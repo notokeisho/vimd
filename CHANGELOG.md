@@ -7,6 +7,22 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.6] - 2025-12-06
+
+### 修正
+
+- **画像表示の修正**
+  - 相対パスで参照された画像がプレビューで正しく表示されるように修正
+  - プレビューHTMLをソースディレクトリに `vimd-preview-{basename}.html` として生成
+  - 終了時にプレビューHTMLを自動削除
+
+### 改善
+
+- **プレビュー更新速度の改善**
+  - debounce時間を500msから100msに短縮
+  - live-serverのwait時間を100msから50msに短縮
+  - 合計遅延: 600ms → 150ms (75%改善)
+
 ## [0.1.5] - 2025-12-06
 
 ### 変更

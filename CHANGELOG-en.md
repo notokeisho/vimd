@@ -7,6 +7,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2025-12-06
+
+### Fixed
+
+- **Image Display Fix**
+  - Fixed images with relative paths not displaying in preview
+  - Preview HTML is now generated in source directory as `vimd-preview-{basename}.html`
+  - Preview HTML is automatically deleted on exit
+
+### Improved
+
+- **Preview Reload Performance**
+  - Reduced debounce time from 500ms to 100ms
+  - Reduced live-server wait time from 100ms to 50ms
+  - Total latency: 600ms → 150ms (75% improvement)
+
 ## [0.1.5] - 2025-12-06
 
 ### Changed
