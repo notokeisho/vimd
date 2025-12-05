@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="vimd">
+  <title>{{title}}</title>
+  <style>
+{{theme_css}}
+  </style>
+{{#if custom_css}}
+  <style>
+{{custom_css}}
+  </style>
+{{/if}}
+</head>
+<body>
+  <div class="markdown-body">
+{{content}}
+  </div>
+
+  <!-- vimd metadata -->
+  <script type="application/json" id="vimd-meta">
+  {
+    "generated": "{{timestamp}}",
+    "theme": "{{theme}}",
+    "version": "{{version}}"
+  }
+  </script>
+</body>
+</html>
