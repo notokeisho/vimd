@@ -4,7 +4,7 @@
 
 > pandocを使ったリアルタイムMarkdownプレビューツール (view markdown)
 
-[![npm version](https://badge.fury.io/js/vimd.svg)](https://www.npmjs.com/package/vimd)
+[![npm version](https://img.shields.io/npm/v/vimd.svg)](https://www.npmjs.com/package/vimd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **vimd** は、pandocを使用した高速でシンプルなMarkdownプレビューツールです。複数のテーマに対応したリアルタイムHTMLプレビューを提供します。
