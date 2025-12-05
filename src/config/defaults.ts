@@ -13,7 +13,7 @@ export const DEFAULT_CONFIG: VimdConfig = {
   },
   watch: {
     ignored: ['node_modules/**', '.git/**', 'dist/**'],
-    debounce: 500,
+    debounce: 100,
   },
   build: {
     inlineCSS: false,
