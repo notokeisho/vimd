@@ -48,10 +48,10 @@ choco install pandoc
 
 ```bash
 # Start live preview
-vimd dev README.md
+vimd dev draft.md
 
 # Build static HTML
-vimd build README.md
+vimd build draft.md
 
 # Change theme
 vimd theme
@@ -67,9 +67,9 @@ vimd config
 Start live preview server with hot reload. Opens browser automatically and watches file changes.
 
 ```bash
-vimd dev README.md
+vimd dev draft.md
 vimd dev docs/guide.md --port 3000
-vimd dev spec.md --theme dark --no-open
+vimd dev article.md --theme dark --no-open
 ```
 
 **Options:**
@@ -82,9 +82,9 @@ vimd dev spec.md --theme dark --no-open
 Build static HTML file. Outputs standalone HTML with embedded styles.
 
 ```bash
-vimd build README.md
+vimd build draft.md
 vimd build docs/guide.md -o dist/guide.html
-vimd build spec.md --theme academic
+vimd build article.md --theme academic
 ```
 
 **Options:**
@@ -172,7 +172,7 @@ const converter = new MarkdownConverter({
 });
 
 // Convert markdown to HTML
-const html = await converter.convertWithTemplate('README.md');
+const html = await converter.convertWithTemplate('draft.md');
 
 // List available themes
 const themes = ThemeManager.list();
@@ -234,7 +234,7 @@ If you get "pandoc not found" error:
 If port 8080 is already in use:
 
 ```bash
-vimd dev README.md --port 3000
+vimd dev draft.md --port 3000
 ```
 
 Or change the default port in `~/.vimd/config.js`.

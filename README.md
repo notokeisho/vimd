@@ -48,10 +48,10 @@ choco install pandoc
 
 ```bash
 # ライブプレビューを開始
-vimd dev README.md
+vimd dev draft.md
 
 # 静的HTMLを生成
-vimd build README.md
+vimd build draft.md
 
 # テーマを変更
 vimd theme
@@ -67,9 +67,9 @@ vimd config
 ホットリロード対応のライブプレビューサーバーを起動します。ブラウザを自動で開き、ファイルの変更を監視します。
 
 ```bash
-vimd dev README.md
+vimd dev draft.md
 vimd dev docs/guide.md --port 3000
-vimd dev spec.md --theme dark --no-open
+vimd dev article.md --theme dark --no-open
 ```
 
 **オプション:**
@@ -83,9 +83,9 @@ vimd dev spec.md --theme dark --no-open
 静的HTMLファイルを生成します。スタイルが埋め込まれたスタンドアロンHTMLを出力します。
 
 ```bash
-vimd build README.md
+vimd build draft.md
 vimd build docs/guide.md -o dist/guide.html
-vimd build spec.md --theme academic
+vimd build article.md --theme academic
 ```
 
 **オプション:**
@@ -174,7 +174,7 @@ const converter = new MarkdownConverter({
 });
 
 // MarkdownをHTMLに変換
-const html = await converter.convertWithTemplate('README.md');
+const html = await converter.convertWithTemplate('draft.md');
 
 // 利用可能なテーマを一覧表示
 const themes = ThemeManager.list();
@@ -236,7 +236,7 @@ vimd/
 ポート8080が既に使用中の場合:
 
 ```bash
-vimd dev README.md --port 3000
+vimd dev draft.md --port 3000
 ```
 
 または `~/.vimd/config.js` でデフォルトポートを変更してください。
