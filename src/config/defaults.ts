@@ -1,0 +1,23 @@
+// src/config/defaults.ts
+import { VimdConfig } from './types.js';
+
+export const DEFAULT_CONFIG: VimdConfig = {
+  theme: 'github',
+  port: 8080,
+  host: 'localhost',
+  open: true,
+  pandoc: {
+    standalone: true,
+    toc: false,
+    tocDepth: 3,
+    highlightStyle: 'github',
+  },
+  watch: {
+    ignored: ['node_modules/**', '.git/**', 'dist/**'],
+    debounce: 500,
+  },
+  build: {
+    inlineCSS: false,
+    standalone: true,
+  },
+};
