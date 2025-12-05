@@ -2,9 +2,21 @@
 
 **作成日**: 2025-12-05
 **最終更新**: 2025-12-06 (v2.0 - ESM対応版)
-**ステータス**: 実装準備フェーズ
+**ステータス**: 実装中 - Phase 0
 **前提**: requirements.md v1.3、project-structure.md v2.0 に基づく
 **開発方針**: TDD (Test-Driven Development)
+
+## 実装進捗
+
+### Phase 0: プロジェクト基盤構築 (進行中)
+- ✅ Task 0.1: プロジェクト初期化 (commit: da2de2c)
+- ✅ Task 0.2: TypeScript設定ファイル作成 (commit: 77539db)
+- ✅ Task 0.3: Git設定ファイル作成 (commit: cc6f4a0)
+- ⏳ Task 0.4: ESLintとPrettier設定
+- ⏳ Task 0.5: Vitest設定
+- ⏳ Task 0.6: ディレクトリ構造作成
+- ⏳ Task 0.7: 開発依存パッケージインストール
+- ⏳ Task 0.8: Git初期化とコミット (スキップ予定 - 既に初期化済み)
 
 ---
 
