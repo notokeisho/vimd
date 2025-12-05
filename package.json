@@ -15,11 +15,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/notokeishou/vimd.git"
+    "url": "git+https://github.com/notokeisho/vimd.git"
   },
-  "homepage": "https://github.com/notokeishou/vimd#readme",
+  "homepage": "https://github.com/notokeisho/vimd#readme",
   "bugs": {
-    "url": "https://github.com/notokeishou/vimd/issues"
+    "url": "https://github.com/notokeisho/vimd/issues"
   },
   "bin": {
     "vimd": "./dist/cli/index.js"
