@@ -78,8 +78,8 @@ console.log('Hello, vimd!');
     // ファイル変更
     await fs.appendFile(testMd, '\n\n## New Section\n\nAdded content.');
 
-    // 変更検知待機
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    // 変更検知待機 (debounce 100ms + ファイルシステム遅延を考慮)
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
     expect(changeDetected).toBe(true);
 
