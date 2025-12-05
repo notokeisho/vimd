@@ -15,7 +15,7 @@
 - **Multiple Themes**: 5 built-in themes (GitHub, Minimal, Dark, Academic, Technical)
 - **Pandoc Powered**: High-quality Markdown conversion using pandoc
 - **Global Configuration**: Clean project directories with `~/.vimd/config.js`
-- **Interactive Setup**: First-run wizard guides theme selection
+- **Interactive Configuration**: Easy setup with `vimd theme` and `vimd config`
 - **Cross-Platform**: Works on macOS, Linux, and Windows
 
 ## Installation
@@ -24,7 +24,7 @@
 npm install -g vimd
 ```
 
-After installation, an interactive setup will guide you through initial configuration.
+On first use, run `vimd theme` to select your preferred theme.
 
 ### Requirements
 

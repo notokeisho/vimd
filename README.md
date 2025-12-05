@@ -15,7 +15,7 @@
 - **複数テーマ**: 5つの組み込みテーマ (GitHub, Minimal, Dark, Academic, Technical)
 - **pandoc連携**: pandocによる高品質なMarkdown変換
 - **グローバル設定**: プロジェクトディレクトリを汚さない `~/.vimd/config.js`
-- **対話的セットアップ**: 初回起動時にテーマ選択をガイド
+- **対話的設定**: `vimd theme` や `vimd config` で簡単に設定変更
 - **クロスプラットフォーム**: macOS, Linux, Windows で動作
 
 ## インストール
@@ -24,7 +24,7 @@
 npm install -g vimd
 ```
 
-インストール後、対話的なセットアップで初期設定を行います。
+初回起動時に `vimd theme` で好みのテーマを選択できます。
 
 ### 必要要件
 
