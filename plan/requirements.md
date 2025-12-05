@@ -154,7 +154,7 @@ end
 |---------|---------|------|
 | 言語 | **TypeScript** | 型安全性、開発体験、メンテナンス性 |
 | モジュール形式 | **ESM (ES Modules)** | 将来性、modern JavaScript、依存パッケージとの互換性 |
-| 設定ファイル形式 | **JavaScript (.vimd.config.js)** | シンプル、実行時複雑性回避、JSDocで型補完可能 |
+| 設定ファイル形式 | **JavaScript (~/.vimd/config.js)** | シンプル、実行時複雑性回避、JSDocで型補完可能 |
 | Markdownパーサー | **pandoc** | 高機能、拡張性、手動インストール前提 |
 | シンタックスハイライト | **pandoc内蔵** | pandocのシンタックスハイライト機能 |
 | ファイル監視 | **chokidar** | クロスプラットフォーム、fswatch不要 |
@@ -648,8 +648,13 @@ vimd dev spec.md --theme academic
 
 **設定ファイルで指定**:
 ```javascript
-// .vimd.config.js
-module.exports = {
+// ~/.vimd/config.js
+// @ts-check
+
+/**
+ * @type {import('vimd').VimdConfig}
+ */
+export default {
   theme: 'github'
 }
 ```
@@ -660,8 +665,13 @@ module.exports = {
 
 **カスタムCSS追加**:
 ```javascript
-// .vimd.config.js
-module.exports = {
+// ~/.vimd/config.js
+// @ts-check
+
+/**
+ * @type {import('vimd').VimdConfig}
+ */
+export default {
   theme: 'github',
   css: './custom.css'  // ベーステーマに追加
 }
@@ -669,8 +679,13 @@ module.exports = {
 
 **完全なカスタムテーマ**:
 ```javascript
-// .vimd.config.js
-module.exports = {
+// ~/.vimd/config.js
+// @ts-check
+
+/**
+ * @type {import('vimd').VimdConfig}
+ */
+export default {
   theme: 'custom',
   template: './custom-template.html',
   css: './custom-theme.css'
@@ -799,10 +814,15 @@ EOF
 vim ~/.vimd/config.js
 
 # 以下を追加
-export default defineConfig({
+// @ts-check
+
+/**
+ * @type {import('vimd').VimdConfig}
+ */
+export default {
   theme: 'github',
   css: '~/custom-style.css'  // カスタムCSS追加
-})
+}
 
 # プレビュー起動 (どのプロジェクトでもカスタムCSSが適用される)
 vimd dev spec.md
@@ -1182,13 +1202,13 @@ export interface VimdConfig {
 
 ```bash
 # ポート指定
-MDLIVE_PORT=8081 vimd dev spec.md
+VIMD_PORT=8081 vimd dev spec.md
 
 # テーマ指定
-MDLIVE_THEME=dark vimd dev spec.md
+VIMD_THEME=dark vimd dev spec.md
 
 # デバッグモード
-MDLIVE_DEBUG=true vimd dev spec.md
+VIMD_DEBUG=true vimd dev spec.md
 ```
 
 ---
