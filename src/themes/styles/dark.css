@@ -1,54 +1,524 @@
-/* Dark Theme - VS Code inspired */
+/*
+ * GitHub Dark Theme for vimd
+ * Based on github-markdown-css by Sindre Sorhus
+ * https://github.com/sindresorhus/github-markdown-css
+ * MIT License
+ */
+
+/* Full page dark background */
+html {
+  background-color: #0d1117;
+}
+
+/* Main body styles */
 body {
-  font-family: 'Fira Code', Consolas, Monaco, monospace;
-  line-height: 1.6;
-  color: #d4d4d4;
-  background: #1e1e1e;
-  max-width: 900px;
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   margin: 0 auto;
   padding: 2rem;
+  max-width: 980px;
+  color: #f0f6fc;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #569cd6;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-}
-
-a {
-  color: #569cd6;
+/* Links */
+body a {
+  background-color: transparent;
+  color: #4493f8;
   text-decoration: none;
 }
 
-a:hover {
+body a:hover {
   text-decoration: underline;
 }
 
-code {
-  background: #252526;
-  color: #ce9178;
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
-  font-family: 'Fira Code', monospace;
+/* Strong / Bold */
+body b,
+body strong {
+  font-weight: 600;
 }
 
-pre {
-  background: #252526;
-  padding: 1em;
-  border-radius: 5px;
-  overflow-x: auto;
-  border: 1px solid #333;
+/* Headings */
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
-pre code {
-  background: none;
-  color: #d4d4d4;
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #3d444db3;
+}
+
+body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #3d444db3;
+}
+
+body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #9198a1;
+}
+
+/* Paragraphs */
+body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* Lists */
+body ul,
+body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+body li+li {
+  margin-top: .25em;
+}
+
+/* Blockquote */
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #9198a1;
+  border-left: .25em solid #3d444d;
+}
+
+/* Horizontal Rule */
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #3d444db3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #3d444d;
+  border: 0;
+}
+
+/* Images */
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+/* Tables */
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+}
+
+body table th {
+  font-weight: 600;
+}
+
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #3d444d;
+}
+
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #3d444db3;
+}
+
+body table tr:nth-child(2n) {
+  background-color: #151b23;
+}
+
+/* Inline Code */
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #656c7633;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+/* Code Blocks */
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+body pre code {
+  font-size: 100%;
+}
+
+body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+body .highlight pre,
+body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #f0f6fc;
+  background-color: #151b23;
+  border-radius: 6px;
+}
+
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+/* Keyboard */
+body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #f0f6fc;
+  vertical-align: middle;
+  background-color: #151b23;
+  border: solid 1px #3d444db3;
+  border-bottom-color: #3d444db3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #3d444db3;
+}
+
+/* Mark / Highlight */
+body mark {
+  background-color: #bb800926;
+  color: #f0f6fc;
+}
+
+/* Definition Lists */
+body dl {
   padding: 0;
 }
 
-blockquote {
-  border-left: 4px solid #569cd6;
-  padding-left: 1em;
-  color: #b5b5b5;
-  margin-left: 0;
+body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Table of Contents (pandoc) */
+nav#TOC {
+  background-color: #151b23;
+  border: 1px solid #3d444d;
+  border-radius: 6px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+nav#TOC > ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+nav#TOC ul {
+  padding-left: 1.5em;
+}
+
+nav#TOC li {
+  margin: 0.4em 0;
+}
+
+nav#TOC a {
+  color: #4493f8;
+}
+
+nav#TOC a:hover {
+  color: #58a6ff;
+}
+
+/* Pandoc Syntax Highlighting - GitHub Dark Colors */
+div.sourceCode {
+  background-color: #151b23;
+  border-radius: 6px;
+  overflow: auto;
+}
+
+pre.sourceCode {
+  margin: 0;
+  padding: 1rem;
+}
+
+code.sourceCode {
+  background: transparent;
+  color: #f0f6fc;
+}
+
+/* Comments */
+code.sourceCode span.co,
+.sourceCode .co {
+  color: #9198a1;
+}
+
+/* Constants */
+code.sourceCode span.cn,
+code.sourceCode span.c1,
+code.sourceCode span.dv,
+code.sourceCode span.bn,
+code.sourceCode span.fl,
+.sourceCode .cn,
+.sourceCode .c1,
+.sourceCode .dv,
+.sourceCode .bn,
+.sourceCode .fl {
+  color: #79c0ff;
+}
+
+/* Strings */
+code.sourceCode span.st,
+code.sourceCode span.ch,
+code.sourceCode span.vs,
+.sourceCode .st,
+.sourceCode .ch,
+.sourceCode .vs {
+  color: #a5d6ff;
+}
+
+/* Keywords */
+code.sourceCode span.kw,
+code.sourceCode span.cf,
+.sourceCode .kw,
+.sourceCode .cf {
+  color: #ff7b72;
+}
+
+/* Functions */
+code.sourceCode span.fu,
+code.sourceCode span.bu,
+.sourceCode .fu,
+.sourceCode .bu {
+  color: #d2a8ff;
+}
+
+/* Variables */
+code.sourceCode span.va,
+.sourceCode .va {
+  color: #ffa657;
+}
+
+/* Data Types */
+code.sourceCode span.dt,
+.sourceCode .dt {
+  color: #79c0ff;
+}
+
+/* Operators */
+code.sourceCode span.op,
+.sourceCode .op {
+  color: #f0f6fc;
+}
+
+/* Attributes / Decorators */
+code.sourceCode span.at,
+.sourceCode .at {
+  color: #7ee787;
+}
+
+/* Preprocessor */
+code.sourceCode span.pp,
+.sourceCode .pp {
+  color: #ff7b72;
+}
+
+/* Import */
+code.sourceCode span.im,
+.sourceCode .im {
+  color: #ff7b72;
+}
+
+/* Special characters */
+code.sourceCode span.sc,
+.sourceCode .sc {
+  color: #a5d6ff;
+}
+
+/* Regular expressions */
+code.sourceCode span.ss,
+.sourceCode .ss {
+  color: #a5d6ff;
+}
+
+/* Annotations */
+code.sourceCode span.an,
+.sourceCode .an {
+  color: #9198a1;
+}
+
+/* Documentation */
+code.sourceCode span.do,
+.sourceCode .do {
+  color: #9198a1;
+}
+
+/* Errors */
+code.sourceCode span.er,
+code.sourceCode span.al,
+.sourceCode .er,
+.sourceCode .al {
+  color: #f85149;
+}
+
+/* Warnings */
+code.sourceCode span.wa,
+.sourceCode .wa {
+  color: #d29922;
+}
+
+/* Information */
+code.sourceCode span.in,
+.sourceCode .in {
+  color: #9198a1;
+}
+
+/* GitHub .pl-* classes (for compatibility) */
+body .pl-c {
+  color: #9198a1;
+}
+
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff;
+}
+
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff;
+}
+
+body .pl-smi,
+body .pl-s .pl-s1 {
+  color: #f0f6fc;
+}
+
+body .pl-ent {
+  color: #7ee787;
+}
+
+body .pl-k {
+  color: #ff7b72;
+}
+
+body .pl-s,
+body .pl-pds,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sre,
+body .pl-sr .pl-sra {
+  color: #a5d6ff;
+}
+
+body .pl-v,
+body .pl-smw {
+  color: #ffa657;
+}
+
+body .pl-bu {
+  color: #f85149;
+}
+
+/* Selection */
+::selection {
+  background-color: #264f78;
+  color: #ffffff;
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3d444d;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f5761;
+}
+
+/* Focus states */
+body a:focus {
+  outline: 2px solid #1f6feb;
+  outline-offset: -2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
 }

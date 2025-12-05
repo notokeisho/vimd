@@ -7,6 +7,17 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.8] - 2025-12-06
+
+### 修正
+
+- **ダークテーマの改善**
+  - リンクが黒色で見えない問題を修正
+  - 目次 (Table of Contents) が表示されない問題を修正
+  - コードハイライトの色が暗すぎて見えない問題を修正
+  - GitHub Dark テーマ (sindresorhus/github-markdown-css) ベースに刷新
+  - Pandoc構文ハイライトクラスのサポートを追加
+
 ## [0.1.7] - 2025-12-06
 
 ### 追加
