@@ -7,6 +7,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
+      reportOnFailure: true,
       exclude: [
         'node_modules/',
         'dist/',
