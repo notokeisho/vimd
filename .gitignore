@@ -36,9 +36,13 @@ npm-debug.log*
 tmp/
 temp/
 .tmp/
+.vimd-tmp/
 
 # OS files
 Thumbs.db
 
 # Planning documents (internal use only)
 plan/
+
+# Test files
+test-sample.md
