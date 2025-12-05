@@ -1,35 +1,37 @@
 # vimd
 
-> Real-time Markdown preview tool with pandoc (view markdown)
+🌐 [English](README-en.md) | 日本語
+
+> pandocを使ったリアルタイムMarkdownプレビューツール (view markdown)
 
 [![npm version](https://badge.fury.io/js/vimd.svg)](https://www.npmjs.com/package/vimd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**vimd** is a fast, simple Markdown preview tool that provides real-time HTML preview with multiple themes powered by pandoc.
+**vimd** は、pandocを使用した高速でシンプルなMarkdownプレビューツールです。複数のテーマに対応したリアルタイムHTMLプレビューを提供します。
 
-## Features
+## 特徴
 
-- **Real-time Preview**: Instant browser update on file save with live-server
-- **Multiple Themes**: 5 built-in themes (GitHub, Minimal, Dark, Academic, Technical)
-- **Pandoc Powered**: High-quality Markdown conversion using pandoc
-- **Global Configuration**: Clean project directories with `~/.vimd/config.js`
-- **Interactive Setup**: First-run wizard guides theme selection
-- **Cross-Platform**: Works on macOS, Linux, and Windows
+- **リアルタイムプレビュー**: ファイル保存時にブラウザが即座に更新 (live-server)
+- **複数テーマ**: 5つの組み込みテーマ (GitHub, Minimal, Dark, Academic, Technical)
+- **pandoc連携**: pandocによる高品質なMarkdown変換
+- **グローバル設定**: プロジェクトディレクトリを汚さない `~/.vimd/config.js`
+- **対話的セットアップ**: 初回起動時にテーマ選択をガイド
+- **クロスプラットフォーム**: macOS, Linux, Windows で動作
 
-## Installation
+## インストール
 
 ```bash
 npm install -g vimd
 ```
 
-After installation, an interactive setup will guide you through initial configuration.
+インストール後、対話的なセットアップで初期設定を行います。
 
-### Requirements
+### 必要要件
 
-- **Node.js** >= 18.0.0 (ESM support required)
-- **pandoc** >= 2.0 (manual installation required)
+- **Node.js** >= 18.0.0 (ESMサポートが必要)
+- **pandoc** >= 2.0 (別途インストールが必要)
 
-To install pandoc:
+pandocのインストール方法:
 
 ```bash
 # macOS
@@ -42,27 +44,27 @@ sudo apt install pandoc
 choco install pandoc
 ```
 
-## Quick Start
+## クイックスタート
 
 ```bash
-# Start live preview
+# ライブプレビューを開始
 vimd dev README.md
 
-# Build static HTML
+# 静的HTMLを生成
 vimd build README.md
 
-# Change theme
+# テーマを変更
 vimd theme
 
-# Edit configuration
+# 設定を編集
 vimd config
 ```
 
-## Commands
+## コマンド
 
 ### `vimd dev <file>`
 
-Start live preview server with hot reload. Opens browser automatically and watches file changes.
+ホットリロード対応のライブプレビューサーバーを起動します。ブラウザを自動で開き、ファイルの変更を監視します。
 
 ```bash
 vimd dev README.md
@@ -70,14 +72,14 @@ vimd dev docs/guide.md --port 3000
 vimd dev spec.md --theme dark --no-open
 ```
 
-**Options:**
-- `-p, --port <port>`: Port number (default: 8080)
-- `-t, --theme <theme>`: Theme name (overrides global config)
-- `--no-open`: Do not open browser automatically
+**オプション:**
+- `-p, --port <port>`: ポート番号 (デフォルト: 8080)
+- `-t, --theme <theme>`: テーマ名 (グローバル設定を上書き)
+- `--no-open`: ブラウザを自動で開かない
 
 ### `vimd build <file>`
 
-Build static HTML file. Outputs standalone HTML with embedded styles.
+静的HTMLファイルを生成します。スタイルが埋め込まれたスタンドアロンHTMLを出力します。
 
 ```bash
 vimd build README.md
@@ -85,13 +87,13 @@ vimd build docs/guide.md -o dist/guide.html
 vimd build spec.md --theme academic
 ```
 
-**Options:**
-- `-o, --output <path>`: Output file path (default: same name with .html)
-- `-t, --theme <theme>`: Theme name (overrides global config)
+**オプション:**
+- `-o, --output <path>`: 出力ファイルパス (デフォルト: 同名で拡張子.html)
+- `-t, --theme <theme>`: テーマ名 (グローバル設定を上書き)
 
 ### `vimd theme`
 
-Change theme interactively. Select from 5 built-in themes.
+対話的にテーマを変更します。5つの組み込みテーマから選択できます。
 
 ```bash
 vimd theme
@@ -99,31 +101,31 @@ vimd theme
 
 ### `vimd config`
 
-Edit configuration interactively. Modify theme, port, and other settings.
+対話的に設定を編集します。テーマ、ポート、その他の設定を変更できます。
 
 ```bash
-# Interactive configuration editor
+# 対話的な設定エディタ
 vimd config
 
-# List current configuration
+# 現在の設定を表示
 vimd config --list
 ```
 
-## Themes
+## テーマ
 
-vimd includes 5 built-in themes:
+vimdには5つの組み込みテーマがあります:
 
-| Theme | Description | Best For |
-|-------|-------------|----------|
-| **GitHub** | GitHub Markdown style (Recommended) | General documentation |
-| **Minimal** | Simple white background | Clean, distraction-free writing |
-| **Dark** | VS Code inspired dark mode | Night coding sessions |
-| **Academic** | Paper-style layout | Academic papers, research documents |
-| **Technical** | API documentation style | Technical specifications, API docs |
+| テーマ | 説明 | 用途 |
+|-------|------|------|
+| **GitHub** | GitHub Markdownスタイル (推奨) | 一般的なドキュメント |
+| **Minimal** | シンプルな白背景 | 集中して書きたいとき |
+| **Dark** | VS Codeインスパイアのダークモード | 夜間の作業 |
+| **Academic** | 論文スタイルのレイアウト | 学術論文、研究文書 |
+| **Technical** | APIドキュメントスタイル | 技術仕様書、API文書 |
 
-## Configuration
+## 設定
 
-Global configuration is stored at `~/.vimd/config.js`.
+グローバル設定は `~/.vimd/config.js` に保存されます。
 
 ```javascript
 export default {
@@ -142,125 +144,125 @@ export default {
 };
 ```
 
-### Configuration Options
+### 設定オプション
 
-- `theme`: Default theme name (string)
-- `port`: Dev server port (number, default: 8080)
-- `host`: Dev server host (string, default: 'localhost')
-- `open`: Auto-open browser (boolean, default: true)
-- `pandoc.standalone`: Generate standalone HTML (boolean)
-- `pandoc.toc`: Generate table of contents (boolean)
-- `pandoc.highlightStyle`: Code highlighting style (string)
-- `watch.ignored`: Patterns to ignore for file watching (array)
+- `theme`: デフォルトテーマ名 (文字列)
+- `port`: 開発サーバーのポート (数値、デフォルト: 8080)
+- `host`: 開発サーバーのホスト (文字列、デフォルト: 'localhost')
+- `open`: ブラウザを自動で開く (真偽値、デフォルト: true)
+- `pandoc.standalone`: スタンドアロンHTMLを生成 (真偽値)
+- `pandoc.toc`: 目次を生成 (真偽値)
+- `pandoc.highlightStyle`: コードハイライトスタイル (文字列)
+- `watch.ignored`: ファイル監視で無視するパターン (配列)
 
-## API Usage
+## API使用
 
-vimd can also be used as a Node.js library:
+vimdはNode.jsライブラリとしても使用できます:
 
 ```javascript
 import { MarkdownConverter, ConfigLoader, ThemeManager } from 'vimd';
 
-// Load configuration
+// 設定を読み込む
 const config = await ConfigLoader.loadGlobal();
 
-// Create converter
+// コンバーターを作成
 const converter = new MarkdownConverter({
   theme: 'github',
   pandocOptions: config.pandoc,
 });
 
-// Convert markdown to HTML
+// MarkdownをHTMLに変換
 const html = await converter.convertWithTemplate('README.md');
 
-// List available themes
+// 利用可能なテーマを一覧表示
 const themes = ThemeManager.list();
 console.log(themes); // [{ name: 'github', displayName: 'GitHub' }, ...]
 ```
 
-## Development
+## 開発
 
 ```bash
-# Clone repository
+# リポジトリをクローン
 git clone https://github.com/notokeishou/vimd.git
 cd vimd
 
-# Install dependencies
+# 依存関係をインストール
 npm install
 
-# Build
+# ビルド
 npm run build
 
-# Run tests
+# テストを実行
 npm test
 
-# Run with coverage
+# カバレッジ付きでテスト
 npm run test:coverage
 
-# Development mode
+# 開発モード
 npm run dev -- dev test.md
 ```
 
-### Project Structure
+### プロジェクト構造
 
 ```
 vimd/
 ├── src/
-│   ├── cli/          # CLI commands
-│   ├── config/       # Configuration management
-│   ├── core/         # Core functionality (converter, watcher, server)
-│   ├── themes/       # Theme system
-│   └── utils/        # Utility functions
+│   ├── cli/          # CLIコマンド
+│   ├── config/       # 設定管理
+│   ├── core/         # コア機能 (converter, watcher, server)
+│   ├── themes/       # テーマシステム
+│   └── utils/        # ユーティリティ関数
 ├── tests/
-│   ├── unit/         # Unit tests
-│   └── integration/  # Integration tests
-├── templates/        # HTML templates
-└── dist/            # Built files
+│   ├── unit/         # ユニットテスト
+│   └── integration/  # 統合テスト
+├── templates/        # HTMLテンプレート
+└── dist/            # ビルド済みファイル
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### Pandoc not found
+### pandocが見つからない
 
-If you get "pandoc not found" error:
+「pandoc not found」エラーが出る場合:
 
-1. Install pandoc using your package manager
-2. Verify installation: `pandoc --version`
-3. Restart your terminal
+1. パッケージマネージャーでpandocをインストール
+2. インストールを確認: `pandoc --version`
+3. ターミナルを再起動
 
-### Port already in use
+### ポートが使用中
 
-If port 8080 is already in use:
+ポート8080が既に使用中の場合:
 
 ```bash
 vimd dev README.md --port 3000
 ```
 
-Or change the default port in `~/.vimd/config.js`.
+または `~/.vimd/config.js` でデフォルトポートを変更してください。
 
-### Theme not applied
+### テーマが適用されない
 
-Make sure to:
+以下を確認してください:
 
-1. Check available themes: `vimd theme`
-2. Verify config: `vimd config --list`
-3. Try rebuilding: `npm run build` (if using from source)
+1. 利用可能なテーマを確認: `vimd theme`
+2. 設定を確認: `vimd config --list`
+3. ソースからの場合は再ビルド: `npm run build`
 
-## License
+## ライセンス
 
 MIT © notokeishou
 
-## Contributing
+## コントリビューション
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+コントリビューションを歓迎します! プルリクエストの提出方法については [CONTRIBUTING.md](CONTRIBUTING.md) をお読みください。
 
-## Changelog
+## 変更履歴
 
-See [CHANGELOG.md](CHANGELOG.md) for release history.
+リリース履歴は [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
-## Links
+## リンク
 
-- [GitHub Repository](https://github.com/notokeishou/vimd)
-- [npm Package](https://www.npmjs.com/package/vimd)
+- [GitHubリポジトリ](https://github.com/notokeishou/vimd)
+- [npmパッケージ](https://www.npmjs.com/package/vimd)
 - [Issue Tracker](https://github.com/notokeishou/vimd/issues)
 
 ---
