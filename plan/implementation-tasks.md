@@ -3584,12 +3584,8 @@ export async function devCommand(
     Logger.info(`Theme: ${config.theme}`);
     Logger.info(`Port: ${config.port}`);
 
-    // 2. Pandoc存在チェック & 自動インストール
-    if (!PandocInstaller.check()) {
-      Logger.warn('Pandoc not found. Installing automatically...');
-      const os = OSDetector.detect();
-      await PandocInstaller.install(os);
-    }
+    // 2. Pandoc存在チェック（手動インストール必須）
+    PandocDetector.ensureInstalled();
 
     // 3. ファイル存在チェック
     const absolutePath = path.resolve(filePath);
@@ -3718,7 +3714,7 @@ git commit -m "Add dev command implementation
 
 - Implement vimd dev <file> command
 - Support file watching and hot reload
-- Auto-install pandoc if not found
+- Check pandoc installation (manual install required)
 - Support command-line options (port, theme, open)
 - Add graceful shutdown with cleanup
 
@@ -3771,12 +3767,8 @@ export async function buildCommand(
 
     Logger.info(`Theme: ${config.theme}`);
 
-    // 2. Pandoc存在チェック & 自動インストール
-    if (!PandocInstaller.check()) {
-      Logger.warn('Pandoc not found. Installing automatically...');
-      const os = OSDetector.detect();
-      await PandocInstaller.install(os);
-    }
+    // 2. Pandoc存在チェック（手動インストール必須）
+    PandocDetector.ensureInstalled();
 
     // 3. ファイル存在チェック
     const absolutePath = path.resolve(filePath);
@@ -3856,7 +3848,7 @@ git commit -m "Add build command implementation
 - Implement vimd build <file> command
 - Support custom output path
 - Generate standalone HTML
-- Auto-install pandoc if not found
+- Check pandoc installation (manual install required)
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -4609,8 +4601,8 @@ export default defineConfig({
 
 ## Requirements
 
-- Node.js >= 14.0.0
-- pandoc (auto-installed if not found)
+- Node.js >= 18.0.0 (ESM support required)
+- pandoc (manual installation required, guidance provided)
 
 ## Development
 

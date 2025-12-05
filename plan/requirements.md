@@ -449,7 +449,7 @@ vimd build spec.md --theme academic         # テーマ指定
 **動作**:
 1. 現在利用可能なテーマを一覧表示
 2. 対話式で選択
-3. `~/.vimd/config.ts` を更新
+3. `~/.vimd/config.js` を更新
 
 **例**:
 ```bash
@@ -475,7 +475,7 @@ All projects will use this theme.
 **動作**:
 1. 設定項目を対話式で選択
 2. 各項目を変更
-3. `~/.vimd/config.ts` を更新
+3. `~/.vimd/config.js` を更新
 
 **例**:
 ```bash
@@ -507,7 +507,7 @@ Current configuration:
   Theme: github
   Port: 8080
   Open Browser: true
-  Config: ~/.vimd/config.ts
+  Config: ~/.vimd/config.js
 ```
 
 ---
@@ -700,7 +700,7 @@ Select a theme:
     Minimal
     Dark
 
-Configuration saved: ~/.vimd/config.ts
+Configuration saved: ~/.vimd/config.js
 Setup complete!
 
 # 2. プレビュー起動
@@ -796,7 +796,7 @@ h1 { color: var(--primary-color); }
 EOF
 
 # グローバル設定を編集
-vim ~/.vimd/config.ts
+vim ~/.vimd/config.js
 
 # 以下を追加
 export default defineConfig({
@@ -951,9 +951,9 @@ vimd build *.md
 ### 互換性
 
 **Node.jsバージョン**:
-- サポート: **Node.js >= 14.0.0**
-- 推奨: **Node.js >= 18.0.0** (LTS)
-- テスト対象: 14.x, 16.x, 18.x, 20.x
+- 最小要件: **Node.js >= 18.0.0** (ESM support required)
+- 推奨: **Node.js >= 20.0.0** (LTS)
+- テスト対象: 18.x, 20.x
 
 **OS対応**:
 - macOS: **10.15 (Catalina) 以降**
@@ -973,8 +973,8 @@ vimd build *.md
 ### 必須環境
 
 **ランタイム**:
-- Node.js >= 14.0.0
-- npm >= 6.0.0 (または yarn, pnpm)
+- Node.js >= 18.0.0 (ESM support required)
+- npm >= 8.0.0 (または yarn, pnpm)
 
 ---
 
