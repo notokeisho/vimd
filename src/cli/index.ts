@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import { createRequire } from 'module';
 import { devCommand } from './commands/dev.js';
 import { buildCommand } from './commands/build.js';
 import { themeCommand } from './commands/theme.js';
 import { configCommand } from './commands/config.js';
+
+const require = createRequire(import.meta.url);
+const packageJson = require('../../package.json');
 
 const program = new Command();
 
 program
   .name('vimd')
   .description('Real-time Markdown preview tool (view markdown)')
-  .version('0.1.0');
+  .version(packageJson.version);
 
 // vimd dev <file>
 program

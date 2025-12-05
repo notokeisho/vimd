@@ -1,9 +1,13 @@
 // tests/integration/cli.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { execSync } from 'child_process';
+import { createRequire } from 'module';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
+
+const require = createRequire(import.meta.url);
+const packageJson = require('../../package.json');
 
 describe('CLI Integration Tests', () => {
   const testDir = path.join(os.tmpdir(), 'vimd-cli-test');
@@ -23,7 +27,7 @@ describe('CLI Integration Tests', () => {
       encoding: 'utf-8',
     });
 
-    expect(output).toContain('0.1.0');
+    expect(output).toContain(packageJson.version);
   });
 
   it('should show help', () => {
