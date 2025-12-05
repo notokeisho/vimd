@@ -1,11 +1,13 @@
 // tests/unit/server.test.ts
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LiveServer } from '../../src/core/server';
-import * as liveServer from 'live-server';
+import liveServer from 'live-server';
 
 vi.mock('live-server', () => ({
-  start: vi.fn(),
-  shutdown: vi.fn(),
+  default: {
+    start: vi.fn(),
+    shutdown: vi.fn(),
+  },
 }));
 
 vi.mock('open', () => ({

@@ -1,5 +1,5 @@
 // src/core/server.ts
-import * as liveServer from 'live-server';
+import liveServer from 'live-server';
 import { ServerConfig } from '../config/types.js';
 import { Logger } from '../utils/logger.js';
 import * as path from 'path';
