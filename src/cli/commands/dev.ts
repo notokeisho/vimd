@@ -6,6 +6,7 @@ import { LiveServer } from '../../core/server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
+import { SessionManager } from '../../utils/session-manager.js';
 import * as path from 'path';
 import fs from 'fs-extra';
 
@@ -36,26 +37,51 @@ export async function devCommand(
       config.open = options.open;
     }
 
-    Logger.info(`Theme: ${config.theme}`);
-    Logger.info(`Port: ${config.port}`);
+    let port = config.port;
 
-    // 2. Check pandoc installation
+    // 2. Clean dead sessions first
+    const deadCleaned = await SessionManager.cleanDeadSessions();
+    if (deadCleaned > 0) {
+      Logger.info(`Cleaned ${deadCleaned} stale session(s)`);
+    }
+
+    // 3. Check and cleanup previous session on same port
+    const cleanup = await SessionManager.cleanupSessionOnPort(port);
+    if (cleanup.killed) {
+      Logger.info(`Stopped previous session on port ${port}`);
+    }
+    if (cleanup.htmlRemoved) {
+      Logger.info('Removed previous preview file');
+    }
+
+    // 4. Check if port is available (might be used by other app)
+    if (!(await SessionManager.isPortAvailable(port))) {
+      const newPort = await SessionManager.findAvailablePort(port + 1);
+      Logger.warn(`Port ${port} is in use by another application`);
+      Logger.info(`Using port ${newPort} instead`);
+      port = newPort;
+    }
+
+    Logger.info(`Theme: ${config.theme}`);
+    Logger.info(`Port: ${port}`);
+
+    // 5. Check pandoc installation
     PandocDetector.ensureInstalled();
 
-    // 3. Check file exists
+    // 6. Check file exists
     const absolutePath = path.resolve(filePath);
     if (!(await fs.pathExists(absolutePath))) {
       Logger.error(`File not found: ${filePath}`);
       process.exit(1);
     }
 
-    // 4. Prepare output HTML in source directory
+    // 7. Prepare output HTML in source directory
     const sourceDir = path.dirname(absolutePath);
     const basename = path.basename(filePath, path.extname(filePath));
     const htmlFileName = `vimd-preview-${basename}.html`;
     const htmlPath = path.join(sourceDir, htmlFileName);
 
-    // 5. Prepare converter
+    // 8. Prepare converter
     const converter = new MarkdownConverter({
       theme: config.theme,
       pandocOptions: config.pandoc,
@@ -63,15 +89,15 @@ export async function devCommand(
       template: config.template,
     });
 
-    // 6. Initial conversion
+    // 9. Initial conversion
     Logger.info('Converting markdown...');
     const html = await converter.convertWithTemplate(absolutePath);
     await converter.writeHTML(html, htmlPath);
     Logger.success('Conversion complete');
 
-    // 7. Start live server from source directory
+    // 10. Start live server from source directory
     const server = new LiveServer({
-      port: config.port,
+      port: port,
       host: config.host,
       open: config.open,
       root: sourceDir,
@@ -79,10 +105,19 @@ export async function devCommand(
 
     await server.start(htmlPath);
 
+    // 11. Save session
+    await SessionManager.saveSession({
+      pid: process.pid,
+      port: port,
+      htmlPath: htmlPath,
+      sourcePath: absolutePath,
+      startedAt: new Date().toISOString(),
+    });
+
     Logger.info(`Watching: ${filePath}`);
     Logger.info('Press Ctrl+C to stop');
 
-    // 8. Start file watching
+    // 12. Start file watching
     const watcher = new FileWatcher(absolutePath, config.watch);
 
     watcher.onChange(async (changedPath) => {
@@ -101,11 +136,12 @@ export async function devCommand(
 
     watcher.start();
 
-    // 9. Register cleanup - remove generated HTML file
+    // 13. Register cleanup - remove generated HTML file and session
     ProcessManager.onExit(async () => {
       Logger.info('Shutting down...');
       await watcher.stop();
       await server.stop();
+
       // Remove the generated preview HTML file
       try {
         await fs.remove(htmlPath);
@@ -113,6 +149,10 @@ export async function devCommand(
       } catch {
         // Ignore errors when removing file
       }
+
+      // Remove session from registry
+      await SessionManager.removeSession(port);
+
       Logger.info('Cleanup complete');
     });
   } catch (error) {

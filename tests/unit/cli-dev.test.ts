@@ -8,6 +8,7 @@ import { LiveServer } from '../../src/core/server.js';
 import { PandocDetector } from '../../src/core/pandoc-detector.js';
 import { Logger } from '../../src/utils/logger.js';
 import { ProcessManager } from '../../src/utils/process-manager.js';
+import { SessionManager } from '../../src/utils/session-manager.js';
 import fs from 'fs-extra';
 
 vi.mock('../../src/config/loader.js');
@@ -17,10 +18,15 @@ vi.mock('../../src/core/server.js');
 vi.mock('../../src/core/pandoc-detector.js');
 vi.mock('../../src/utils/logger.js');
 vi.mock('../../src/utils/process-manager.js');
+vi.mock('../../src/utils/session-manager.js');
 vi.mock('fs-extra');
 
 describe('devCommand', () => {
-  const mockConfig = {
+  let mockWatcher: any;
+  let mockServer: any;
+  let mockConverter: any;
+
+  const getDefaultConfig = () => ({
     theme: 'github',
     port: 8080,
     host: 'localhost',
@@ -29,17 +35,13 @@ describe('devCommand', () => {
     css: undefined,
     template: undefined,
     watch: { ignored: [] },
-  };
-
-  let mockWatcher: any;
-  let mockServer: any;
-  let mockConverter: any;
+  });
 
   beforeEach(() => {
     vi.clearAllMocks();
 
     // Mock config
-    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue(mockConfig as any);
+    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue(getDefaultConfig() as any);
 
     // Mock pandoc
     vi.mocked(PandocDetector.ensureInstalled).mockReturnValue(undefined);
@@ -48,6 +50,16 @@ describe('devCommand', () => {
     vi.mocked(fs.pathExists).mockResolvedValue(true);
     vi.mocked(fs.ensureDir).mockResolvedValue(undefined);
     vi.mocked(fs.remove).mockResolvedValue(undefined);
+
+    // Mock SessionManager
+    vi.mocked(SessionManager.cleanDeadSessions).mockResolvedValue(0);
+    vi.mocked(SessionManager.cleanupSessionOnPort).mockResolvedValue({
+      killed: false,
+      htmlRemoved: false,
+    });
+    vi.mocked(SessionManager.isPortAvailable).mockResolvedValue(true);
+    vi.mocked(SessionManager.saveSession).mockResolvedValue(undefined);
+    vi.mocked(SessionManager.removeSession).mockResolvedValue(undefined);
 
     // Mock converter
     mockConverter = {
@@ -86,15 +98,21 @@ describe('devCommand', () => {
     await devCommand('test.md', {});
 
     expect(ConfigLoader.loadGlobal).toHaveBeenCalled();
+    expect(SessionManager.cleanDeadSessions).toHaveBeenCalled();
+    expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(8080);
+    expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(8080);
     expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
     expect(mockConverter.convertWithTemplate).toHaveBeenCalled();
     expect(mockServer.start).toHaveBeenCalled();
+    expect(SessionManager.saveSession).toHaveBeenCalled();
     expect(mockWatcher.start).toHaveBeenCalled();
   });
 
   it('should override port from options', async () => {
     await devCommand('test.md', { port: '3000' });
 
+    expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(3000);
+    expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(3000);
     expect(LiveServer).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 3000,
@@ -154,5 +172,46 @@ describe('devCommand', () => {
     await devCommand('test.md', {});
 
     expect(mockWatcher.onChange).toHaveBeenCalled();
+  });
+
+  it('should find alternative port if port is unavailable', async () => {
+    vi.mocked(SessionManager.isPortAvailable).mockResolvedValue(false);
+    vi.mocked(SessionManager.findAvailablePort).mockResolvedValue(8081);
+
+    await devCommand('test.md', {});
+
+    expect(SessionManager.findAvailablePort).toHaveBeenCalledWith(8081);
+    expect(Logger.warn).toHaveBeenCalledWith(
+      'Port 8080 is in use by another application'
+    );
+    expect(LiveServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 8081,
+      })
+    );
+  });
+
+  it('should log when cleaning stale sessions', async () => {
+    vi.mocked(SessionManager.cleanDeadSessions).mockResolvedValue(2);
+
+    await devCommand('test.md', {});
+
+    expect(Logger.info).toHaveBeenCalledWith('Cleaned 2 stale session(s)');
+  });
+
+  it('should log when killing previous session on same port', async () => {
+    vi.mocked(SessionManager.cleanupSessionOnPort).mockResolvedValue({
+      killed: true,
+      htmlRemoved: true,
+      previousPort: 8080,
+      previousSource: '/tmp/old.md',
+    });
+
+    await devCommand('test.md', {});
+
+    expect(Logger.info).toHaveBeenCalledWith(
+      'Stopped previous session on port 8080'
+    );
+    expect(Logger.info).toHaveBeenCalledWith('Removed previous preview file');
   });
 });

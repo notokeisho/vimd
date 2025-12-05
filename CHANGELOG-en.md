@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] - 2025-12-06
+
+### Added
+
+- **Session Management**
+  - Automatic port conflict resolution (auto-terminates previous vimd sessions)
+  - Auto-detects available port when another app occupies the port
+  - Multi-session support (run multiple vimd instances on different ports)
+  - Session tracking via `$TMPDIR/vimd/sessions.json`
+  - Automatic cleanup of stale sessions from dead processes
+
 ## [0.1.6] - 2025-12-06
 
 ### Fixed
