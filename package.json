@@ -1,0 +1,52 @@
+{
+  "name": "vimd",
+  "version": "0.1.0",
+  "description": "Real-time Markdown preview tool with pandoc (view markdown)",
+  "type": "module",
+  "keywords": [
+    "markdown",
+    "preview",
+    "live-server",
+    "pandoc",
+    "cli",
+    "viewer"
+  ],
+  "author": "notokeishou",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/notokeishou/vimd.git"
+  },
+  "homepage": "https://github.com/notokeishou/vimd#readme",
+  "bugs": {
+    "url": "https://github.com/notokeishou/vimd/issues"
+  },
+  "bin": {
+    "vimd": "./dist/cli/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsx src/cli/index.ts",
+    "build": "tsc && node scripts/set-executable.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/postinstall.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
