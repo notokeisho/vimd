@@ -49,8 +49,8 @@ export async function devCommand(
       process.exit(1);
     }
 
-    // 4. Prepare output directory
-    const outputDir = path.join(process.cwd(), '.vimd-tmp');
+    // 4. Prepare output directory (not starting with '.' to avoid live-server ignore)
+    const outputDir = path.join(process.cwd(), 'vimd-preview');
     await fs.ensureDir(outputDir);
     const htmlPath = path.join(
       outputDir,

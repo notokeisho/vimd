@@ -21,7 +21,7 @@ export class LiveServer {
       file: file,
       open: false, // manually open
       wait: 100,
-      logLevel: 2, // verbose for debugging
+      logLevel: 0, // silent
       watch: [root], // explicitly watch the root directory
     };
 
