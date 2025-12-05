@@ -7,7 +7,7 @@ import { PandocDetector } from '../../core/pandoc-detector.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
 interface DevOptions {
   port?: string;

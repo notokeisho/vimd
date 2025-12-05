@@ -10,7 +10,6 @@ export const DEFAULT_CONFIG: VimdConfig = {
     standalone: true,
     toc: false,
     tocDepth: 3,
-    highlightStyle: 'github',
   },
   watch: {
     ignored: ['node_modules/**', '.git/**', 'dist/**'],

@@ -16,7 +16,7 @@ export interface PandocConfig {
   standalone: boolean;
   toc: boolean;
   tocDepth?: number;
-  highlightStyle: string;
+  highlightStyle?: string;
   metadata?: Record<string, string>;
 }
 

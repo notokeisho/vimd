@@ -23,7 +23,8 @@ describe('DEFAULT_CONFIG', () => {
     expect(DEFAULT_CONFIG.pandoc).toBeDefined();
     expect(DEFAULT_CONFIG.pandoc.standalone).toBe(true);
     expect(DEFAULT_CONFIG.pandoc.toc).toBe(false);
-    expect(DEFAULT_CONFIG.pandoc.highlightStyle).toBe('github');
+    // highlightStyle is optional and removed from defaults
+    expect(DEFAULT_CONFIG.pandoc.highlightStyle).toBeUndefined();
   });
 
   it('should have watch configuration', () => {

@@ -1,7 +1,7 @@
 // src/themes/index.ts
 import { ThemeInfo } from '../config/types.js';
 import { THEMES, getThemeByName } from './registry.js';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
 export class ThemeManager {
   static list(): ThemeInfo[] {

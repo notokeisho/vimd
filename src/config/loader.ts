@@ -2,7 +2,7 @@
 import { VimdConfig } from './types.js';
 import { DEFAULT_CONFIG } from './defaults.js';
 import { PathResolver } from '../utils/path-resolver.js';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 
 export class ConfigLoader {

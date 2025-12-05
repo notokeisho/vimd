@@ -5,7 +5,7 @@ import { DEFAULT_CONFIG } from '../config/defaults.js';
 import { ThemeManager } from '../themes/index.js';
 import { Logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
 export async function setupCommand(): Promise<void> {
   console.log('\nWelcome to vimd!\n');

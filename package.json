@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "dev": "tsx src/cli/index.ts",
-    "build": "tsc && node scripts/set-executable.cjs",
+    "build": "tsc && node scripts/set-executable.cjs && node scripts/copy-assets.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

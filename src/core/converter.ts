@@ -2,7 +2,7 @@
 import { execSync } from 'child_process';
 import { ConverterConfig } from '../config/types.js';
 import { ThemeManager } from '../themes/index.js';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
