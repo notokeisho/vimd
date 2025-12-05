@@ -30,6 +30,6 @@ describe('DEFAULT_CONFIG', () => {
   it('should have watch configuration', () => {
     expect(DEFAULT_CONFIG.watch).toBeDefined();
     expect(DEFAULT_CONFIG.watch.ignored).toContain('node_modules/**');
-    expect(DEFAULT_CONFIG.watch.debounce).toBe(500);
+    expect(DEFAULT_CONFIG.watch.debounce).toBe(100);
   });
 });
