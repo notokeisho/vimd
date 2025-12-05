@@ -7,6 +7,51 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.5] - 2025-12-06
+
+### 変更
+
+- **一時ファイル管理の改善**
+  - プレビュー用HTMLファイルをシステム一時ディレクトリ (`$TMPDIR/vimd/`) に保存するように変更
+  - ユーザーのプロジェクトディレクトリを汚さないようになった
+  - セッションベースの管理 (24時間経過した古いセッションは自動クリーンアップ)
+
+## [0.1.4] - 2025-12-06
+
+### 修正
+
+- **ライブリロードの修正**
+  - live-serverがドットで始まるディレクトリを無視する問題を修正
+  - ファイル変更検知後のブラウザ自動リロードが正常に動作するようになった
+
+## [0.1.3] - 2025-12-06
+
+### 修正
+
+- **live-serverインポートの修正**
+  - ESM/CommonJSの互換性問題を修正
+  - `liveServer.start is not a function` エラーを解消
+
+## [0.1.2] - 2025-12-06
+
+### 修正
+
+- **バージョン表示の修正**
+  - `vimd --version` が正しいバージョンを表示するように修正
+  - package.jsonから動的に読み込むように変更
+
+## [0.1.1] - 2025-12-06
+
+### 修正
+
+- **npm公開の修正**
+  - 不要なpostinstallスクリプトを削除
+
+### 変更
+
+- **ドキュメントの改善**
+  - READMEの例で使用するファイル名を `README.md` から `draft.md` に変更
+
 ## [0.1.0] - 2025-12-06
 
 ### 追加
@@ -47,4 +92,9 @@
 
 ## リリースリンク
 
+- [0.1.5](https://github.com/notokeishou/vimd/releases/tag/v0.1.5) - 一時ファイル管理改善
+- [0.1.4](https://github.com/notokeishou/vimd/releases/tag/v0.1.4) - ライブリロード修正
+- [0.1.3](https://github.com/notokeishou/vimd/releases/tag/v0.1.3) - live-serverインポート修正
+- [0.1.2](https://github.com/notokeishou/vimd/releases/tag/v0.1.2) - バージョン表示修正
+- [0.1.1](https://github.com/notokeishou/vimd/releases/tag/v0.1.1) - npm公開修正
 - [0.1.0](https://github.com/notokeishou/vimd/releases/tag/v0.1.0) - 初回リリース
