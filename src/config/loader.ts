@@ -10,18 +10,24 @@ export class ConfigLoader {
     return {
       ...DEFAULT_CONFIG,
       ...partial,
-      pandoc: {
-        ...DEFAULT_CONFIG.pandoc,
-        ...partial.pandoc,
-      },
-      watch: {
-        ...DEFAULT_CONFIG.watch,
-        ...partial.watch,
-      },
-      build: {
-        ...DEFAULT_CONFIG.build,
-        ...partial.build,
-      },
+      pandoc: partial.pandoc
+        ? {
+            ...DEFAULT_CONFIG.pandoc,
+            ...partial.pandoc,
+          }
+        : DEFAULT_CONFIG.pandoc,
+      watch: partial.watch
+        ? {
+            ...DEFAULT_CONFIG.watch,
+            ...partial.watch,
+          }
+        : DEFAULT_CONFIG.watch,
+      build: partial.build
+        ? {
+            ...DEFAULT_CONFIG.build,
+            ...partial.build,
+          }
+        : DEFAULT_CONFIG.build,
     };
   }
 

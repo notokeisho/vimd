@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "dev": "tsx src/cli/index.ts",
-    "build": "tsc && node scripts/set-executable.js",
+    "build": "tsc && node scripts/set-executable.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -42,7 +42,7 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node scripts/postinstall.js",
+    "postinstall": "node scripts/postinstall.cjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "engines": {
