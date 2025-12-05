@@ -6,6 +6,7 @@ import { LiveServer } from '../../core/server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
+import { TempManager } from '../../utils/temp-manager.js';
 import * as path from 'path';
 import fs from 'fs-extra';
 
@@ -49,9 +50,8 @@ export async function devCommand(
       process.exit(1);
     }
 
-    // 4. Prepare output directory (not starting with '.' to avoid live-server ignore)
-    const outputDir = path.join(process.cwd(), 'vimd-preview');
-    await fs.ensureDir(outputDir);
+    // 4. Prepare output directory in system temp
+    const outputDir = await TempManager.createSessionDir();
     const htmlPath = path.join(
       outputDir,
       path.basename(filePath, path.extname(filePath)) + '.html'
@@ -108,7 +108,7 @@ export async function devCommand(
       Logger.info('Shutting down...');
       await watcher.stop();
       await server.stop();
-      await fs.remove(outputDir);
+      await TempManager.removeSessionDir(outputDir);
       Logger.info('Cleanup complete');
     });
   } catch (error) {
