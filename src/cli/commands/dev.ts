@@ -6,7 +6,6 @@ import { LiveServer } from '../../core/server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
-import { TempManager } from '../../utils/temp-manager.js';
 import * as path from 'path';
 import fs from 'fs-extra';
 
@@ -50,12 +49,11 @@ export async function devCommand(
       process.exit(1);
     }
 
-    // 4. Prepare output directory in system temp
-    const outputDir = await TempManager.createSessionDir();
-    const htmlPath = path.join(
-      outputDir,
-      path.basename(filePath, path.extname(filePath)) + '.html'
-    );
+    // 4. Prepare output HTML in source directory
+    const sourceDir = path.dirname(absolutePath);
+    const basename = path.basename(filePath, path.extname(filePath));
+    const htmlFileName = `vimd-preview-${basename}.html`;
+    const htmlPath = path.join(sourceDir, htmlFileName);
 
     // 5. Prepare converter
     const converter = new MarkdownConverter({
@@ -71,12 +69,12 @@ export async function devCommand(
     await converter.writeHTML(html, htmlPath);
     Logger.success('Conversion complete');
 
-    // 7. Start live server
+    // 7. Start live server from source directory
     const server = new LiveServer({
       port: config.port,
       host: config.host,
       open: config.open,
-      root: outputDir,
+      root: sourceDir,
     });
 
     await server.start(htmlPath);
@@ -103,12 +101,18 @@ export async function devCommand(
 
     watcher.start();
 
-    // 9. Register cleanup
+    // 9. Register cleanup - remove generated HTML file
     ProcessManager.onExit(async () => {
       Logger.info('Shutting down...');
       await watcher.stop();
       await server.stop();
-      await TempManager.removeSessionDir(outputDir);
+      // Remove the generated preview HTML file
+      try {
+        await fs.remove(htmlPath);
+        Logger.info(`Removed: ${htmlFileName}`);
+      } catch {
+        // Ignore errors when removing file
+      }
       Logger.info('Cleanup complete');
     });
   } catch (error) {
