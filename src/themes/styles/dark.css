@@ -1,0 +1,54 @@
+/* Dark Theme - VS Code inspired */
+body {
+  font-family: 'Fira Code', Consolas, Monaco, monospace;
+  line-height: 1.6;
+  color: #d4d4d4;
+  background: #1e1e1e;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #569cd6;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+a {
+  color: #569cd6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  background: #252526;
+  color: #ce9178;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Fira Code', monospace;
+}
+
+pre {
+  background: #252526;
+  padding: 1em;
+  border-radius: 5px;
+  overflow-x: auto;
+  border: 1px solid #333;
+}
+
+pre code {
+  background: none;
+  color: #d4d4d4;
+  padding: 0;
+}
+
+blockquote {
+  border-left: 4px solid #569cd6;
+  padding-left: 1em;
+  color: #b5b5b5;
+  margin-left: 0;
+}

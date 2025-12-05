@@ -1,0 +1,84 @@
+/* Technical Theme - API documentation style */
+body {
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  line-height: 1.6;
+  color: #2c3e50;
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+}
+
+.markdown-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #34495e;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 1.8em;
+  color: #34495e;
+  margin-top: 2em;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  font-size: 1.3em;
+  color: #34495e;
+}
+
+code {
+  background: #f4f4f4;
+  color: #e74c3c;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  font-family: 'SF Mono', monospace;
+  font-size: 0.95em;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 1.5em;
+  border-radius: 5px;
+  overflow-x: auto;
+  border-left: 4px solid #3498db;
+}
+
+pre code {
+  background: none;
+  color: #2c3e50;
+  padding: 0;
+}
+
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.8em;
+  text-align: left;
+}
+
+th {
+  background: #34495e;
+  color: #fff;
+}
