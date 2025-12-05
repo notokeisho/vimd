@@ -73,6 +73,7 @@ vimd dev spec.md --theme dark --no-open
 ```
 
 **オプション:**
+
 - `-p, --port <port>`: ポート番号 (デフォルト: 8080)
 - `-t, --theme <theme>`: テーマ名 (グローバル設定を上書き)
 - `--no-open`: ブラウザを自動で開かない
@@ -88,6 +89,7 @@ vimd build spec.md --theme academic
 ```
 
 **オプション:**
+
 - `-o, --output <path>`: 出力ファイルパス (デフォルト: 同名で拡張子.html)
 - `-t, --theme <theme>`: テーマ名 (グローバル設定を上書き)
 
@@ -115,13 +117,13 @@ vimd config --list
 
 vimdには5つの組み込みテーマがあります:
 
-| テーマ | 説明 | 用途 |
-|-------|------|------|
-| **GitHub** | GitHub Markdownスタイル (推奨) | 一般的なドキュメント |
-| **Minimal** | シンプルな白背景 | 集中して書きたいとき |
-| **Dark** | VS Codeインスパイアのダークモード | 夜間の作業 |
-| **Academic** | 論文スタイルのレイアウト | 学術論文、研究文書 |
-| **Technical** | APIドキュメントスタイル | 技術仕様書、API文書 |
+| テーマ        | 説明                              | 用途                 |
+| ------------- | --------------------------------- | -------------------- |
+| **GitHub**    | GitHub Markdownスタイル (推奨)    | 一般的なドキュメント |
+| **Minimal**   | シンプルな白背景                  | 集中して書きたいとき |
+| **Dark**      | VS Codeインスパイアのダークモード | 夜間の作業           |
+| **Academic**  | 論文スタイルのレイアウト          | 学術論文、研究文書   |
+| **Technical** | APIドキュメントスタイル           | 技術仕様書、API文書  |
 
 ## 設定
 
@@ -266,5 +268,3 @@ MIT © notokeishou
 - [Issue Tracker](https://github.com/notokeishou/vimd/issues)
 
 ---
-
-Made with ❤️ by notokeishou
