@@ -69,6 +69,7 @@
     "fs-extra": "^11.3.2",
     "github-markdown-css": "^5.8.1",
     "inquirer": "^9.3.8",
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "open": "^9.1.0"
   }
 }
