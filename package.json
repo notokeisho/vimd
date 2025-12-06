@@ -1,6 +1,6 @@
 {
   "name": "vimd",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "description": "Real-time Markdown preview tool with pandoc (view markdown)",
   "type": "module",
   "keywords": [
