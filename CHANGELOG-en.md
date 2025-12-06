@@ -7,6 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.12] - 2025-12-06
+
+### Added
+
+- **technical.css Theme Complete Redesign**
+  - API Documentation Template-inspired styling
+  - Fix: Changed `.markdown-body` selector to `body`
+  - CSS variables for easy customization
+  - Monospace headings for technical appearance
+  - Blue-bordered code blocks
+  - Note/warning style blockquotes with background
+  - Dark header tables with zebra striping
+  - TOC with "Table of Contents" header
+  - Colorful syntax highlighting
+  - Custom scrollbar styling
+  - Print support
+  - Responsive design
+
 ## [0.1.11] - 2025-12-06
 
 ### Added

@@ -7,6 +7,24 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.12] - 2025-12-06
+
+### 追加
+
+- **technical.css テーマの完全刷新**
+  - API Documentation Template インスパイアのスタイル
+  - `.markdown-body` セレクタを `body` に修正
+  - CSS変数によるカスタマイズ対応
+  - モノスペース見出しで技術的な見た目
+  - 青ボーダーのコードブロック
+  - Note/Warning風blockquote
+  - ダークヘッダー + 縞模様テーブル
+  - "Table of Contents" ヘッダー付きTOC
+  - カラフルなシンタックスハイライト
+  - カスタムスクロールバー
+  - 印刷対応
+  - レスポンシブデザイン
+
 ## [0.1.11] - 2025-12-06
 
 ### 追加
