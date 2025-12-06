@@ -7,6 +7,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-12-06
+
+### Added
+
+- **Dual Parser System**
+  - markdown-it parser: Fast, no pandoc required
+  - pandoc parser: High quality, feature-rich
+  - ParserFactory for unified parser management
+
+- **New CLI Options**
+  - `vimd dev --pandoc`: Use pandoc parser in dev command
+  - `vimd build --fast`: Use markdown-it parser in build command (fast build)
+
+- **New Configuration Options**
+  - `devParser`: Default parser for dev command (default: `markdown-it`)
+  - `buildParser`: Default parser for build command (default: `pandoc`)
+
+- **markdown-it Features**
+  - GitHub Flavored Markdown (GFM) support
+  - Tables, strikethrough, task lists
+  - Syntax highlighting via highlight.js
+
+### Changed
+
+- **pandoc is Now Optional**
+  - dev command uses markdown-it by default (no pandoc required)
+  - pandoc is only required for high-quality builds (optional)
+
+- **Performance Improvements**
+  - markdown-it converts Markdown faster than pandoc
+  - Improved preview experience during development
+
+### Technical Changes
+
+- Added parser injection to Converter class (setParser/getParser)
+- Added 45 parser-related unit tests
+- Total 173 tests passing
+
 ## [0.1.12] - 2025-12-06
 
 ### Added
@@ -194,6 +232,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Release Links
 
+- [0.2.0](https://github.com/notokeishou/vimd/releases/tag/v0.2.0) - Dual Parser System
+- [0.1.12](https://github.com/notokeishou/vimd/releases/tag/v0.1.12) - Technical theme redesign
 - [0.1.5](https://github.com/notokeishou/vimd/releases/tag/v0.1.5) - Improved temp file management
 - [0.1.4](https://github.com/notokeishou/vimd/releases/tag/v0.1.4) - Live reload fix
 - [0.1.3](https://github.com/notokeishou/vimd/releases/tag/v0.1.3) - live-server import fix

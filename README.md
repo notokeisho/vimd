@@ -60,14 +60,7 @@
 ### 必要要件
 
 - **Node.js** >= 18.0.0
-- **pandoc** >= 2.0
-
-```bash
-# pandocのインストール
-brew install pandoc        # macOS
-sudo apt install pandoc    # Ubuntu/Debian
-choco install pandoc       # Windows
-```
+- **pandoc** >= 2.0（オプション、高品質ビルド時のみ）
 
 ### インストール
 
@@ -75,14 +68,27 @@ choco install pandoc       # Windows
 npm install -g vimd
 ```
 
+v0.2.0 からは **pandoc なしで利用可能** になりました。
+高品質な出力が必要な場合のみ pandoc をインストールしてください。
+
+```bash
+# pandocのインストール（オプション）
+brew install pandoc        # macOS
+sudo apt install pandoc    # Ubuntu/Debian
+choco install pandoc       # Windows
+```
+
 ### 使い方
 
 ```bash
-# ライブプレビューを開始
+# ライブプレビューを開始（pandoc不要、高速）
 vimd dev draft.md
 
-# 静的HTMLを生成
+# 静的HTMLを生成（pandoc使用、高品質）
 vimd build draft.md
+
+# 高速ビルド（pandoc不要）
+vimd build draft.md --fast
 
 # テーマを変更
 vimd theme
@@ -105,10 +111,16 @@ vimd config
 ### オプション
 
 ```bash
+# dev コマンド
 vimd dev draft.md --port 3000      # ポート指定
 vimd dev draft.md --theme dark     # テーマ指定
 vimd dev draft.md --no-open        # ブラウザを開かない
+vimd dev draft.md --pandoc         # pandocパーサーを使用
+
+# build コマンド
 vimd build draft.md -o output.html # 出力先指定
+vimd build draft.md --fast         # markdown-itで高速ビルド
+vimd build draft.md --theme dark   # テーマ指定
 ```
 
 ---
@@ -122,8 +134,17 @@ export default {
   theme: 'github',
   port: 8080,
   open: true,
+  devParser: 'markdown-it',  // dev用パーサー（デフォルト: markdown-it）
+  buildParser: 'pandoc',     // build用パーサー（デフォルト: pandoc）
 };
 ```
+
+### パーサー設定
+
+| パーサー | 特徴 | 用途 |
+|----------|------|------|
+| `markdown-it` | 高速、pandoc不要 | 開発時のプレビュー |
+| `pandoc` | 高品質、多機能 | 最終出力の生成 |
 
 詳細な設定オプションは [docs/api.md](docs/api.md) を参照してください。
 
@@ -134,7 +155,8 @@ export default {
 | 特徴 | vimd | 他のツール |
 |------|------|-----------|
 | セットアップ | `npm i -g vimd` | 複雑な設定が必要な場合も |
-| 変換品質 | pandoc (高品質) | 様々 |
+| 外部依存 | なし（pandocはオプション） | pandoc必須が多い |
+| 変換品質 | markdown-it / pandoc 選択可 | 固定 |
 | テーマ | 5種類組み込み | 別途設定が必要 |
 | 設定ファイル | プロジェクト外 (`~/.vimd/`) | プロジェクト内が多い |
 | ライブリロード | 自動 | 手動リロードが必要な場合も |

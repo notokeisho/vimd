@@ -60,14 +60,7 @@
 ### Requirements
 
 - **Node.js** >= 18.0.0
-- **pandoc** >= 2.0
-
-```bash
-# Install pandoc
-brew install pandoc        # macOS
-sudo apt install pandoc    # Ubuntu/Debian
-choco install pandoc       # Windows
-```
+- **pandoc** >= 2.0 (optional, for high-quality builds only)
 
 ### Installation
 
@@ -75,14 +68,27 @@ choco install pandoc       # Windows
 npm install -g vimd
 ```
 
+From v0.2.0, **vimd works without pandoc**.
+Install pandoc only when you need high-quality output.
+
+```bash
+# Install pandoc (optional)
+brew install pandoc        # macOS
+sudo apt install pandoc    # Ubuntu/Debian
+choco install pandoc       # Windows
+```
+
 ### Usage
 
 ```bash
-# Start live preview
+# Start live preview (no pandoc required, fast)
 vimd dev draft.md
 
-# Build static HTML
+# Build static HTML (uses pandoc, high quality)
 vimd build draft.md
+
+# Fast build (no pandoc required)
+vimd build draft.md --fast
 
 # Change theme
 vimd theme
@@ -105,10 +111,16 @@ vimd config
 ### Options
 
 ```bash
+# dev command
 vimd dev draft.md --port 3000      # Specify port
 vimd dev draft.md --theme dark     # Specify theme
 vimd dev draft.md --no-open        # Don't open browser
+vimd dev draft.md --pandoc         # Use pandoc parser
+
+# build command
 vimd build draft.md -o output.html # Specify output path
+vimd build draft.md --fast         # Fast build with markdown-it
+vimd build draft.md --theme dark   # Specify theme
 ```
 
 ---
@@ -122,8 +134,17 @@ export default {
   theme: 'github',
   port: 8080,
   open: true,
+  devParser: 'markdown-it',  // Parser for dev (default: markdown-it)
+  buildParser: 'pandoc',     // Parser for build (default: pandoc)
 };
 ```
+
+### Parser Settings
+
+| Parser | Features | Use Case |
+|--------|----------|----------|
+| `markdown-it` | Fast, no pandoc required | Development preview |
+| `pandoc` | High quality, feature-rich | Final output generation |
 
 See [docs/api.md](docs/api.md) for detailed configuration options.
 
@@ -134,7 +155,8 @@ See [docs/api.md](docs/api.md) for detailed configuration options.
 | Feature | vimd | Other Tools |
 |---------|------|-------------|
 | Setup | `npm i -g vimd` | May require complex setup |
-| Conversion Quality | pandoc (high quality) | Varies |
+| Dependencies | None (pandoc is optional) | Often requires pandoc |
+| Conversion Quality | markdown-it / pandoc selectable | Fixed |
 | Themes | 5 built-in | Often requires configuration |
 | Config File | Outside project (`~/.vimd/`) | Often inside project |
 | Live Reload | Automatic | May require manual refresh |

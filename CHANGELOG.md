@@ -7,6 +7,44 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.2.0] - 2025-12-06
+
+### 追加
+
+- **デュアルパーサーシステム**
+  - markdown-it パーサー: 高速、pandoc不要
+  - pandoc パーサー: 高品質、多機能
+  - ParserFactory による統一されたパーサー管理
+
+- **新しいCLIオプション**
+  - `vimd dev --pandoc`: devコマンドでpandocパーサーを使用
+  - `vimd build --fast`: buildコマンドでmarkdown-itパーサーを使用（高速ビルド）
+
+- **新しい設定項目**
+  - `devParser`: devコマンドのデフォルトパーサー（デフォルト: `markdown-it`）
+  - `buildParser`: buildコマンドのデフォルトパーサー（デフォルト: `pandoc`）
+
+- **markdown-it の機能**
+  - GitHub Flavored Markdown (GFM) サポート
+  - テーブル、取り消し線、タスクリスト
+  - highlight.js によるシンタックスハイライト
+
+### 変更
+
+- **pandocが不要に**
+  - devコマンドはデフォルトでmarkdown-itを使用（pandoc不要）
+  - pandocは高品質ビルド時のみ必要（オプション）
+
+- **パフォーマンス向上**
+  - markdown-itはpandocより高速にMarkdownを変換
+  - 開発時のプレビュー体験が向上
+
+### 技術的変更
+
+- Converterクラスにパーサー注入機能を追加（setParser/getParser）
+- 45件のパーサー関連ユニットテストを追加
+- 合計173件のテストが通過
+
 ## [0.1.12] - 2025-12-06
 
 ### 追加
@@ -194,6 +232,8 @@
 
 ## リリースリンク
 
+- [0.2.0](https://github.com/notokeishou/vimd/releases/tag/v0.2.0) - デュアルパーサーシステム
+- [0.1.12](https://github.com/notokeishou/vimd/releases/tag/v0.1.12) - technicalテーマ刷新
 - [0.1.5](https://github.com/notokeishou/vimd/releases/tag/v0.1.5) - 一時ファイル管理改善
 - [0.1.4](https://github.com/notokeishou/vimd/releases/tag/v0.1.4) - ライブリロード修正
 - [0.1.3](https://github.com/notokeishou/vimd/releases/tag/v0.1.3) - live-serverインポート修正
