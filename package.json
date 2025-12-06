@@ -51,6 +51,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^9.0.9",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^20.19.25",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -67,8 +68,12 @@
     "commander": "^12.1.0",
     "fs-extra": "^11.3.2",
     "github-markdown-css": "^5.8.1",
+    "highlight.js": "^11.11.1",
     "inquirer": "^9.3.8",
     "live-server": "^1.2.2",
+    "markdown-it": "^14.1.0",
+    "markdown-it-strikethrough-alt": "^1.0.0",
+    "markdown-it-task-lists": "^2.1.1",
     "open": "^9.1.0"
   }
 }

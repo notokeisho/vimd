@@ -6,6 +6,7 @@ import { FileWatcher } from '../../src/core/watcher.js';
 import { MarkdownConverter } from '../../src/core/converter.js';
 import { LiveServer } from '../../src/core/server.js';
 import { PandocDetector } from '../../src/core/pandoc-detector.js';
+import { ParserFactory } from '../../src/core/parser/index.js';
 import { Logger } from '../../src/utils/logger.js';
 import { ProcessManager } from '../../src/utils/process-manager.js';
 import { SessionManager } from '../../src/utils/session-manager.js';
@@ -16,6 +17,7 @@ vi.mock('../../src/core/watcher.js');
 vi.mock('../../src/core/converter.js');
 vi.mock('../../src/core/server.js');
 vi.mock('../../src/core/pandoc-detector.js');
+vi.mock('../../src/core/parser/index.js');
 vi.mock('../../src/utils/logger.js');
 vi.mock('../../src/utils/process-manager.js');
 vi.mock('../../src/utils/session-manager.js');
@@ -35,6 +37,8 @@ describe('devCommand', () => {
     css: undefined,
     template: undefined,
     watch: { ignored: [] },
+    devParser: 'markdown-it',
+    buildParser: 'pandoc',
   });
 
   beforeEach(() => {
@@ -45,6 +49,14 @@ describe('devCommand', () => {
 
     // Mock pandoc
     vi.mocked(PandocDetector.ensureInstalled).mockReturnValue(undefined);
+
+    // Mock ParserFactory
+    const mockParser = {
+      name: 'markdown-it',
+      parse: vi.fn().mockResolvedValue('<html>test</html>'),
+      isAvailable: vi.fn().mockResolvedValue(true),
+    };
+    vi.mocked(ParserFactory.create).mockReturnValue(mockParser as any);
 
     // Mock file system
     vi.mocked(fs.pathExists).mockResolvedValue(true);
@@ -65,6 +77,8 @@ describe('devCommand', () => {
     mockConverter = {
       convertWithTemplate: vi.fn().mockResolvedValue('<html>test</html>'),
       writeHTML: vi.fn().mockResolvedValue(undefined),
+      setParser: vi.fn(),
+      getParser: vi.fn(),
     };
     vi.mocked(MarkdownConverter).mockImplementation(() => mockConverter);
 
@@ -101,7 +115,11 @@ describe('devCommand', () => {
     expect(SessionManager.cleanDeadSessions).toHaveBeenCalled();
     expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(8080);
     expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(8080);
-    expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
+    // Note: PandocDetector.ensureInstalled is NOT called by default
+    // because devParser defaults to 'markdown-it'
+    expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
+    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {});
+    expect(mockConverter.setParser).toHaveBeenCalled();
     expect(mockConverter.convertWithTemplate).toHaveBeenCalled();
     expect(mockServer.start).toHaveBeenCalled();
     expect(SessionManager.saveSession).toHaveBeenCalled();
@@ -213,5 +231,20 @@ describe('devCommand', () => {
       'Stopped previous session on port 8080'
     );
     expect(Logger.info).toHaveBeenCalledWith('Removed previous preview file');
+  });
+
+  it('should use pandoc parser when --pandoc option is provided', async () => {
+    await devCommand('test.md', { pandoc: true });
+
+    expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
+    expect(ParserFactory.create).toHaveBeenCalledWith('pandoc', {});
+    expect(mockConverter.setParser).toHaveBeenCalled();
+  });
+
+  it('should use markdown-it parser by default (devParser config)', async () => {
+    await devCommand('test.md', {});
+
+    expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
+    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {});
   });
 });

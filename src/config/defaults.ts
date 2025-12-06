@@ -19,4 +19,6 @@ export const DEFAULT_CONFIG: VimdConfig = {
     inlineCSS: false,
     standalone: true,
   },
+  devParser: 'markdown-it',
+  buildParser: 'pandoc',
 };

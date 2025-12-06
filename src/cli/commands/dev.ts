@@ -4,6 +4,7 @@ import { FileWatcher } from '../../core/watcher.js';
 import { MarkdownConverter } from '../../core/converter.js';
 import { LiveServer } from '../../core/server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
+import { ParserFactory } from '../../core/parser/index.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
 import { SessionManager } from '../../utils/session-manager.js';
@@ -14,6 +15,7 @@ interface DevOptions {
   port?: string;
   theme?: string;
   open?: boolean;
+  pandoc?: boolean;
 }
 
 export async function devCommand(
@@ -65,37 +67,45 @@ export async function devCommand(
     Logger.info(`Theme: ${config.theme}`);
     Logger.info(`Port: ${port}`);
 
-    // 5. Check pandoc installation
-    PandocDetector.ensureInstalled();
+    // 5. Determine parser type
+    const parserType = options.pandoc ? 'pandoc' : config.devParser;
+    Logger.info(`Parser: ${parserType}`);
 
-    // 6. Check file exists
+    // 6. Check pandoc installation only if pandoc parser is selected
+    if (parserType === 'pandoc') {
+      PandocDetector.ensureInstalled();
+    }
+
+    // 7. Check file exists
     const absolutePath = path.resolve(filePath);
     if (!(await fs.pathExists(absolutePath))) {
       Logger.error(`File not found: ${filePath}`);
       process.exit(1);
     }
 
-    // 7. Prepare output HTML in source directory
+    // 8. Prepare output HTML in source directory
     const sourceDir = path.dirname(absolutePath);
     const basename = path.basename(filePath, path.extname(filePath));
     const htmlFileName = `vimd-preview-${basename}.html`;
     const htmlPath = path.join(sourceDir, htmlFileName);
 
-    // 8. Prepare converter
+    // 9. Prepare converter with selected parser
+    const parser = ParserFactory.create(parserType, config.pandoc);
     const converter = new MarkdownConverter({
       theme: config.theme,
       pandocOptions: config.pandoc,
       customCSS: config.css,
       template: config.template,
     });
+    converter.setParser(parser);
 
-    // 9. Initial conversion
+    // 10. Initial conversion
     Logger.info('Converting markdown...');
     const html = await converter.convertWithTemplate(absolutePath);
     await converter.writeHTML(html, htmlPath);
     Logger.success('Conversion complete');
 
-    // 10. Start live server from source directory
+    // 11. Start live server from source directory
     const server = new LiveServer({
       port: port,
       host: config.host,
@@ -105,7 +115,7 @@ export async function devCommand(
 
     await server.start(htmlPath);
 
-    // 11. Save session
+    // 12. Save session
     await SessionManager.saveSession({
       pid: process.pid,
       port: port,
@@ -117,7 +127,7 @@ export async function devCommand(
     Logger.info(`Watching: ${filePath}`);
     Logger.info('Press Ctrl+C to stop');
 
-    // 12. Start file watching
+    // 13. Start file watching
     const watcher = new FileWatcher(absolutePath, config.watch);
 
     watcher.onChange(async (changedPath) => {
@@ -136,7 +146,7 @@ export async function devCommand(
 
     watcher.start();
 
-    // 13. Register cleanup - remove generated HTML file and session
+    // 14. Register cleanup - remove generated HTML file and session
     ProcessManager.onExit(async () => {
       Logger.info('Shutting down...');
       await watcher.stop();

@@ -2,6 +2,7 @@
 import { execSync } from 'child_process';
 import { ConverterConfig } from '../config/types.js';
 import { ThemeManager } from '../themes/index.js';
+import { Parser } from './parser/index.js';
 import fs from 'fs-extra';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,9 +11,43 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export class MarkdownConverter {
+  private parser: Parser | null = null;
+
   constructor(private config: ConverterConfig) {}
 
+  /**
+   * Set the parser to use for conversion.
+   * If not set, falls back to legacy pandoc conversion.
+   * @param parser - The parser instance to use
+   */
+  setParser(parser: Parser): void {
+    this.parser = parser;
+  }
+
+  /**
+   * Get the currently set parser.
+   * @returns The parser instance or null if not set
+   */
+  getParser(): Parser | null {
+    return this.parser;
+  }
+
   async convert(markdownPath: string): Promise<string> {
+    // If a parser is set, use it
+    if (this.parser) {
+      const content = await fs.readFile(markdownPath, 'utf-8');
+      return this.parser.parse(content);
+    }
+
+    // Legacy: use direct pandoc execution for backward compatibility
+    return this.convertWithPandocLegacy(markdownPath);
+  }
+
+  /**
+   * Legacy pandoc conversion method.
+   * Used when no parser is explicitly set (backward compatibility).
+   */
+  private async convertWithPandocLegacy(markdownPath: string): Promise<string> {
     const pandocArgs = this.buildPandocArgs();
     const command = `pandoc ${pandocArgs.join(' ')} "${markdownPath}"`;
 
@@ -83,7 +118,7 @@ export class MarkdownConverter {
     }
 
     if (this.config.pandocOptions.highlightStyle) {
-      args.push(`--highlight-style=${this.config.pandocOptions.highlightStyle}`);
+      args.push(`--syntax-highlighting=${this.config.pandocOptions.highlightStyle}`);
     }
 
     // Metadata

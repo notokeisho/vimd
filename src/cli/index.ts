@@ -24,6 +24,7 @@ program
   .option('-p, --port <port>', 'Port number', '8080')
   .option('-t, --theme <theme>', 'Theme name')
   .option('--no-open', 'Do not open browser automatically')
+  .option('--pandoc', 'Use pandoc parser instead of markdown-it')
   .action(devCommand);
 
 // vimd build <file>
@@ -32,6 +33,7 @@ program
   .description('Build static HTML file')
   .option('-o, --output <path>', 'Output file path')
   .option('-t, --theme <theme>', 'Theme name')
+  .option('--fast', 'Use markdown-it parser for faster build')
   .action(buildCommand);
 
 // vimd theme

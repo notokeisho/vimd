@@ -2,6 +2,7 @@
 import { ConfigLoader } from '../../config/loader.js';
 import { MarkdownConverter } from '../../core/converter.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
+import { ParserFactory } from '../../core/parser/index.js';
 import { Logger } from '../../utils/logger.js';
 import * as path from 'path';
 import fs from 'fs-extra';
@@ -9,6 +10,7 @@ import fs from 'fs-extra';
 interface BuildOptions {
   output?: string;
   theme?: string;
+  fast?: boolean;
 }
 
 export async function buildCommand(
@@ -28,17 +30,23 @@ export async function buildCommand(
 
     Logger.info(`Theme: ${config.theme}`);
 
-    // 2. Check pandoc installation
-    PandocDetector.ensureInstalled();
+    // 2. Determine parser type
+    const parserType = options.fast ? 'markdown-it' : config.buildParser;
+    Logger.info(`Parser: ${parserType}`);
 
-    // 3. Check file exists
+    // 3. Check pandoc installation only if pandoc parser is selected
+    if (parserType === 'pandoc') {
+      PandocDetector.ensureInstalled();
+    }
+
+    // 4. Check file exists
     const absolutePath = path.resolve(filePath);
     if (!(await fs.pathExists(absolutePath))) {
       Logger.error(`File not found: ${filePath}`);
       process.exit(1);
     }
 
-    // 4. Determine output path
+    // 5. Determine output path
     const outputPath = options.output
       ? path.resolve(options.output)
       : path.join(
@@ -48,18 +56,21 @@ export async function buildCommand(
 
     Logger.info(`Output: ${outputPath}`);
 
-    // 5. Prepare converter
+    // 6. Prepare converter with selected parser
+    const pandocOptions = {
+      ...config.pandoc,
+      standalone: true, // build always uses standalone
+    };
+    const parser = ParserFactory.create(parserType, pandocOptions);
     const converter = new MarkdownConverter({
       theme: config.theme,
-      pandocOptions: {
-        ...config.pandoc,
-        standalone: true, // build always uses standalone
-      },
+      pandocOptions: pandocOptions,
       customCSS: config.css,
       template: config.template || undefined,
     });
+    converter.setParser(parser);
 
-    // 6. Execute conversion
+    // 7. Execute conversion
     Logger.info('Converting...');
     const html = await converter.convertWithTemplate(absolutePath);
     await converter.writeHTML(html, outputPath);

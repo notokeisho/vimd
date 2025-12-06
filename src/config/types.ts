@@ -1,5 +1,11 @@
 // src/config/types.ts
 
+/**
+ * Available parser types.
+ * Duplicated here to avoid circular dependency with core/parser/types.ts
+ */
+export type ConfigParserType = 'markdown-it' | 'pandoc';
+
 export interface VimdConfig {
   theme: 'github' | 'minimal' | 'dark' | 'academic' | 'technical';
   port: number;
@@ -10,6 +16,8 @@ export interface VimdConfig {
   pandoc: PandocConfig;
   watch: WatchConfig;
   build?: BuildConfig;
+  devParser: ConfigParserType;
+  buildParser: ConfigParserType;
 }
 
 export interface PandocConfig {

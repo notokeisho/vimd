@@ -29,8 +29,13 @@ export class PandocDetector {
   static showInstallGuide(os: OSType): void {
     console.error('⚠️  pandoc not found');
     console.error('');
-    console.error('vimd requires pandoc to convert Markdown to HTML.');
-    console.error('Please install pandoc manually:');
+    console.error('pandoc is required for the selected parser mode.');
+    console.error('');
+    console.error('Option 1: Use markdown-it mode (no pandoc needed)');
+    console.error('  vimd dev document.md       (default, fast preview)');
+    console.error('  vimd build document.md --fast');
+    console.error('');
+    console.error('Option 2: Install pandoc for high-quality output');
     console.error('');
 
     switch (os) {

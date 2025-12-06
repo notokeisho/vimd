@@ -4,12 +4,14 @@ import { buildCommand } from '../../src/cli/commands/build.js';
 import { ConfigLoader } from '../../src/config/loader.js';
 import { MarkdownConverter } from '../../src/core/converter.js';
 import { PandocDetector } from '../../src/core/pandoc-detector.js';
+import { ParserFactory } from '../../src/core/parser/index.js';
 import { Logger } from '../../src/utils/logger.js';
 import fs from 'fs-extra';
 
 vi.mock('../../src/config/loader.js');
 vi.mock('../../src/core/converter.js');
 vi.mock('../../src/core/pandoc-detector.js');
+vi.mock('../../src/core/parser/index.js');
 vi.mock('../../src/utils/logger.js');
 vi.mock('fs-extra');
 
@@ -23,6 +25,8 @@ describe('buildCommand', () => {
     host: 'localhost',
     open: false,
     watch: { ignored: [] },
+    devParser: 'markdown-it',
+    buildParser: 'pandoc',
   };
 
   beforeEach(() => {
@@ -31,9 +35,19 @@ describe('buildCommand', () => {
     vi.mocked(PandocDetector.ensureInstalled).mockReturnValue(undefined);
     vi.mocked(fs.pathExists).mockResolvedValue(true);
 
+    // Mock ParserFactory
+    const mockParser = {
+      name: 'pandoc',
+      parse: vi.fn().mockResolvedValue('<html>test</html>'),
+      isAvailable: vi.fn().mockResolvedValue(true),
+    };
+    vi.mocked(ParserFactory.create).mockReturnValue(mockParser as any);
+
     const mockConverter = {
       convertWithTemplate: vi.fn().mockResolvedValue('<html>test</html>'),
       writeHTML: vi.fn().mockResolvedValue(undefined),
+      setParser: vi.fn(),
+      getParser: vi.fn(),
     };
     vi.mocked(MarkdownConverter).mockImplementation(() => mockConverter as any);
 
@@ -86,6 +100,8 @@ describe('buildCommand', () => {
     const mockConverter = {
       convertWithTemplate: vi.fn().mockRejectedValue(new Error('Conversion failed')),
       writeHTML: vi.fn(),
+      setParser: vi.fn(),
+      getParser: vi.fn(),
     };
     vi.mocked(MarkdownConverter).mockImplementation(() => mockConverter as any);
 
@@ -93,5 +109,26 @@ describe('buildCommand', () => {
 
     expect(Logger.error).toHaveBeenCalledWith('Build failed');
     expect(process.exit).toHaveBeenCalledWith(1);
+  });
+
+  it('should use pandoc parser by default (buildParser config)', async () => {
+    await buildCommand('test.md', {});
+
+    expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
+    expect(ParserFactory.create).toHaveBeenCalledWith(
+      'pandoc',
+      expect.objectContaining({ standalone: true })
+    );
+  });
+
+  it('should use markdown-it parser when --fast option is provided', async () => {
+    await buildCommand('test.md', { fast: true });
+
+    // When --fast is used, pandoc check should NOT be called
+    expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
+    expect(ParserFactory.create).toHaveBeenCalledWith(
+      'markdown-it',
+      expect.objectContaining({ standalone: true })
+    );
   });
 });
