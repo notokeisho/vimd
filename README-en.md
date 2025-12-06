@@ -2,49 +2,87 @@
 
 🌐 English | [日本語](README.md)
 
-> Real-time Markdown preview tool with pandoc (view markdown)
+> Write and preview. Markdown made visible.
 
 [![npm version](https://img.shields.io/npm/v/vimd.svg)](https://www.npmjs.com/package/vimd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-≥18-green.svg)](https://nodejs.org/)
 
-**vimd** is a fast, simple Markdown preview tool that provides real-time HTML preview with multiple themes powered by pandoc.
+---
 
-## Features
+## Demo
 
-- **Real-time Preview**: Instant browser update on file save with live-server
-- **Multiple Themes**: 5 built-in themes (GitHub, Minimal, Dark, Academic, Technical)
-- **Pandoc Powered**: High-quality Markdown conversion using pandoc
-- **Global Configuration**: Clean project directories with `~/.vimd/config.js`
-- **Interactive Configuration**: Easy setup with `vimd theme` and `vimd config`
-- **Cross-Platform**: Works on macOS, Linux, and Windows
+https://github.com/user-attachments/assets/demo.mp4
 
-## Installation
+<details>
+<summary>View GIF version</summary>
+
+![vimd demo](assets/demo.gif)
+
+</details>
+
+---
+
+## Themes
+
+<details open>
+<summary><strong>GitHub</strong> (Default)</summary>
+
+![GitHub Theme](assets/theme-github.png)
+
+</details>
+
+<details>
+<summary><strong>Dark</strong></summary>
+
+![Dark Theme](assets/theme-dark.png)
+
+</details>
+
+<details>
+<summary><strong>Academic</strong></summary>
+
+![Academic Theme](assets/theme-academic.png)
+
+</details>
+
+<details>
+<summary><strong>Minimal</strong></summary>
+
+![Minimal Theme](assets/theme-minimal.png)
+
+</details>
+
+<details>
+<summary><strong>Technical</strong></summary>
+
+![Technical Theme](assets/theme-technical.png)
+
+</details>
+
+---
+
+## Quick Start
+
+### Requirements
+
+- **Node.js** >= 18.0.0
+- **pandoc** >= 2.0
+
+```bash
+# Install pandoc
+brew install pandoc        # macOS
+sudo apt install pandoc    # Ubuntu/Debian
+choco install pandoc       # Windows
+```
+
+### Installation
 
 ```bash
 npm install -g vimd
 ```
 
-On first use, run `vimd theme` to select your preferred theme.
-
-### Requirements
-
-- **Node.js** >= 18.0.0 (ESM support required)
-- **pandoc** >= 2.0 (manual installation required)
-
-To install pandoc:
-
-```bash
-# macOS
-brew install pandoc
-
-# Ubuntu/Debian
-sudo apt install pandoc
-
-# Windows
-choco install pandoc
-```
-
-## Quick Start
+### Usage
 
 ```bash
 # Start live preview
@@ -60,68 +98,27 @@ vimd theme
 vimd config
 ```
 
+---
+
 ## Commands
 
-### `vimd dev <file>`
+| Command | Description |
+|---------|-------------|
+| `vimd dev <file>` | Start live preview server |
+| `vimd build <file>` | Generate static HTML |
+| `vimd theme` | Change theme interactively |
+| `vimd config` | Edit configuration interactively |
 
-Start live preview server with hot reload. Opens browser automatically and watches file changes.
-
-```bash
-vimd dev draft.md
-vimd dev docs/guide.md --port 3000
-vimd dev article.md --theme dark --no-open
-```
-
-**Options:**
-- `-p, --port <port>`: Port number (default: 8080)
-- `-t, --theme <theme>`: Theme name (overrides global config)
-- `--no-open`: Do not open browser automatically
-
-### `vimd build <file>`
-
-Build static HTML file. Outputs standalone HTML with embedded styles.
+### Options
 
 ```bash
-vimd build draft.md
-vimd build docs/guide.md -o dist/guide.html
-vimd build article.md --theme academic
+vimd dev draft.md --port 3000      # Specify port
+vimd dev draft.md --theme dark     # Specify theme
+vimd dev draft.md --no-open        # Don't open browser
+vimd build draft.md -o output.html # Specify output path
 ```
 
-**Options:**
-- `-o, --output <path>`: Output file path (default: same name with .html)
-- `-t, --theme <theme>`: Theme name (overrides global config)
-
-### `vimd theme`
-
-Change theme interactively. Select from 5 built-in themes.
-
-```bash
-vimd theme
-```
-
-### `vimd config`
-
-Edit configuration interactively. Modify theme, port, and other settings.
-
-```bash
-# Interactive configuration editor
-vimd config
-
-# List current configuration
-vimd config --list
-```
-
-## Themes
-
-vimd includes 5 built-in themes:
-
-| Theme | Description | Best For |
-|-------|-------------|----------|
-| **GitHub** | GitHub Markdown style (Recommended) | General documentation |
-| **Minimal** | Simple white background | Clean, distraction-free writing |
-| **Dark** | VS Code inspired dark mode | Night coding sessions |
-| **Academic** | Paper-style layout | Academic papers, research documents |
-| **Technical** | API documentation style | Technical specifications, API docs |
+---
 
 ## Configuration
 
@@ -131,140 +128,45 @@ Global configuration is stored at `~/.vimd/config.js`.
 export default {
   theme: 'github',
   port: 8080,
-  host: 'localhost',
   open: true,
-  pandoc: {
-    standalone: true,
-    toc: false,
-    highlightStyle: 'github',
-  },
-  watch: {
-    ignored: ['node_modules', '.git'],
-  },
 };
 ```
 
-### Configuration Options
+See [docs/api.md](docs/api.md) for detailed configuration options.
 
-- `theme`: Default theme name (string)
-- `port`: Dev server port (number, default: 8080)
-- `host`: Dev server host (string, default: 'localhost')
-- `open`: Auto-open browser (boolean, default: true)
-- `pandoc.standalone`: Generate standalone HTML (boolean)
-- `pandoc.toc`: Generate table of contents (boolean)
-- `pandoc.highlightStyle`: Code highlighting style (string)
-- `watch.ignored`: Patterns to ignore for file watching (array)
+---
 
-## API Usage
+## Why vimd?
 
-vimd can also be used as a Node.js library:
+| Feature | vimd | Other Tools |
+|---------|------|-------------|
+| Setup | `npm i -g vimd` | May require complex setup |
+| Conversion Quality | pandoc (high quality) | Varies |
+| Themes | 5 built-in | Often requires configuration |
+| Config File | Outside project (`~/.vimd/`) | Often inside project |
+| Live Reload | Automatic | May require manual refresh |
 
-```javascript
-import { MarkdownConverter, ConfigLoader, ThemeManager } from 'vimd';
+---
 
-// Load configuration
-const config = await ConfigLoader.loadGlobal();
+## Documentation
 
-// Create converter
-const converter = new MarkdownConverter({
-  theme: 'github',
-  pandocOptions: config.pandoc,
-});
+- [Development Guide](docs/development.md) - Development environment setup
+- [Architecture](docs/architecture.md) - Project structure
+- [API Reference](docs/api.md) - Detailed options
+- [Testing](docs/testing.md) - Test structure
+- [Troubleshooting](docs/troubleshooting.md) - Common issues
 
-// Convert markdown to HTML
-const html = await converter.convertWithTemplate('draft.md');
+---
 
-// List available themes
-const themes = ThemeManager.list();
-console.log(themes); // [{ name: 'github', displayName: 'GitHub' }, ...]
-```
+## Links
 
-## Development
+- [CONTRIBUTING-en.md](CONTRIBUTING-en.md) - Contribution guide
+- [CHANGELOG-en.md](CHANGELOG-en.md) - Changelog
+- [GitHub](https://github.com/notokeishou/vimd)
+- [npm](https://www.npmjs.com/package/vimd)
 
-```bash
-# Clone repository
-git clone https://github.com/notokeishou/vimd.git
-cd vimd
-
-# Install dependencies
-npm install
-
-# Build
-npm run build
-
-# Run tests
-npm test
-
-# Run with coverage
-npm run test:coverage
-
-# Development mode
-npm run dev -- dev test.md
-```
-
-### Project Structure
-
-```
-vimd/
-├── src/
-│   ├── cli/          # CLI commands
-│   ├── config/       # Configuration management
-│   ├── core/         # Core functionality (converter, watcher, server)
-│   ├── themes/       # Theme system
-│   └── utils/        # Utility functions
-├── tests/
-│   ├── unit/         # Unit tests
-│   └── integration/  # Integration tests
-├── templates/        # HTML templates
-└── dist/            # Built files
-```
-
-## Troubleshooting
-
-### Pandoc not found
-
-If you get "pandoc not found" error:
-
-1. Install pandoc using your package manager
-2. Verify installation: `pandoc --version`
-3. Restart your terminal
-
-### Port already in use
-
-If port 8080 is already in use:
-
-```bash
-vimd dev draft.md --port 3000
-```
-
-Or change the default port in `~/.vimd/config.js`.
-
-### Theme not applied
-
-Make sure to:
-
-1. Check available themes: `vimd theme`
-2. Verify config: `vimd config --list`
-3. Try rebuilding: `npm run build` (if using from source)
+---
 
 ## License
 
 MIT © notokeishou
-
-## Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING-en.md](CONTRIBUTING-en.md) for details on our code of conduct and the process for submitting pull requests.
-
-## Changelog
-
-See [CHANGELOG-en.md](CHANGELOG-en.md) for release history.
-
-## Links
-
-- [GitHub Repository](https://github.com/notokeishou/vimd)
-- [npm Package](https://www.npmjs.com/package/vimd)
-- [Issue Tracker](https://github.com/notokeishou/vimd/issues)
-
----
-
-Made with ❤️ by notokeishou
