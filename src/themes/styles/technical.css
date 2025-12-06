@@ -1,84 +1,669 @@
-/* Technical Theme - API documentation style */
-body {
-  font-family: 'SF Mono', 'Roboto Mono', monospace;
-  line-height: 1.6;
-  color: #2c3e50;
-  background: #fafafa;
-  margin: 0;
-  padding: 0;
+/*
+ * Technical Theme for vimd
+ * API documentation style inspired by modern technical docs
+ * https://github.com/floriannicolas/API-Documentation-HTML-Template
+ * MIT License
+ */
+
+/* ============================================
+   CSS Variables
+   ============================================ */
+:root {
+  --tech-text-color: #2c3e50;
+  --tech-bg-color: #fafafa;
+  --tech-accent-color: #3498db;
+  --tech-accent-dark: #2980b9;
+  --tech-heading-color: #34495e;
+  --tech-code-color: #e74c3c;
+  --tech-code-bg: #f4f4f4;
+  --tech-border-color: #ecf0f1;
+  --tech-table-header: #34495e;
+  --tech-muted-color: #7f8c8d;
 }
 
-.markdown-body {
-  max-width: 1200px;
+/* ============================================
+   Base Styles
+   ============================================ */
+html {
+  background-color: var(--tech-bg-color);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--tech-text-color);
+  background-color: var(--tech-bg-color);
+  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-h1 {
-  font-size: 2.5em;
-  color: #34495e;
-  border-bottom: 3px solid #3498db;
-  padding-bottom: 0.5em;
-}
-
-h2 {
-  font-size: 1.8em;
-  color: #34495e;
+/* ============================================
+   Typography
+   ============================================ */
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--tech-heading-color);
   margin-top: 2em;
-  border-bottom: 2px solid #ecf0f1;
+  margin-bottom: 0.75em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+body h1 {
+  font-size: 2.2em;
+  margin-top: 0;
+  padding-bottom: 0.5em;
+  border-bottom: 3px solid var(--tech-accent-color);
+}
+
+body h2 {
+  font-size: 1.7em;
   padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--tech-border-color);
 }
 
-h3 {
+body h3 {
   font-size: 1.3em;
-  color: #34495e;
 }
 
-code {
-  background: #f4f4f4;
-  color: #e74c3c;
-  padding: 0.2em 0.5em;
-  border-radius: 3px;
-  font-family: 'SF Mono', monospace;
+body h4 {
+  font-size: 1.1em;
+}
+
+body h5 {
+  font-size: 1em;
+}
+
+body h6 {
   font-size: 0.95em;
+  color: var(--tech-muted-color);
 }
 
-pre {
-  background: #f4f4f4;
-  padding: 1.5em;
-  border-radius: 5px;
-  overflow-x: auto;
-  border-left: 4px solid #3498db;
+body p {
+  margin-top: 0;
+  margin-bottom: 1em;
 }
 
-pre code {
-  background: none;
-  color: #2c3e50;
-  padding: 0;
-}
-
-a {
-  color: #3498db;
+/* ============================================
+   Links
+   ============================================ */
+body a {
+  color: var(--tech-accent-color);
   text-decoration: none;
 }
 
-a:hover {
+body a:hover {
+  color: var(--tech-accent-dark);
   text-decoration: underline;
 }
 
-table {
+body a:visited {
+  color: #8e44ad;
+}
+
+/* ============================================
+   Lists
+   ============================================ */
+body ul,
+body ol {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+body li {
+  margin-bottom: 0.4em;
+}
+
+body li > p {
+  margin-bottom: 0.5em;
+}
+
+body ul ul,
+body ol ol,
+body ul ol,
+body ol ul {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+/* Definition lists */
+body dl {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+body dt {
+  font-weight: 600;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  margin-top: 1em;
+  color: var(--tech-heading-color);
+}
+
+body dd {
+  margin-left: 2em;
+  margin-bottom: 0.5em;
+}
+
+/* ============================================
+   Blockquotes - Note/Warning style
+   ============================================ */
+body blockquote {
+  margin: 1.5em 0;
+  padding: 1em 1.5em;
+  background-color: #e8f4fd;
+  border-left: 4px solid var(--tech-accent-color);
+  border-radius: 0 4px 4px 0;
+}
+
+body blockquote p {
+  margin-bottom: 0.5em;
+}
+
+body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+body blockquote code {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   Code
+   ============================================ */
+body code,
+body tt {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.9em;
+  background-color: var(--tech-code-bg);
+  color: var(--tech-code-color);
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+}
+
+body pre {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  background-color: var(--tech-code-bg);
+  padding: 1.25em;
+  border-radius: 0 4px 4px 0;
+  border-left: 4px solid var(--tech-accent-color);
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+body pre code {
+  background: none;
+  color: var(--tech-text-color);
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+body table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1em 0;
+  margin: 1.5em 0;
+  font-size: 0.95em;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 0.8em;
+body th,
+body td {
+  padding: 0.75em 1em;
   text-align: left;
+  border: 1px solid #ddd;
 }
 
-th {
-  background: #34495e;
+body th {
+  font-weight: 600;
+  background-color: var(--tech-table-header);
   color: #fff;
+}
+
+body td {
+  background-color: #fff;
+}
+
+body tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+body tr:hover td {
+  background-color: #f0f7fc;
+}
+
+/* ============================================
+   Horizontal Rules
+   ============================================ */
+body hr {
+  border: none;
+  border-top: 2px solid var(--tech-border-color);
+  margin: 2.5em 0;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5em auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body figure {
+  margin: 2em 0;
+  text-align: center;
+}
+
+body figure img {
+  margin: 0 auto 0.75em;
+}
+
+body figcaption {
+  font-size: 0.9em;
+  color: var(--tech-muted-color);
+  font-style: italic;
+}
+
+/* ============================================
+   Table of Contents (Pandoc)
+   ============================================ */
+nav#TOC {
+  background-color: #fff;
+  border: 1px solid var(--tech-border-color);
+  border-left: 4px solid var(--tech-accent-color);
+  border-radius: 0 4px 4px 0;
+  padding: 1.25em 1.5em;
+  margin-bottom: 2em;
+}
+
+nav#TOC::before {
+  content: "Table of Contents";
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-weight: 600;
+  font-size: 0.9em;
+  color: var(--tech-heading-color);
+  margin-bottom: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+nav#TOC > ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+nav#TOC ul {
+  padding-left: 1.5em;
+}
+
+nav#TOC li {
+  margin: 0.4em 0;
+  font-size: 0.95em;
+}
+
+nav#TOC a {
+  color: var(--tech-text-color);
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+}
+
+nav#TOC a:hover {
+  color: var(--tech-accent-color);
+  border-bottom-color: var(--tech-accent-color);
+}
+
+/* ============================================
+   Footnotes (Pandoc)
+   ============================================ */
+.footnotes {
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 2px solid var(--tech-border-color);
+  font-size: 0.9em;
+}
+
+.footnotes hr {
+  display: none;
+}
+
+.footnotes ol {
+  padding-left: 1.5em;
+}
+
+.footnotes li {
+  margin-bottom: 0.75em;
+}
+
+.footnote-ref {
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  color: var(--tech-accent-color);
+  font-weight: 600;
+}
+
+.footnote-back {
+  margin-left: 0.3em;
+  text-decoration: none;
+}
+
+/* ============================================
+   Pandoc Syntax Highlighting - Technical Style
+   ============================================ */
+div.sourceCode {
+  background-color: var(--tech-code-bg);
+  border-left: 4px solid var(--tech-accent-color);
+  border-radius: 0 4px 4px 0;
+  overflow: auto;
+}
+
+pre.sourceCode {
+  margin: 0;
+  padding: 1.25em;
+}
+
+code.sourceCode {
+  background: transparent;
+  color: var(--tech-text-color);
+}
+
+/* Comments - gray italic */
+code.sourceCode span.co,
+.sourceCode .co {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Strings - green */
+code.sourceCode span.st,
+code.sourceCode span.ch,
+code.sourceCode span.vs,
+.sourceCode .st,
+.sourceCode .ch,
+.sourceCode .vs {
+  color: #27ae60;
+}
+
+/* Keywords - purple/magenta */
+code.sourceCode span.kw,
+code.sourceCode span.cf,
+.sourceCode .kw,
+.sourceCode .cf {
+  color: #8e44ad;
+  font-weight: 600;
+}
+
+/* Numbers - orange */
+code.sourceCode span.dv,
+code.sourceCode span.bn,
+code.sourceCode span.fl,
+code.sourceCode span.cn,
+.sourceCode .dv,
+.sourceCode .bn,
+.sourceCode .fl,
+.sourceCode .cn {
+  color: #e67e22;
+}
+
+/* Functions - blue */
+code.sourceCode span.fu,
+code.sourceCode span.bu,
+.sourceCode .fu,
+.sourceCode .bu {
+  color: var(--tech-accent-color);
+}
+
+/* Variables - red/coral */
+code.sourceCode span.va,
+.sourceCode .va {
+  color: #e74c3c;
+}
+
+/* Data types - teal */
+code.sourceCode span.dt,
+.sourceCode .dt {
+  color: #16a085;
+  font-weight: 600;
+}
+
+/* Operators */
+code.sourceCode span.op,
+.sourceCode .op {
+  color: var(--tech-text-color);
+}
+
+/* Attributes - green */
+code.sourceCode span.at,
+.sourceCode .at {
+  color: #27ae60;
+}
+
+/* Preprocessor - purple */
+code.sourceCode span.pp,
+code.sourceCode span.im,
+.sourceCode .pp,
+.sourceCode .im {
+  color: #8e44ad;
+  font-weight: 600;
+}
+
+/* Special characters */
+code.sourceCode span.sc,
+code.sourceCode span.ss,
+.sourceCode .sc,
+.sourceCode .ss {
+  color: #27ae60;
+}
+
+/* Annotations */
+code.sourceCode span.an,
+code.sourceCode span.do,
+.sourceCode .an,
+.sourceCode .do {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Errors */
+code.sourceCode span.er,
+code.sourceCode span.al,
+.sourceCode .er,
+.sourceCode .al {
+  color: #c0392b;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Warnings */
+code.sourceCode span.wa,
+.sourceCode .wa {
+  color: #f39c12;
+}
+
+/* Information */
+code.sourceCode span.in,
+.sourceCode .in {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* ============================================
+   Keyboard and Mark
+   ============================================ */
+body kbd {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  padding: 0.2em 0.5em;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+  background-color: #ecf0f1;
+  box-shadow: inset 0 -2px 0 #bdc3c7;
+}
+
+body mark {
+  background-color: #f1c40f;
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+/* ============================================
+   Strong and Emphasis
+   ============================================ */
+body strong,
+body b {
+  font-weight: 600;
+}
+
+body em,
+body i {
+  font-style: italic;
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+::selection {
+  background-color: rgba(52, 152, 219, 0.3);
+  color: var(--tech-text-color);
+}
+
+/* ============================================
+   Scrollbar (WebKit)
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--tech-border-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  body {
+    max-width: 100%;
+    padding: 0;
+    font-size: 11pt;
+    background: #fff;
+    color: #000;
+  }
+
+  body a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  body a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  body pre,
+  body blockquote {
+    border-left-color: #333;
+    background-color: #f5f5f5;
+    page-break-inside: avoid;
+  }
+
+  body th {
+    background-color: #333;
+  }
+
+  nav#TOC {
+    border-left-color: #333;
+    page-break-after: always;
+  }
+
+  body h2,
+  body h3 {
+    page-break-after: avoid;
+  }
+
+  body table {
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  body {
+    padding: 1.5rem 1rem;
+    font-size: 15px;
+  }
+
+  body h1 {
+    font-size: 1.8em;
+  }
+
+  body h2 {
+    font-size: 1.4em;
+  }
+
+  body pre {
+    padding: 1em;
+    font-size: 0.8em;
+  }
+
+  body table {
+    font-size: 0.85em;
+  }
+
+  body th,
+  body td {
+    padding: 0.5em;
+  }
+
+  nav#TOC {
+    padding: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+
+  body h1 {
+    font-size: 1.5em;
+  }
+
+  body pre {
+    border-left-width: 3px;
+    padding: 0.75em;
+  }
+
+  body blockquote {
+    padding: 0.75em 1em;
+  }
 }
