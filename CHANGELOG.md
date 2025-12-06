@@ -7,6 +7,25 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.10] - 2025-12-06
+
+### 追加
+
+- **academic.css テーマの完全刷新**
+  - LaTeX.css ベースの学術論文スタイル
+  - LaTeX風の段落インデント + 両端揃え
+  - 自動ハイフネーション対応
+  - "Contents" ヘッダー付き目次スタイル
+  - Pandoc脚注の学術スタイル
+  - minted風シンタックスハイライト
+  - LaTeX booktabs風の三線テーブル
+  - 印刷対応（URL表示、改ページ制御）
+
+### 修正
+
+- **テストがソースファイルを上書きする問題を修正**
+  - theme-manager.test.ts が github.css を上書きしていた問題を修正
+
 ## [0.1.9] - 2025-12-06
 
 ### 追加
