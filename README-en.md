@@ -170,6 +170,7 @@ See [docs/api.md](docs/api.md) for detailed configuration options.
 - [API Reference](docs/api.md) - Detailed options
 - [Testing](docs/testing.md) - Test structure
 - [Troubleshooting](docs/troubleshooting.md) - Common issues
+- [v0.2.0 Release Notes](docs/releases/v0.2.0-en.md) - Dual Parser System
 
 ---
 

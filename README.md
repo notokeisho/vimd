@@ -170,6 +170,7 @@ export default {
 - [APIリファレンス](docs/api.md) - 詳細なオプション
 - [テスト](docs/testing.md) - テスト構成
 - [トラブルシューティング](docs/troubleshooting.md) - よくある問題
+- [v0.2.0 リリースノート](docs/releases/v0.2.0.md) - Dual Parser System
 
 ---
 
