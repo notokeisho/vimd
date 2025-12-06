@@ -1,68 +1,671 @@
-/* Academic Theme - Paper-style layout */
+/*
+ * Academic Theme for vimd
+ * LaTeX-inspired styling for academic documents
+ * Based on LaTeX.css (https://latex.vercel.app/)
+ * MIT License
+ */
+
+/* ============================================
+   CSS Variables for easy customization
+   ============================================ */
+:root {
+  --academic-text-color: #1a1a1a;
+  --academic-bg-color: #ffffff;
+  --academic-link-color: #1a0dab;
+  --academic-link-hover: #0f0875;
+  --academic-border-color: #1a1a1a;
+  --academic-muted-color: #555555;
+  --academic-code-bg: #f8f8f8;
+  --academic-quote-border: #cccccc;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+html {
+  background-color: var(--academic-bg-color);
+}
+
 body {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Latin Modern Roman", "Computer Modern", Georgia, "Times New Roman", serif;
+  font-size: 16px;
   line-height: 1.8;
-  color: #333;
-  background: #fff;
-  max-width: 700px;
+  color: var(--academic-text-color);
+  background-color: var(--academic-bg-color);
+  max-width: 720px;
   margin: 0 auto;
-  padding: 3rem;
+  padding: 3rem 2rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
 }
 
-h1 {
-  font-size: 2em;
+/* ============================================
+   Typography
+   ============================================ */
+
+/* Headings */
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  font-family: "Latin Modern Roman", "Computer Modern", Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+body h1 {
+  font-size: 2.2em;
   text-align: center;
-  margin-bottom: 2em;
-  border-bottom: none;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  font-weight: bold;
 }
 
-h2 {
-  font-size: 1.5em;
-  margin-top: 2em;
+body h2 {
+  font-size: 1.6em;
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--academic-border-color);
+  padding-bottom: 0.3rem;
+}
+
+body h3 {
+  font-size: 1.3em;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+body h4 {
+  font-size: 1.1em;
+  margin-top: 1.5rem;
+}
+
+body h5 {
+  font-size: 1em;
+  margin-top: 1.5rem;
+  font-style: italic;
+}
+
+body h6 {
+  font-size: 0.95em;
+  margin-top: 1.5rem;
+  color: var(--academic-muted-color);
+}
+
+/* Paragraphs - LaTeX style with first-line indent */
+body p {
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: justify;
+  text-indent: 1.5em;
+}
+
+/* No indent for first paragraph after headings */
+body h1 + p,
+body h2 + p,
+body h3 + p,
+body h4 + p,
+body h5 + p,
+body h6 + p,
+body hr + p,
+body blockquote + p,
+body pre + p,
+body ul + p,
+body ol + p,
+body dl + p,
+body table + p,
+body figure + p {
+  text-indent: 0;
+}
+
+/* Add vertical space between paragraphs when needed */
+body p + p {
+  margin-top: 0;
+}
+
+/* ============================================
+   Links
+   ============================================ */
+body a {
+  color: var(--academic-link-color);
+  text-decoration: none;
+}
+
+body a:hover {
+  color: var(--academic-link-hover);
+  text-decoration: underline;
+}
+
+body a:visited {
+  color: #660099;
+}
+
+/* ============================================
+   Lists
+   ============================================ */
+body ul,
+body ol {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 2em;
+}
+
+body li {
+  margin-bottom: 0.3em;
+  text-align: justify;
+}
+
+body li > p {
+  text-indent: 0;
   margin-bottom: 0.5em;
 }
 
-p {
-  text-align: justify;
-  margin-bottom: 1em;
+body ul ul,
+body ol ol,
+body ul ol,
+body ol ul {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
-code {
-  background: #f9f9f9;
-  padding: 0.2em 0.4em;
-  border: 1px solid #e0e0e0;
-  font-family: 'Courier New', monospace;
+/* Definition lists */
+body dl {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+body dt {
+  font-weight: bold;
+  margin-top: 0.8em;
+}
+
+body dd {
+  margin-left: 2em;
+  margin-bottom: 0.5em;
+}
+
+/* ============================================
+   Blockquotes
+   ============================================ */
+body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  border-left: 3px solid var(--academic-quote-border);
+  font-style: italic;
+  color: var(--academic-muted-color);
+}
+
+body blockquote p {
+  text-indent: 0;
+  margin-bottom: 0.5em;
+}
+
+body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+body blockquote cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-style: normal;
   font-size: 0.9em;
 }
 
-pre {
-  background: #f9f9f9;
-  padding: 1em;
+body blockquote cite::before {
+  content: "— ";
+}
+
+/* ============================================
+   Code
+   ============================================ */
+
+/* Inline code */
+body code,
+body tt {
+  font-family: "Latin Modern Mono", "Computer Modern Typewriter", "Courier New", Courier, monospace;
+  font-size: 0.9em;
+  background-color: var(--academic-code-bg);
+  padding: 0.15em 0.4em;
   border: 1px solid #e0e0e0;
+  border-radius: 2px;
+}
+
+/* Code blocks */
+body pre {
+  font-family: "Latin Modern Mono", "Computer Modern Typewriter", "Courier New", Courier, monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  background-color: var(--academic-code-bg);
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  padding: 1em;
+  margin: 1.5rem 0;
   overflow-x: auto;
 }
 
-blockquote {
-  border-left: 3px solid #ccc;
-  padding-left: 1em;
-  font-style: italic;
-  color: #666;
-  margin: 1.5em 0;
+body pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
 }
 
-table {
+/* ============================================
+   Tables
+   ============================================ */
+body table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1.5em 0;
+  margin: 1.5rem 0;
+  font-size: 0.95em;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 0.5em;
+body table caption {
+  caption-side: bottom;
+  padding: 0.5rem;
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--academic-muted-color);
+}
+
+body th,
+body td {
+  padding: 0.5rem 0.75rem;
   text-align: left;
+  border-top: 1px solid var(--academic-border-color);
+  border-bottom: 1px solid var(--academic-border-color);
 }
 
-th {
-  background: #f5f5f5;
-  font-weight: 600;
+body th {
+  font-weight: bold;
+  border-bottom: 2px solid var(--academic-border-color);
+}
+
+body tr:first-child th,
+body tr:first-child td {
+  border-top: 2px solid var(--academic-border-color);
+}
+
+body tr:last-child td {
+  border-bottom: 2px solid var(--academic-border-color);
+}
+
+/* ============================================
+   Horizontal Rules
+   ============================================ */
+body hr {
+  border: none;
+  border-top: 1px solid var(--academic-border-color);
+  margin: 2rem 0;
+}
+
+/* ============================================
+   Images & Figures
+   ============================================ */
+body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+}
+
+body figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+body figure img {
+  margin: 0 auto 0.5rem;
+}
+
+body figcaption {
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--academic-muted-color);
+}
+
+/* ============================================
+   Table of Contents (Pandoc)
+   ============================================ */
+nav#TOC {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--academic-border-color);
+}
+
+nav#TOC::before {
+  content: "Contents";
+  display: block;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+nav#TOC > ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+nav#TOC ul {
+  padding-left: 1.5em;
+  list-style: none;
+}
+
+nav#TOC li {
+  margin: 0.4em 0;
+  line-height: 1.4;
+}
+
+nav#TOC a {
+  color: var(--academic-text-color);
+  text-decoration: none;
+}
+
+nav#TOC a:hover {
+  color: var(--academic-link-color);
+  text-decoration: underline;
+}
+
+/* ============================================
+   Footnotes (Pandoc)
+   ============================================ */
+.footnotes {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--academic-border-color);
+  font-size: 0.9em;
+}
+
+.footnotes hr {
+  display: none;
+}
+
+.footnotes ol {
+  padding-left: 1.5em;
+}
+
+.footnotes li {
+  margin-bottom: 0.5em;
+}
+
+.footnote-ref {
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+}
+
+.footnote-back {
+  margin-left: 0.3em;
+}
+
+/* ============================================
+   Abstract (custom class)
+   ============================================ */
+.abstract {
+  margin: 2rem 3rem;
+  font-size: 0.95em;
+}
+
+.abstract::before {
+  content: "Abstract";
+  display: block;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.abstract p {
+  text-indent: 0;
+}
+
+/* ============================================
+   Pandoc Syntax Highlighting - minted style
+   ============================================ */
+div.sourceCode {
+  background-color: var(--academic-code-bg);
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  overflow: auto;
+}
+
+pre.sourceCode {
+  margin: 0;
+  padding: 1em;
+  border: none;
+}
+
+code.sourceCode {
+  background: transparent;
+  color: var(--academic-text-color);
+}
+
+/* Comments - italic gray */
+code.sourceCode span.co,
+.sourceCode .co {
+  color: #6a737d;
+  font-style: italic;
+}
+
+/* Strings - dark red/maroon */
+code.sourceCode span.st,
+code.sourceCode span.ch,
+code.sourceCode span.vs,
+.sourceCode .st,
+.sourceCode .ch,
+.sourceCode .vs {
+  color: #b31d28;
+}
+
+/* Keywords - bold blue */
+code.sourceCode span.kw,
+code.sourceCode span.cf,
+.sourceCode .kw,
+.sourceCode .cf {
+  color: #005cc5;
+  font-weight: bold;
+}
+
+/* Numbers and constants */
+code.sourceCode span.dv,
+code.sourceCode span.bn,
+code.sourceCode span.fl,
+code.sourceCode span.cn,
+.sourceCode .dv,
+.sourceCode .bn,
+.sourceCode .fl,
+.sourceCode .cn {
+  color: #005cc5;
+}
+
+/* Functions */
+code.sourceCode span.fu,
+code.sourceCode span.bu,
+.sourceCode .fu,
+.sourceCode .bu {
+  color: #6f42c1;
+}
+
+/* Variables */
+code.sourceCode span.va,
+.sourceCode .va {
+  color: #e36209;
+}
+
+/* Data types */
+code.sourceCode span.dt,
+.sourceCode .dt {
+  color: #005cc5;
+}
+
+/* Operators */
+code.sourceCode span.op,
+.sourceCode .op {
+  color: var(--academic-text-color);
+}
+
+/* Attributes / Decorators */
+code.sourceCode span.at,
+.sourceCode .at {
+  color: #22863a;
+}
+
+/* Preprocessor */
+code.sourceCode span.pp,
+code.sourceCode span.im,
+.sourceCode .pp,
+.sourceCode .im {
+  color: #005cc5;
+  font-weight: bold;
+}
+
+/* Special characters */
+code.sourceCode span.sc,
+code.sourceCode span.ss,
+.sourceCode .sc,
+.sourceCode .ss {
+  color: #b31d28;
+}
+
+/* Annotations and documentation */
+code.sourceCode span.an,
+code.sourceCode span.do,
+.sourceCode .an,
+.sourceCode .do {
+  color: #6a737d;
+  font-style: italic;
+}
+
+/* Errors */
+code.sourceCode span.er,
+code.sourceCode span.al,
+.sourceCode .er,
+.sourceCode .al {
+  color: #cb2431;
+  font-weight: bold;
+}
+
+/* Warnings */
+code.sourceCode span.wa,
+.sourceCode .wa {
+  color: #b08800;
+}
+
+/* Information */
+code.sourceCode span.in,
+.sourceCode .in {
+  color: #6a737d;
+  font-style: italic;
+}
+
+/* ============================================
+   Strong and Emphasis
+   ============================================ */
+body strong,
+body b {
+  font-weight: bold;
+}
+
+body em,
+body i {
+  font-style: italic;
+}
+
+/* ============================================
+   Keyboard and Mark
+   ============================================ */
+body kbd {
+  font-family: "Latin Modern Mono", "Computer Modern Typewriter", "Courier New", Courier, monospace;
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border: 1px solid #c6c6c6;
+  border-radius: 3px;
+  background-color: #f7f7f7;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+body mark {
+  background-color: #fff3cd;
+  padding: 0.1em 0.2em;
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+::selection {
+  background-color: #b4d5fe;
+  color: var(--academic-text-color);
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  body {
+    max-width: 100%;
+    padding: 1cm;
+    font-size: 11pt;
+  }
+
+  body a {
+    color: var(--academic-text-color);
+    text-decoration: underline;
+  }
+
+  body a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: var(--academic-muted-color);
+  }
+
+  nav#TOC {
+    page-break-after: always;
+  }
+
+  body h2,
+  body h3 {
+    page-break-after: avoid;
+  }
+
+  body pre,
+  body blockquote,
+  body table {
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  body {
+    padding: 1.5rem 1rem;
+    font-size: 15px;
+  }
+
+  body h1 {
+    font-size: 1.8em;
+  }
+
+  body h2 {
+    font-size: 1.4em;
+  }
+
+  body blockquote {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .abstract {
+    margin: 1.5rem 1rem;
+  }
 }
