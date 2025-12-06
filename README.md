@@ -12,12 +12,12 @@
 
 ## デモ
 
-https://github.com/user-attachments/assets/demo.mp4
+![vimd demo](assets/demo.gif)
 
 <details>
-<summary>GIF版を見る</summary>
+<summary>MP4版をダウンロード</summary>
 
-![vimd demo](assets/demo.gif)
+[demo.mp4](assets/demo.mp4)
 
 </details>
 

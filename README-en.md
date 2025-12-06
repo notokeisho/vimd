@@ -12,12 +12,12 @@
 
 ## Demo
 
-https://github.com/user-attachments/assets/demo.mp4
+![vimd demo](assets/demo.gif)
 
 <details>
-<summary>View GIF version</summary>
+<summary>Download MP4 version</summary>
 
-![vimd demo](assets/demo.gif)
+[demo.mp4](assets/demo.mp4)
 
 </details>
 
