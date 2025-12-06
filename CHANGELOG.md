@@ -7,6 +7,21 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.11] - 2025-12-06
+
+### 追加
+
+- **minimal.css テーマの完全刷新**
+  - Buttondown CSS ベースのクリーンなスタイル
+  - 控えめなリンクスタイル（hover時下線）
+  - textbook風テーブル（水平線のみ）
+  - blockquote（左ボーダー + イタリック）
+  - 目次 (TOC) スタイル
+  - モノクロシンタックスハイライト
+  - Pandoc脚注対応
+  - 印刷対応（URL表示）
+  - レスポンシブデザイン
+
 ## [0.1.10] - 2025-12-06
 
 ### 追加
