@@ -14,13 +14,6 @@
 
 ![vimd demo](assets/demo.gif)
 
-<details>
-<summary>Download MP4 version</summary>
-
-[demo.mp4](assets/demo.mp4)
-
-</details>
-
 ---
 
 ## Themes
