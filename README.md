@@ -146,7 +146,7 @@ export default {
 | `markdown-it` | 高速、pandoc不要 | 開発時のプレビュー |
 | `pandoc` | 高品質、多機能 | 最終出力の生成 |
 
-詳細な設定オプションは [docs/api.md](docs/api.md) を参照してください。
+詳細な設定オプションは [docs/ja/api.md](docs/ja/api.md) を参照してください。
 
 ---
 
@@ -165,12 +165,12 @@ export default {
 
 ## ドキュメント
 
-- [開発ガイド](docs/development.md) - 開発環境構築
-- [アーキテクチャ](docs/architecture.md) - プロジェクト構造
-- [APIリファレンス](docs/api.md) - 詳細なオプション
-- [テスト](docs/testing.md) - テスト構成
-- [トラブルシューティング](docs/troubleshooting.md) - よくある問題
-- [v0.2.0 リリースノート](docs/releases/v0.2.0.md) - Dual Parser System
+- [開発ガイド](docs/ja/development.md) - 開発環境構築
+- [アーキテクチャ](docs/ja/architecture.md) - プロジェクト構造
+- [APIリファレンス](docs/ja/api.md) - 詳細なオプション
+- [テスト](docs/ja/testing.md) - テスト構成
+- [トラブルシューティング](docs/ja/troubleshooting.md) - よくある問題
+- [v0.2.0 リリースノート](docs/ja/releases/v0.2.0.md) - Dual Parser System
 
 ---
 

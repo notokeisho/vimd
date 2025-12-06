@@ -146,7 +146,7 @@ export default {
 | `markdown-it` | Fast, no pandoc required | Development preview |
 | `pandoc` | High quality, feature-rich | Final output generation |
 
-See [docs/api.md](docs/api.md) for detailed configuration options.
+See [docs/en/api-en.md](docs/en/api-en.md) for detailed configuration options.
 
 ---
 
@@ -165,12 +165,12 @@ See [docs/api.md](docs/api.md) for detailed configuration options.
 
 ## Documentation
 
-- [Development Guide](docs/development.md) - Development environment setup
-- [Architecture](docs/architecture.md) - Project structure
-- [API Reference](docs/api.md) - Detailed options
-- [Testing](docs/testing.md) - Test structure
-- [Troubleshooting](docs/troubleshooting.md) - Common issues
-- [v0.2.0 Release Notes](docs/releases/v0.2.0-en.md) - Dual Parser System
+- [Development Guide](docs/en/development-en.md) - Development environment setup
+- [Architecture](docs/en/architecture-en.md) - Project structure
+- [API Reference](docs/en/api-en.md) - Detailed options
+- [Testing](docs/en/testing-en.md) - Test structure
+- [Troubleshooting](docs/en/troubleshooting-en.md) - Common issues
+- [v0.2.0 Release Notes](docs/en/releases/v0.2.0-en.md) - Dual Parser System
 
 ---
 
