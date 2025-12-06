@@ -7,6 +7,18 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.1.9] - 2025-12-06
+
+### 追加
+
+- **github.css テーマの完全実装**
+  - デフォルトテーマを GitHub Light カラーで完全実装
+  - sindresorhus/github-markdown-css ベースのスタイル
+  - 全要素のスタイリング (見出し、リンク、コード、テーブル、blockquote など)
+  - 目次 (TOC) スタイル対応
+  - Pandoc シンタックスハイライト対応
+  - レスポンシブデザイン対応
+
 ## [0.1.8] - 2025-12-06
 
 ### 修正
