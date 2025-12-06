@@ -36,16 +36,11 @@ describe('ThemeManager', () => {
 
   describe('getCSS', () => {
     it('should return CSS content for valid theme', async () => {
-      // まずCSSファイルを作成
-      const cssDir = path.join(__dirname, '../../src/themes/styles');
-      await fs.ensureDir(cssDir);
-      await fs.writeFile(
-        path.join(cssDir, 'github.css'),
-        'body { color: black; }'
-      );
-
+      // Read the existing github.css file (do not overwrite source files!)
       const css = await ThemeManager.getCSS('github');
       expect(css).toContain('body');
+      // Verify it contains GitHub Light theme specific styles
+      expect(css).toContain('color-scheme: light');
     });
 
     it('should throw error for invalid theme', async () => {
