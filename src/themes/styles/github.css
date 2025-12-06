@@ -1,1 +1,524 @@
-body { color: black; }
+/*
+ * GitHub Light Theme for vimd
+ * Based on github-markdown-css by Sindre Sorhus
+ * https://github.com/sindresorhus/github-markdown-css
+ * MIT License
+ */
+
+/* Full page light background */
+html {
+  background-color: #ffffff;
+}
+
+/* Main body styles */
+body {
+  color-scheme: light;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 980px;
+  color: #1f2328;
+  background-color: #ffffff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* Links */
+body a {
+  background-color: transparent;
+  color: #0969da;
+  text-decoration: none;
+}
+
+body a:hover {
+  text-decoration: underline;
+}
+
+/* Strong / Bold */
+body b,
+body strong {
+  font-weight: 600;
+}
+
+/* Headings */
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #656d76;
+}
+
+/* Paragraphs */
+body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* Lists */
+body ul,
+body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+body li+li {
+  margin-top: .25em;
+}
+
+/* Blockquote */
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #656d76;
+  border-left: .25em solid #d1d9e0;
+}
+
+/* Horizontal Rule */
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #d1d9e0b3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #d1d9e0;
+  border: 0;
+}
+
+/* Images */
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+/* Tables */
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+}
+
+body table th {
+  font-weight: 600;
+}
+
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #d1d9e0;
+}
+
+body table tr {
+  background-color: #ffffff;
+  border-top: 1px solid #d1d9e0b3;
+}
+
+body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* Inline Code */
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #eff1f3;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+/* Code Blocks */
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+body pre code {
+  font-size: 100%;
+}
+
+body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+body .highlight pre,
+body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #1f2328;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+/* Keyboard */
+body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #1f2328;
+  vertical-align: middle;
+  background-color: #f6f8fa;
+  border: solid 1px #d1d9e0b3;
+  border-bottom-color: #d1d9e0b3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #d1d9e0b3;
+}
+
+/* Mark / Highlight */
+body mark {
+  background-color: #fff8c5;
+  color: #1f2328;
+}
+
+/* Definition Lists */
+body dl {
+  padding: 0;
+}
+
+body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Table of Contents (pandoc) */
+nav#TOC {
+  background-color: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+nav#TOC > ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+nav#TOC ul {
+  padding-left: 1.5em;
+}
+
+nav#TOC li {
+  margin: 0.4em 0;
+}
+
+nav#TOC a {
+  color: #0969da;
+}
+
+nav#TOC a:hover {
+  color: #0550ae;
+}
+
+/* Pandoc Syntax Highlighting - GitHub Light Colors */
+div.sourceCode {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  overflow: auto;
+}
+
+pre.sourceCode {
+  margin: 0;
+  padding: 1rem;
+}
+
+code.sourceCode {
+  background: transparent;
+  color: #1f2328;
+}
+
+/* Comments */
+code.sourceCode span.co,
+.sourceCode .co {
+  color: #59636e;
+}
+
+/* Constants */
+code.sourceCode span.cn,
+code.sourceCode span.c1,
+code.sourceCode span.dv,
+code.sourceCode span.bn,
+code.sourceCode span.fl,
+.sourceCode .cn,
+.sourceCode .c1,
+.sourceCode .dv,
+.sourceCode .bn,
+.sourceCode .fl {
+  color: #0550ae;
+}
+
+/* Strings */
+code.sourceCode span.st,
+code.sourceCode span.ch,
+code.sourceCode span.vs,
+.sourceCode .st,
+.sourceCode .ch,
+.sourceCode .vs {
+  color: #0a3069;
+}
+
+/* Keywords */
+code.sourceCode span.kw,
+code.sourceCode span.cf,
+.sourceCode .kw,
+.sourceCode .cf {
+  color: #cf222e;
+}
+
+/* Functions */
+code.sourceCode span.fu,
+code.sourceCode span.bu,
+.sourceCode .fu,
+.sourceCode .bu {
+  color: #8250df;
+}
+
+/* Variables */
+code.sourceCode span.va,
+.sourceCode .va {
+  color: #953800;
+}
+
+/* Data Types */
+code.sourceCode span.dt,
+.sourceCode .dt {
+  color: #0550ae;
+}
+
+/* Operators */
+code.sourceCode span.op,
+.sourceCode .op {
+  color: #1f2328;
+}
+
+/* Attributes / Decorators */
+code.sourceCode span.at,
+.sourceCode .at {
+  color: #116329;
+}
+
+/* Preprocessor */
+code.sourceCode span.pp,
+.sourceCode .pp {
+  color: #cf222e;
+}
+
+/* Import */
+code.sourceCode span.im,
+.sourceCode .im {
+  color: #cf222e;
+}
+
+/* Special characters */
+code.sourceCode span.sc,
+.sourceCode .sc {
+  color: #0a3069;
+}
+
+/* Regular expressions */
+code.sourceCode span.ss,
+.sourceCode .ss {
+  color: #0a3069;
+}
+
+/* Annotations */
+code.sourceCode span.an,
+.sourceCode .an {
+  color: #59636e;
+}
+
+/* Documentation */
+code.sourceCode span.do,
+.sourceCode .do {
+  color: #59636e;
+}
+
+/* Errors */
+code.sourceCode span.er,
+code.sourceCode span.al,
+.sourceCode .er,
+.sourceCode .al {
+  color: #cf222e;
+}
+
+/* Warnings */
+code.sourceCode span.wa,
+.sourceCode .wa {
+  color: #9a6700;
+}
+
+/* Information */
+code.sourceCode span.in,
+.sourceCode .in {
+  color: #59636e;
+}
+
+/* GitHub .pl-* classes (for compatibility) */
+body .pl-c {
+  color: #59636e;
+}
+
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #0550ae;
+}
+
+body .pl-e,
+body .pl-en {
+  color: #8250df;
+}
+
+body .pl-smi,
+body .pl-s .pl-s1 {
+  color: #1f2328;
+}
+
+body .pl-ent {
+  color: #116329;
+}
+
+body .pl-k {
+  color: #cf222e;
+}
+
+body .pl-s,
+body .pl-pds,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sre,
+body .pl-sr .pl-sra {
+  color: #0a3069;
+}
+
+body .pl-v,
+body .pl-smw {
+  color: #953800;
+}
+
+body .pl-bu {
+  color: #cf222e;
+}
+
+/* Selection */
+::selection {
+  background-color: #0969da33;
+  color: #1f2328;
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d9e0;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #afb8c1;
+}
+
+/* Focus states */
+body a:focus {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+}
