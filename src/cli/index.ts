@@ -21,7 +21,7 @@ program
 program
   .command('dev <file>')
   .description('Start live preview server')
-  .option('-p, --port <port>', 'Port number', '8080')
+  .option('-p, --port <port>', 'Port number')
   .option('-t, --theme <theme>', 'Theme name')
   .option('--no-open', 'Do not open browser automatically')
   .option('--pandoc', 'Use pandoc parser instead of markdown-it')

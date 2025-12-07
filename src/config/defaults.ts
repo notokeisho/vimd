@@ -3,7 +3,7 @@ import { VimdConfig } from './types.js';
 
 export const DEFAULT_CONFIG: VimdConfig = {
   theme: 'github',
-  port: 8080,
+  port: 38080,
   host: 'localhost',
   open: true,
   pandoc: {
