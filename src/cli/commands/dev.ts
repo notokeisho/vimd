@@ -113,12 +113,18 @@ export async function devCommand(
       root: sourceDir,
     });
 
-    await server.start(htmlPath);
+    const startResult = await server.start(htmlPath);
 
-    // 12. Save session
+    // Update port if live-server used a different one
+    const actualPort = startResult.actualPort;
+    if (startResult.portChanged) {
+      port = actualPort;
+    }
+
+    // 12. Save session with actual port
     await SessionManager.saveSession({
       pid: process.pid,
-      port: port,
+      port: actualPort,
       htmlPath: htmlPath,
       sourcePath: absolutePath,
       startedAt: new Date().toISOString(),
@@ -160,8 +166,8 @@ export async function devCommand(
         // Ignore errors when removing file
       }
 
-      // Remove session from registry
-      await SessionManager.removeSession(port);
+      // Remove session from registry (use actual port)
+      await SessionManager.removeSession(actualPort);
 
       Logger.info('Cleanup complete');
     });

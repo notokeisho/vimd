@@ -84,8 +84,13 @@ describe('devCommand', () => {
 
     // Mock server
     mockServer = {
-      start: vi.fn().mockResolvedValue(undefined),
+      start: vi.fn().mockResolvedValue({
+        actualPort: 8080,
+        requestedPort: 8080,
+        portChanged: false,
+      }),
       stop: vi.fn().mockResolvedValue(undefined),
+      getActualPort: vi.fn().mockReturnValue(8080),
     };
     vi.mocked(LiveServer).mockImplementation(() => mockServer);
 

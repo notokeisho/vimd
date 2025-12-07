@@ -7,8 +7,8 @@ describe('DEFAULT_CONFIG', () => {
     expect(DEFAULT_CONFIG.theme).toBe('github');
   });
 
-  it('should have default port as 8080', () => {
-    expect(DEFAULT_CONFIG.port).toBe(8080);
+  it('should have default port as 38080', () => {
+    expect(DEFAULT_CONFIG.port).toBe(38080);
   });
 
   it('should have default host as localhost', () => {

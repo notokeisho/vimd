@@ -1,4 +1,6 @@
 declare module 'live-server' {
+  import { Server } from 'http';
+
   export interface LiveServerParams {
     port?: number;
     host?: string;
@@ -23,9 +25,9 @@ declare module 'live-server' {
     spa?: boolean;
   }
 
-  export function start(params: LiveServerParams): void;
+  export function start(params: LiveServerParams): Server;
   export function shutdown(): void;
-  export const server: any;
+  export const server: Server;
   export const watcher: any;
   export let logLevel: number;
 }

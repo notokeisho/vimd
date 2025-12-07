@@ -2,10 +2,31 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LiveServer } from '../../src/core/server';
 import liveServer from 'live-server';
+import { EventEmitter } from 'events';
+
+// Create a mock server that extends EventEmitter
+const createMockServer = (port: number) => {
+  const mockServer = new EventEmitter() as EventEmitter & {
+    address: () => { port: number };
+  };
+  mockServer.address = () => ({ port });
+
+  // Emit 'listening' event immediately after addListener is called
+  const originalAddListener = mockServer.addListener.bind(mockServer);
+  mockServer.addListener = (event: string, listener: (...args: any[]) => void) => {
+    originalAddListener(event, listener);
+    if (event === 'listening') {
+      setImmediate(() => mockServer.emit('listening'));
+    }
+    return mockServer;
+  };
+
+  return mockServer;
+};
 
 vi.mock('live-server', () => ({
   default: {
-    start: vi.fn(),
+    start: vi.fn(() => createMockServer(8080)),
     shutdown: vi.fn(),
   },
 }));

@@ -4,13 +4,23 @@ import { ServerConfig } from '../config/types.js';
 import { Logger } from '../utils/logger.js';
 import * as path from 'path';
 import open from 'open';
+import { AddressInfo } from 'net';
+
+export interface ServerStartResult {
+  actualPort: number;
+  requestedPort: number;
+  portChanged: boolean;
+}
 
 export class LiveServer {
   private running = false;
+  private actualPort: number;
 
-  constructor(private config: ServerConfig) {}
+  constructor(private config: ServerConfig) {
+    this.actualPort = config.port;
+  }
 
-  async start(htmlPath: string): Promise<void> {
+  async start(htmlPath: string): Promise<ServerStartResult> {
     const root = path.dirname(htmlPath);
     const file = path.basename(htmlPath);
 
@@ -26,15 +36,46 @@ export class LiveServer {
     };
 
     try {
-      liveServer.start(params);
+      const server = liveServer.start(params);
+
+      // Wait for server to start and get actual port
+      const actualPort = await new Promise<number>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Server start timeout'));
+        }, 10000);
+
+        server.addListener('listening', () => {
+          clearTimeout(timeout);
+          const address = server.address() as AddressInfo;
+          resolve(address.port);
+        });
+
+        server.addListener('error', (err: Error) => {
+          clearTimeout(timeout);
+          reject(err);
+        });
+      });
+
+      this.actualPort = actualPort;
       this.running = true;
 
-      const url = `http://${this.config.host}:${this.config.port}`;
+      const portChanged = actualPort !== this.config.port;
+      const url = `http://${this.config.host}:${actualPort}`;
+
+      if (portChanged) {
+        Logger.warn(`Port ${this.config.port} was unavailable, using port ${actualPort}`);
+      }
       Logger.success(`Server started at ${url}`);
 
       if (this.config.open) {
         await this.openBrowser(url);
       }
+
+      return {
+        actualPort,
+        requestedPort: this.config.port,
+        portChanged,
+      };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       throw new Error(`Failed to start server: ${errorMessage}`);
@@ -61,6 +102,10 @@ export class LiveServer {
   }
 
   getURL(): string {
-    return `http://${this.config.host}:${this.config.port}`;
+    return `http://${this.config.host}:${this.actualPort}`;
+  }
+
+  getActualPort(): number {
+    return this.actualPort;
   }
 }
