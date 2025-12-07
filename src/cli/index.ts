@@ -6,6 +6,7 @@ import { devCommand } from './commands/dev.js';
 import { buildCommand } from './commands/build.js';
 import { themeCommand } from './commands/theme.js';
 import { configCommand } from './commands/config.js';
+import { killCommand } from './commands/kill.js';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../../package.json');
@@ -48,5 +49,13 @@ program
   .description('Edit configuration interactively')
   .option('-l, --list', 'List current configuration')
   .action(configCommand);
+
+// vimd kill
+program
+  .command('kill')
+  .description('Kill vimd dev sessions')
+  .option('--all', 'Kill all sessions (default)')
+  .option('--port <port>', 'Kill session on specific port')
+  .action(killCommand);
 
 program.parse(process.argv);
