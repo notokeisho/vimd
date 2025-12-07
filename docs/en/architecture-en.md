@@ -138,7 +138,7 @@ Configuration files use JavaScript (not JSON) for flexibility.
 // ~/.vimd/config.js
 export default {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // Default: 38080
 };
 ```
 

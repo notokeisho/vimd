@@ -138,7 +138,7 @@ vimd は最新の JavaScript 互換性のために ESM 形式を使用します�
 // ~/.vimd/config.js
 export default {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // デフォルト: 38080
 };
 ```
 

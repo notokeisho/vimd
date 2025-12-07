@@ -7,6 +7,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-12-07
+
+### Documentation Update
+
+- **Reflect default port 38080 in documentation**
+  - README.md / README-en.md
+  - docs/ja/troubleshooting.md / docs/en/troubleshooting-en.md
+  - docs/ja/api.md / docs/en/api-en.md
+  - docs/ja/architecture.md / docs/en/architecture-en.md
+  - CLAUDE.md
+
+- **Add vimd kill command usage**
+  - Added to command list and options in README.md / README-en.md
+  - Added as port conflict solution in troubleshooting
+
 ## [0.2.1] - 2025-12-07
 
 ### Added

@@ -107,6 +107,7 @@ vimd config
 | `vimd build <file>` | 静的HTMLを生成 |
 | `vimd theme` | テーマを対話的に変更 |
 | `vimd config` | 設定を対話的に編集 |
+| `vimd kill` | 実行中のセッションを終了 |
 
 ### オプション
 
@@ -121,6 +122,10 @@ vimd dev draft.md --pandoc         # pandocパーサーを使用
 vimd build draft.md -o output.html # 出力先指定
 vimd build draft.md --fast         # markdown-itで高速ビルド
 vimd build draft.md --theme dark   # テーマ指定
+
+# kill コマンド
+vimd kill                          # 全セッションを終了
+vimd kill --port 38080             # 特定ポートのセッションを終了
 ```
 
 ---
@@ -132,7 +137,7 @@ vimd build draft.md --theme dark   # テーマ指定
 ```javascript
 export default {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // デフォルト: 38080（v0.2.1で変更）
   open: true,
   devParser: 'markdown-it',  // dev用パーサー（デフォルト: markdown-it）
   buildParser: 'pandoc',     // build用パーサー（デフォルト: pandoc）

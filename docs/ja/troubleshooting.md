@@ -44,30 +44,42 @@ pandoc --version
 ### 症状
 
 ```
-Error: EADDRINUSE: address already in use :::8080
+Error: EADDRINUSE: address already in use :::38080
 ```
 
 ### 解決策
 
-#### オプション 1: 別のポートを使用
+#### オプション 1: vimd kill を使用（推奨）
+
+v0.2.1 以降では、`vimd kill` コマンドで実行中のセッションを終了できます。
+
+```bash
+# 全セッションを終了
+vimd kill
+
+# 特定ポートのセッションを終了
+vimd kill --port 38080
+```
+
+#### オプション 2: 別のポートを使用
 
 ```bash
 vimd dev document.md --port 3000
 ```
 
-#### オプション 2: ポートを使用しているプロセスを見つけて終了
+#### オプション 3: ポートを使用しているプロセスを見つけて終了
 
 ```bash
 # macOS/Linux
-lsof -i :8080
+lsof -i :38080
 kill -9 <PID>
 
 # Windows
-netstat -ano | findstr :8080
+netstat -ano | findstr :38080
 taskkill /PID <PID> /F
 ```
 
-#### オプション 3: 設定でデフォルトポートを変更
+#### オプション 4: 設定でデフォルトポートを変更
 
 ```javascript
 // ~/.vimd/config.js
@@ -173,7 +185,7 @@ vimd config --list
 // 正しい形式
 export default {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // デフォルト: 38080
 };
 ```
 
@@ -206,6 +218,10 @@ export default {
 2. 他の vimd インスタンスを閉じます。
 
 ```bash
+# 推奨: vimd kill コマンドを使用
+vimd kill
+
+# または pkill を使用
 pkill -f vimd
 ```
 

@@ -7,6 +7,21 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.2.2] - 2025-12-07
+
+### ドキュメント更新
+
+- **デフォルトポート38080の記載を反映**
+  - README.md / README-en.md
+  - docs/ja/troubleshooting.md / docs/en/troubleshooting-en.md
+  - docs/ja/api.md / docs/en/api-en.md
+  - docs/ja/architecture.md / docs/en/architecture-en.md
+  - CLAUDE.md
+
+- **vimd kill コマンドの使用方法を追加**
+  - README.md / README-en.md のコマンド一覧とオプションに追加
+  - トラブルシューティングにポート競合の解決策として追加
+
 ## [0.2.1] - 2025-12-07
 
 ### 追加

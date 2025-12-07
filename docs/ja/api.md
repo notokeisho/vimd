@@ -122,7 +122,7 @@ interface VimdConfig {
 ```javascript
 {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // v0.2.1 で 8080 から変更
   host: 'localhost',
   open: true,
   pandoc: {

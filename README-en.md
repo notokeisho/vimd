@@ -107,6 +107,7 @@ vimd config
 | `vimd build <file>` | Generate static HTML |
 | `vimd theme` | Change theme interactively |
 | `vimd config` | Edit configuration interactively |
+| `vimd kill` | Terminate running sessions |
 
 ### Options
 
@@ -121,6 +122,10 @@ vimd dev draft.md --pandoc         # Use pandoc parser
 vimd build draft.md -o output.html # Specify output path
 vimd build draft.md --fast         # Fast build with markdown-it
 vimd build draft.md --theme dark   # Specify theme
+
+# kill command
+vimd kill                          # Terminate all sessions
+vimd kill --port 38080             # Terminate session on specific port
 ```
 
 ---
@@ -132,7 +137,7 @@ Global configuration is stored at `~/.vimd/config.js`.
 ```javascript
 export default {
   theme: 'github',
-  port: 8080,
+  port: 38080,  // Default: 38080 (changed in v0.2.1)
   open: true,
   devParser: 'markdown-it',  // Parser for dev (default: markdown-it)
   buildParser: 'pandoc',     // Parser for build (default: pandoc)
