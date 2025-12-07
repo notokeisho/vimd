@@ -7,6 +7,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-12-07
+
+### Added
+
+- **`vimd kill` command**
+  - Terminate running vimd dev sessions
+  - `vimd kill`: Terminate all sessions
+  - `vimd kill --port <port>`: Terminate session on specific port
+  - Safe process termination with PID validation
+  - Automatic cleanup of preview files
+
+### Changed
+
+- **Default port changed to 38080**
+  - Changed from 8080 to avoid conflicts with other applications
+  - Set `port: 8080` in `~/.vimd/config.js` to use the previous default
+
+### Fixed
+
+- **Accurate port detection on port conflicts**
+  - Detect actual port used by live-server
+  - Use correct port in session registry and log output
+  - Open browser with correct URL
+
 ## [0.2.0] - 2025-12-06
 
 ### Added
