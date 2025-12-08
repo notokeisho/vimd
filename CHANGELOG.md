@@ -7,6 +7,16 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.2.3] - 2025-12-08
+
+### 追加
+
+- **`vimd reset` コマンド**
+  - 設定ファイル (`~/.vimd/config.js`) を削除してデフォルト設定に戻す
+  - `vimd reset`: 確認プロンプト付きでリセット
+  - `vimd reset --yes`: 確認なしでリセット
+  - v0.2.1 でデフォルトポートが38080に変更されたため、既存ユーザーが簡単にデフォルト設定に戻せるようになった
+
 ## [0.2.2] - 2025-12-07
 
 ### ドキュメント更新
