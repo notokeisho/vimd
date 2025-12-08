@@ -7,6 +7,7 @@ import { buildCommand } from './commands/build.js';
 import { themeCommand } from './commands/theme.js';
 import { configCommand } from './commands/config.js';
 import { killCommand } from './commands/kill.js';
+import { resetCommand } from './commands/reset.js';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../../package.json');
@@ -57,5 +58,12 @@ program
   .option('--all', 'Kill all sessions (default)')
   .option('--port <port>', 'Kill session on specific port')
   .action(killCommand);
+
+// vimd reset
+program
+  .command('reset')
+  .description('Reset configuration to defaults')
+  .option('-y, --yes', 'Skip confirmation prompt')
+  .action(resetCommand);
 
 program.parse(process.argv);
