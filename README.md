@@ -108,6 +108,7 @@ vimd config
 | `vimd theme` | テーマを対話的に変更 |
 | `vimd config` | 設定を対話的に編集 |
 | `vimd kill` | 実行中のセッションを終了 |
+| `vimd reset` | 設定をデフォルトにリセット |
 
 ### オプション
 
@@ -126,6 +127,10 @@ vimd build draft.md --theme dark   # テーマ指定
 # kill コマンド
 vimd kill                          # 全セッションを終了
 vimd kill --port 38080             # 特定ポートのセッションを終了
+
+# reset コマンド
+vimd reset                         # 設定をリセット（確認あり）
+vimd reset --yes                   # 確認なしでリセット
 ```
 
 ---

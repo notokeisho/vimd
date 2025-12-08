@@ -108,6 +108,7 @@ vimd config
 | `vimd theme` | Change theme interactively |
 | `vimd config` | Edit configuration interactively |
 | `vimd kill` | Terminate running sessions |
+| `vimd reset` | Reset configuration to defaults |
 
 ### Options
 
@@ -126,6 +127,10 @@ vimd build draft.md --theme dark   # Specify theme
 # kill command
 vimd kill                          # Terminate all sessions
 vimd kill --port 38080             # Terminate session on specific port
+
+# reset command
+vimd reset                         # Reset configuration (with confirmation)
+vimd reset --yes                   # Reset without confirmation
 ```
 
 ---
