@@ -68,6 +68,8 @@
 npm install -g vimd
 ```
 
+**Current stable version: v0.2.4**
+
 From v0.2.0, **vimd works without pandoc**.
 Install pandoc only when you need high-quality output.
 
@@ -95,6 +97,20 @@ vimd theme
 
 # Edit configuration
 vimd config
+```
+
+---
+
+## Version Information
+
+**Stable version: v0.2.4** (same as latest)
+
+The stable version has been thoroughly tested before release.
+When the latest version differs from the stable version, both will be listed.
+
+To install the stable version:
+```bash
+npm install -g vimd@latest
 ```
 
 ---
