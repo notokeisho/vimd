@@ -2,7 +2,7 @@
 import { ConfigLoader } from '../../config/loader.js';
 import { FileWatcher } from '../../core/watcher.js';
 import { MarkdownConverter } from '../../core/converter.js';
-import { LiveServer } from '../../core/server.js';
+import { WebSocketServer } from '../../core/websocket-server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { ParserFactory } from '../../core/parser/index.js';
 import { Logger } from '../../utils/logger.js';
@@ -10,6 +10,7 @@ import { ProcessManager } from '../../utils/process-manager.js';
 import { SessionManager } from '../../utils/session-manager.js';
 import * as path from 'path';
 import fs from 'fs-extra';
+import open from 'open';
 
 interface DevOptions {
   port?: string;
@@ -105,20 +106,30 @@ export async function devCommand(
     await converter.writeHTML(html, htmlPath);
     Logger.success('Conversion complete');
 
-    // 11. Start live server from source directory
-    const server = new LiveServer({
+    // 11. Start WebSocket server from source directory
+    const server = new WebSocketServer({
       port: port,
       host: config.host,
-      open: config.open,
       root: sourceDir,
     });
 
-    const startResult = await server.start(htmlPath);
+    const startResult = await server.start();
 
-    // Update port if live-server used a different one
+    // Update port if server used a different one
     const actualPort = startResult.actualPort;
     if (startResult.portChanged) {
       port = actualPort;
+    }
+
+    // 11.5. Open browser if configured
+    if (config.open) {
+      const url = `http://${config.host}:${actualPort}/${htmlFileName}`;
+      try {
+        await open(url);
+        Logger.info('Browser opened');
+      } catch {
+        Logger.warn('Failed to open browser automatically');
+      }
     }
 
     // 12. Save session with actual port
@@ -141,6 +152,7 @@ export async function devCommand(
       try {
         const newHtml = await converter.convertWithTemplate(changedPath);
         await converter.writeHTML(newHtml, htmlPath);
+        server.broadcast('reload');
         Logger.success('Reconversion complete');
       } catch (error) {
         Logger.error('Reconversion failed');
