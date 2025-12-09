@@ -7,6 +7,24 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.0] - 2025-12-10
+
+### 変更
+
+- **WebSocket 直接通信によるライブリロード**
+  - live-server 依存を削除し、独自の WebSocket サーバーを実装
+  - `ws` + `polka` + `sirv` による軽量な構成
+  - バンドルサイズ 83% 削減 (1.7MB → 284KB)
+  - サーバー起動時間: 平均 1.31ms
+  - ブロードキャストレイテンシ: 平均 0.01ms
+
+### 技術的変更
+
+- WebSocketServer クラスを追加 (`src/core/websocket-server.ts`)
+- HTML 応答にリロードスクリプトを自動注入するミドルウェア
+- LiveServer クラスを削除
+- テストを WebSocketServer 用に更新
+
 ## [0.2.4] - 2025-12-09
 
 ### ドキュメント更新
@@ -290,6 +308,7 @@
 
 ## リリースリンク
 
+- [0.3.0](https://github.com/notokeishou/vimd/releases/tag/v0.3.0) - WebSocket Direct Communication
 - [0.2.0](https://github.com/notokeishou/vimd/releases/tag/v0.2.0) - デュアルパーサーシステム
 - [0.1.12](https://github.com/notokeishou/vimd/releases/tag/v0.1.12) - technicalテーマ刷新
 - [0.1.5](https://github.com/notokeishou/vimd/releases/tag/v0.1.5) - 一時ファイル管理改善

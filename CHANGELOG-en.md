@@ -7,6 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-12-10
+
+### Changed
+
+- **WebSocket Direct Communication for Live Reload**
+  - Removed live-server dependency, implemented custom WebSocket server
+  - Lightweight architecture with `ws` + `polka` + `sirv`
+  - 83% reduction in bundle size (1.7MB → 284KB)
+  - Server startup time: 1.31ms average
+  - Broadcast latency: 0.01ms average
+
+### Technical Changes
+
+- Added WebSocketServer class (`src/core/websocket-server.ts`)
+- Middleware for automatic reload script injection into HTML responses
+- Removed LiveServer class
+- Updated tests for WebSocketServer
+
 ## [0.2.4] - 2025-12-09
 
 ### Documentation Update
@@ -290,6 +308,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Release Links
 
+- [0.3.0](https://github.com/notokeishou/vimd/releases/tag/v0.3.0) - WebSocket Direct Communication
 - [0.2.0](https://github.com/notokeishou/vimd/releases/tag/v0.2.0) - Dual Parser System
 - [0.1.12](https://github.com/notokeishou/vimd/releases/tag/v0.1.12) - Technical theme redesign
 - [0.1.5](https://github.com/notokeishou/vimd/releases/tag/v0.1.5) - Improved temp file management
