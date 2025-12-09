@@ -22,7 +22,7 @@ vimd/
 │   ├── core/             # Core functionality
 │   │   ├── converter.ts  # Markdown to HTML conversion
 │   │   ├── watcher.ts    # File watching
-│   │   ├── server.ts     # Live preview server
+│   │   ├── websocket-server.ts  # WebSocket live reload server
 │   │   └── pandoc-detector.ts  # pandoc detection
 │   │
 │   ├── themes/           # Theme system
@@ -70,9 +70,9 @@ Contains the main business logic.
 
 | Module | Responsibility |
 |--------|----------------|
-| `converter.ts` | Markdown to HTML conversion via pandoc |
+| `converter.ts` | Markdown to HTML conversion via pandoc/markdown-it |
 | `watcher.ts` | File system watching with chokidar |
-| `server.ts` | Live preview server with live-server |
+| `websocket-server.ts` | WebSocket live reload server (polka + sirv + ws) |
 | `pandoc-detector.ts` | pandoc installation detection |
 
 ### Config Layer (`src/config/`)
@@ -98,12 +98,12 @@ Theme Name → ThemeManager → CSS Content → HTML Injection
 ```
 1. Parse CLI arguments
 2. Load configuration
-3. Detect pandoc
+3. Detect pandoc (when --pandoc option)
 4. Start file watcher
 5. Convert Markdown to HTML
-6. Start live-server
+6. Start WebSocketServer (HTTP + WebSocket)
 7. Open browser
-8. Watch for changes → Re-convert → Browser reload
+8. Watch for changes → Re-convert → Send reload via WebSocket
 ```
 
 ### `vimd build` Command
