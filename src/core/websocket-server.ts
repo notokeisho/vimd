@@ -1,5 +1,7 @@
 // src/core/websocket-server.ts
 import http from 'http';
+import fs from 'fs';
+import path from 'path';
 import polka from 'polka';
 import sirv from 'sirv';
 import { WebSocketServer as WSServer, WebSocket } from 'ws';
@@ -116,38 +118,42 @@ export class WebSocketServer {
     const app = polka();
 
     // Middleware to inject reload script into HTML
+    // For HTML files, read directly to avoid sirv streaming issues
     app.use((req, res, next) => {
       // Only process GET requests for HTML files
       if (req.method !== 'GET' || !req.url?.endsWith('.html')) {
         return serve(req, res, next);
       }
 
-      // For HTML files, we need to inject the script
-      // Override res.end to modify the response
-      const originalEnd = res.end.bind(res);
-      let body = '';
+      // Parse the URL and resolve the file path
+      const urlPath = req.url || '/index.html';
+      const filePath = path.join(this.options.root, urlPath);
 
-      res.write = (chunk: any) => {
-        body += chunk.toString();
-        return true;
-      };
+      // Check if file exists
+      if (!fs.existsSync(filePath)) {
+        // Let sirv handle 404
+        return serve(req, res, next);
+      }
 
-      res.end = ((chunk?: any) => {
-        if (chunk) {
-          body += chunk.toString();
-        }
+      try {
+        // Read HTML file directly
+        const html = fs.readFileSync(filePath, 'utf8');
 
-        // Inject reload script before </body> or </html>
-        const injectedBody = this.injectReloadScript(body);
+        // Inject reload script
+        const injectedHtml = this.injectReloadScript(html);
 
-        // Update Content-Length header
-        const contentLength = Buffer.byteLength(injectedBody, 'utf8');
-        res.setHeader('Content-Length', contentLength);
-
-        return originalEnd(injectedBody);
-      }) as typeof res.end;
-
-      serve(req, res, next);
+        // Send response with proper headers
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Content-Length': Buffer.byteLength(injectedHtml, 'utf8'),
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        });
+        res.end(injectedHtml);
+      } catch (error) {
+        // On error, fall back to sirv
+        Logger.warn(`Failed to read HTML file: ${filePath}`);
+        serve(req, res, next);
+      }
     });
 
     // Create HTTP server

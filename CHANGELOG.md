@@ -7,6 +7,14 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.1] - 2025-12-10
+
+### 修正
+
+- **HTML配信時のERR_HTTP_HEADERS_SENTエラーを修正**
+  - sirv のストリーミング配信と競合していた問題を解決
+  - HTML ファイルを直接読み込む方式に変更
+
 ## [0.3.0] - 2025-12-10
 
 ### 変更
