@@ -68,7 +68,7 @@
 npm install -g vimd
 ```
 
-**現在の安定版: v0.2.4**
+**現在の安定版: v0.3.0**
 
 v0.2.0 からは **pandoc なしで利用可能** になりました。
 高品質な出力が必要な場合のみ pandoc をインストールしてください。
@@ -103,10 +103,11 @@ vimd config
 
 ## バージョン情報
 
-**安定版: v0.2.4**（最新版と同一）
+**安定版: v0.3.0**（最新版と同一）
 
-安定版は十分なテストを経てリリースされたバージョンです。
-最新版と安定版が異なる場合は、両方を記載します。
+v0.3.0 では内部アーキテクチャを刷新し、パフォーマンスを改善しました:
+- WebSocket 直接通信によるライブリロード（live-server 依存を削除）
+- バンドルサイズ 83% 削減
 
 安定版のインストール:
 ```bash
@@ -196,6 +197,7 @@ export default {
 - [APIリファレンス](docs/ja/api.md) - 詳細なオプション
 - [テスト](docs/ja/testing.md) - テスト構成
 - [トラブルシューティング](docs/ja/troubleshooting.md) - よくある問題
+- [v0.3.0 リリースノート](docs/ja/releases/v0.3.0.md) - WebSocket Direct Communication
 - [v0.2.0 リリースノート](docs/ja/releases/v0.2.0.md) - Dual Parser System
 
 ---
