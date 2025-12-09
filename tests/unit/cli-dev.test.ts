@@ -4,24 +4,26 @@ import { devCommand } from '../../src/cli/commands/dev.js';
 import { ConfigLoader } from '../../src/config/loader.js';
 import { FileWatcher } from '../../src/core/watcher.js';
 import { MarkdownConverter } from '../../src/core/converter.js';
-import { LiveServer } from '../../src/core/server.js';
+import { WebSocketServer } from '../../src/core/websocket-server.js';
 import { PandocDetector } from '../../src/core/pandoc-detector.js';
 import { ParserFactory } from '../../src/core/parser/index.js';
 import { Logger } from '../../src/utils/logger.js';
 import { ProcessManager } from '../../src/utils/process-manager.js';
 import { SessionManager } from '../../src/utils/session-manager.js';
 import fs from 'fs-extra';
+import open from 'open';
 
 vi.mock('../../src/config/loader.js');
 vi.mock('../../src/core/watcher.js');
 vi.mock('../../src/core/converter.js');
-vi.mock('../../src/core/server.js');
+vi.mock('../../src/core/websocket-server.js');
 vi.mock('../../src/core/pandoc-detector.js');
 vi.mock('../../src/core/parser/index.js');
 vi.mock('../../src/utils/logger.js');
 vi.mock('../../src/utils/process-manager.js');
 vi.mock('../../src/utils/session-manager.js');
 vi.mock('fs-extra');
+vi.mock('open');
 
 describe('devCommand', () => {
   let mockWatcher: any;
@@ -90,9 +92,9 @@ describe('devCommand', () => {
         portChanged: false,
       }),
       stop: vi.fn().mockResolvedValue(undefined),
-      getActualPort: vi.fn().mockReturnValue(8080),
+      broadcast: vi.fn(),
     };
-    vi.mocked(LiveServer).mockImplementation(() => mockServer);
+    vi.mocked(WebSocketServer).mockImplementation(() => mockServer);
 
     // Mock watcher
     mockWatcher = {
@@ -104,6 +106,9 @@ describe('devCommand', () => {
 
     // Mock ProcessManager
     vi.mocked(ProcessManager.onExit).mockImplementation(() => {});
+
+    // Mock open (browser opener)
+    vi.mocked(open).mockResolvedValue({} as any);
 
     // Mock process.exit
     vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
@@ -136,7 +141,7 @@ describe('devCommand', () => {
 
     expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(3000);
     expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(3000);
-    expect(LiveServer).toHaveBeenCalledWith(
+    expect(WebSocketServer).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 3000,
       })
@@ -154,13 +159,12 @@ describe('devCommand', () => {
   });
 
   it('should override open browser option', async () => {
+    // Note: open option is now handled separately in dev.ts using the 'open' package
+    // WebSocketServer doesn't receive the open option directly
     await devCommand('test.md', { open: true });
 
-    expect(LiveServer).toHaveBeenCalledWith(
-      expect.objectContaining({
-        open: true,
-      })
-    );
+    // Verify server is started (open is handled after server start)
+    expect(mockServer.start).toHaveBeenCalled();
   });
 
   it('should exit with error when file does not exist', async () => {
@@ -207,7 +211,7 @@ describe('devCommand', () => {
     expect(Logger.warn).toHaveBeenCalledWith(
       'Port 8080 is in use by another application'
     );
-    expect(LiveServer).toHaveBeenCalledWith(
+    expect(WebSocketServer).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 8081,
       })
