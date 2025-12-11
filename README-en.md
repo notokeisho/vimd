@@ -65,10 +65,10 @@
 ### Installation
 
 ```bash
-npm install -g vimd
+npm install -g vimd@0.2.4
 ```
 
-**Current stable version: v0.3.0**
+**Current stable version: v0.2.4**
 
 From v0.2.0, **vimd works without pandoc**.
 Install pandoc only when you need high-quality output.
@@ -103,13 +103,17 @@ vimd config
 
 ## Version Information
 
-**Stable version: v0.3.0** (same as latest)
+**Stable version: v0.2.4**
 
-v0.3.0 brings internal architecture improvements and performance enhancements:
-- WebSocket direct communication for live reload (removed live-server dependency)
-- 83% reduction in bundle size
+v0.3.x is an experimental version with revamped internal architecture.
+Use v0.2.4 for stable operation.
 
 To install the stable version:
+```bash
+npm install -g vimd@0.2.4
+```
+
+To install the latest (experimental) version:
 ```bash
 npm install -g vimd@latest
 ```
