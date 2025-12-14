@@ -7,6 +7,15 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.2] - 2025-12-14
+
+### 修正
+
+- **サーバーシャットダウンの遅延問題を修正**
+  - `Ctrl+C` 押下後、サーバーが即座に終了するようになった
+  - WebSocket クライアントの強制切断 (`terminate()`) を使用
+  - HTTP keep-alive 接続の強制クローズ (`closeAllConnections()`) を追加
+
 ## [0.3.1] - 2025-12-10
 
 ### 修正

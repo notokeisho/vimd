@@ -207,19 +207,21 @@ export class WebSocketServer {
 
   /**
    * Stop the server
+   * Uses force termination to ensure immediate shutdown
    */
   async stop(): Promise<void> {
-    // Close all WebSocket connections
+    // Force terminate all WebSocket clients (immediate disconnect)
+    // Use terminate() instead of close() to avoid waiting for graceful handshake
     for (const client of this.clients) {
       try {
-        client.close();
+        client.terminate();
       } catch {
-        // Ignore close errors
+        // Ignore termination errors
       }
     }
     this.clients.clear();
 
-    // Close WebSocket server
+    // Close WebSocket server (should be instant now that clients are terminated)
     if (this.wsServer) {
       await new Promise<void>((resolve) => {
         this.wsServer!.close(() => resolve());
@@ -227,8 +229,10 @@ export class WebSocketServer {
       this.wsServer = null;
     }
 
-    // Close HTTP server
+    // Force close all HTTP connections before closing server
+    // closeAllConnections() requires Node.js >= 18.2.0
     if (this.httpServer) {
+      this.httpServer.closeAllConnections();
       await new Promise<void>((resolve) => {
         this.httpServer!.close(() => resolve());
       });
