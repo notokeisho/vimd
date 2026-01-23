@@ -20,9 +20,10 @@ on:
           - minor
           - major
 
-# 権限を明示的に設定 (手動実行時の git push に必要)
+# 権限を明示的に設定
 permissions:
-  contents: write
+  contents: write      # 手動実行時の git push に必要
+  id-token: write      # Trusted Publishing (OIDC) に必要
 
 jobs:
   publish:
@@ -83,9 +84,7 @@ jobs:
         run: npm test
 
       - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
 
       - name: Notify Discord on success
         if: success()
