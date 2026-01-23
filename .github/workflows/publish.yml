@@ -104,7 +104,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           MESSAGE="📦 **vimd v${VERSION}** が npm に公開されました"$'\n'"https://www.npmjs.com/package/vimd/v/${VERSION}"
-          curl -H "Content-Type: application/json" \
+          curl --globoff -H "Content-Type: application/json" \
             -d "$(jq -n --arg msg "$MESSAGE" '{content: $msg}')" \
             "$DISCORD_WEBHOOK"
 
@@ -115,6 +115,6 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           MESSAGE="❌ **vimd** の npm publish に失敗しました"$'\n'"${RUN_URL}"
-          curl -H "Content-Type: application/json" \
+          curl --globoff -H "Content-Type: application/json" \
             -d "$(jq -n --arg msg "$MESSAGE" '{content: $msg}')" \
             "$DISCORD_WEBHOOK"
