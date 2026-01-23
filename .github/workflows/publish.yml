@@ -44,8 +44,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '22'  # npm 11.x included (required for OIDC)
 
       - name: Install pandoc
         run: |
@@ -84,11 +83,9 @@ jobs:
         run: npm test
 
       - name: Publish to npm with OIDC
-        run: |
-          # Remove the .npmrc created by setup-node (it expects NODE_AUTH_TOKEN)
-          rm -f "$NPM_CONFIG_USERCONFIG"
-          # Publish with provenance - npm will use OIDC automatically
-          npm publish --provenance --access public
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ""  # Empty string to trigger OIDC authentication
 
       - name: Notify Discord on success
         if: success()
