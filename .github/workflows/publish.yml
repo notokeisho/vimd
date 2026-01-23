@@ -46,6 +46,11 @@ jobs:
         with:
           node-version: '22'  # npm 11.x included (required for OIDC)
 
+      - name: Verify npm version (OIDC requires npm 11.5.1+)
+        run: |
+          echo "Node.js version: $(node --version)"
+          echo "npm version: $(npm --version)"
+
       - name: Install pandoc
         run: |
           wget https://github.com/jgm/pandoc/releases/download/3.8/pandoc-3.8-1-amd64.deb
