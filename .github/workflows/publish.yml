@@ -1,0 +1,102 @@
+# .github/workflows/publish.yml
+name: Publish to npm
+
+on:
+  # パターン A: タグ push でトリガー
+  push:
+    tags:
+      - 'v*'
+
+  # パターン B: GitHub UI から手動実行
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type to bump'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+# 権限を明示的に設定 (手動実行時の git push に必要)
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # 無限ループ防止: bot からのタグ push はスキップ
+    # - タグ push (ローカルから): github.actor = ユーザー → 実行
+    # - タグ push (手動実行後): github.actor = github-actions[bot] → スキップ
+    # - 手動実行: main ブランチからのみ → 実行
+    if: |
+      (github.event_name == 'push' && github.actor != 'github-actions[bot]') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 手動実行時のみ: バージョンを bump (無限ループ防止のため手動でタグ作成)
+      - name: Bump version (manual trigger only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          git add package.json package-lock.json
+          VERSION=$(node -p "require('./package.json').version")
+          git commit -m "chore: release v${VERSION}"
+          git tag "v${VERSION}"
+          git push origin main --tags
+
+      # バージョン情報を取得
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Notify Discord on success
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            📦 **vimd v${{ steps.version.outputs.version }}** が npm に公開されました!
+            https://www.npmjs.com/package/vimd/v/${{ steps.version.outputs.version }}
+
+      - name: Notify Discord on failure
+        if: failure()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            ❌ **vimd** の npm publish に失敗しました
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
