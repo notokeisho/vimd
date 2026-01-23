@@ -103,9 +103,9 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          jq -n --arg msg "📦 **vimd v${VERSION}** が npm に公開されました
-          https://www.npmjs.com/package/vimd/v/${VERSION}" '{content: $msg}' > /tmp/payload.json
-          wget -q --header="Content-Type: application/json" --post-file=/tmp/payload.json -O - "${DISCORD_WEBHOOK}"
+          jq -n --arg msg "📦 **vimd v${VERSION}** published to npm - https://www.npmjs.com/package/vimd/v/${VERSION}" '{content: $msg}' > /tmp/payload.json
+          cat /tmp/payload.json
+          wget --header="Content-Type: application/json" --post-file=/tmp/payload.json -O - "${DISCORD_WEBHOOK}" || echo "wget failed with exit code $?"
 
       - name: Notify Discord on failure
         if: failure()
@@ -113,6 +113,6 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          jq -n --arg msg "❌ **vimd** の npm publish に失敗しました
-          ${RUN_URL}" '{content: $msg}' > /tmp/payload.json
-          wget -q --header="Content-Type: application/json" --post-file=/tmp/payload.json -O - "${DISCORD_WEBHOOK}"
+          jq -n --arg msg "❌ vimd npm publish failed - ${RUN_URL}" '{content: $msg}' > /tmp/payload.json
+          cat /tmp/payload.json
+          wget --header="Content-Type: application/json" --post-file=/tmp/payload.json -O - "${DISCORD_WEBHOOK}" || echo "wget failed with exit code $?"
