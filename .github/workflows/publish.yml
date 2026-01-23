@@ -47,9 +47,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install pandoc
-        uses: pandoc/actions/setup@v1
-        with:
-          version: 3.6.2
+        run: |
+          wget https://github.com/jgm/pandoc/releases/download/3.8/pandoc-3.8-1-amd64.deb
+          sudo dpkg -i pandoc-3.8-1-amd64.deb
+          pandoc --version
 
       - name: Configure Git
         run: |
