@@ -99,20 +99,14 @@ jobs:
 
       - name: Notify Discord on success
         if: success()
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: |
-            📦 **vimd v${{ steps.version.outputs.version }}** が npm に公開されました!
-            https://www.npmjs.com/package/vimd/v/${{ steps.version.outputs.version }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"📦 **vimd v${{ steps.version.outputs.version }}** が npm に公開されました!\nhttps://www.npmjs.com/package/vimd/v/${{ steps.version.outputs.version }}\"}" \
+            ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify Discord on failure
         if: failure()
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: |
-            ❌ **vimd** の npm publish に失敗しました
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"❌ **vimd** の npm publish に失敗しました\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            ${{ secrets.DISCORD_WEBHOOK }}
