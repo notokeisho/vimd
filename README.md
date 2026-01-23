@@ -65,7 +65,7 @@
 ### インストール
 
 ```bash
-npm install -g vimd@0.2.4
+npm install -g vimd@0.3.11
 ```
 
 **現在の安定版: v0.2.4**
