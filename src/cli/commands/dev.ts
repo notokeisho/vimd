@@ -91,12 +91,13 @@ export async function devCommand(
     const htmlPath = path.join(sourceDir, htmlFileName);
 
     // 9. Prepare converter with selected parser
-    const parser = ParserFactory.create(parserType, config.pandoc);
+    const parser = ParserFactory.create(parserType, config.pandoc, config.math);
     const converter = new MarkdownConverter({
       theme: config.theme,
       pandocOptions: config.pandoc,
       customCSS: config.css,
       template: config.template,
+      mathEnabled: config.math?.enabled ?? true,
     });
     converter.setParser(parser);
 

@@ -3,7 +3,7 @@
 import { Parser, ParserType } from './types.js';
 import { MarkdownItParser } from './markdown-it-parser.js';
 import { PandocParser } from './pandoc-parser.js';
-import { PandocConfig } from '../../config/types.js';
+import { PandocConfig, MathConfig } from '../../config/types.js';
 
 /**
  * Factory for creating parser instances.
@@ -14,15 +14,20 @@ export class ParserFactory {
    * Create a parser instance by type.
    * @param type - The type of parser to create
    * @param pandocConfig - Optional configuration for pandoc parser
+   * @param mathConfig - Optional configuration for math support
    * @returns A parser instance
    * @throws Error if the parser type is unknown
    */
-  static create(type: ParserType, pandocConfig?: Partial<PandocConfig>): Parser {
+  static create(
+    type: ParserType,
+    pandocConfig?: Partial<PandocConfig>,
+    mathConfig?: MathConfig
+  ): Parser {
     switch (type) {
       case 'markdown-it':
-        return new MarkdownItParser();
+        return new MarkdownItParser(mathConfig);
       case 'pandoc':
-        return new PandocParser(pandocConfig);
+        return new PandocParser(pandocConfig, mathConfig);
       default:
         // TypeScript exhaustive check
         const _exhaustive: never = type;
@@ -35,14 +40,16 @@ export class ParserFactory {
    * If the preferred parser is not available, falls back to markdown-it.
    * @param preferred - The preferred parser type
    * @param pandocConfig - Optional configuration for pandoc parser
+   * @param mathConfig - Optional configuration for math support
    * @returns A parser instance that is guaranteed to be available
    * @throws Error if pandoc is preferred but not installed (no silent fallback)
    */
   static async createWithFallback(
     preferred: ParserType,
-    pandocConfig?: Partial<PandocConfig>
+    pandocConfig?: Partial<PandocConfig>,
+    mathConfig?: MathConfig
   ): Promise<Parser> {
-    const parser = this.create(preferred, pandocConfig);
+    const parser = this.create(preferred, pandocConfig, mathConfig);
 
     if (await parser.isAvailable()) {
       return parser;

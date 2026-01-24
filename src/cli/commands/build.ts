@@ -61,12 +61,13 @@ export async function buildCommand(
       ...config.pandoc,
       standalone: true, // build always uses standalone
     };
-    const parser = ParserFactory.create(parserType, pandocOptions);
+    const parser = ParserFactory.create(parserType, pandocOptions, config.math);
     const converter = new MarkdownConverter({
       theme: config.theme,
       pandocOptions: pandocOptions,
       customCSS: config.css,
       template: config.template || undefined,
+      mathEnabled: config.math?.enabled ?? true,
     });
     converter.setParser(parser);
 
