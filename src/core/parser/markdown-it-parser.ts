@@ -4,7 +4,6 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import strikethrough from 'markdown-it-strikethrough-alt';
 import taskLists from 'markdown-it-task-lists';
-import texmath from 'markdown-it-texmath';
 import { Parser } from './types.js';
 import { MathConfig } from '../../config/types.js';
 
@@ -16,7 +15,7 @@ export class MarkdownItParser implements Parser {
   readonly name = 'markdown-it';
   private md: MarkdownIt;
 
-  constructor(mathConfig?: MathConfig) {
+  constructor(_mathConfig?: MathConfig) {
     this.md = new MarkdownIt({
       html: true,
       linkify: true,
@@ -37,13 +36,10 @@ export class MarkdownItParser implements Parser {
     this.md.use(strikethrough); // ~~strikethrough~~
     this.md.use(taskLists); // - [ ] task list
 
-    // Enable math support
-    if (mathConfig?.enabled) {
-      this.md.use(texmath, {
-        engine: { name: mathConfig.engine },
-        delimiters: 'dollars',
-      });
-    }
+    // Note: For MathJax, we don't need a markdown-it plugin.
+    // MathJax will find and render $...$ and $$...$$ in the browser.
+    // The markdown-it-texmath plugin is for server-side KaTeX rendering,
+    // which conflicts with client-side MathJax rendering.
   }
 
   /**
