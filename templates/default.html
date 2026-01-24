@@ -13,6 +13,19 @@
 {{custom_css}}
   </style>
 {{/if}}
+{{#if math_enabled}}
+  <script>
+  MathJax = {
+    loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics']},
+    tex: {
+      packages: {'[+]': ['bussproofs', 'ams', 'physics']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    }
+  };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{{/if}}
 </head>
 <body>
   <div class="markdown-body">
