@@ -7,6 +7,7 @@ export interface ValidationResult {
 }
 
 const VALID_THEMES = ['github', 'minimal', 'dark', 'academic', 'technical'];
+const VALID_MATH_ENGINES = ['mathjax', 'katex'];
 
 export class ConfigValidator {
   static validatePort(port: number): boolean {
@@ -15,6 +16,10 @@ export class ConfigValidator {
 
   static validateTheme(theme: string): boolean {
     return VALID_THEMES.includes(theme);
+  }
+
+  static validateMathEngine(engine: string): boolean {
+    return VALID_MATH_ENGINES.includes(engine);
   }
 
   static validate(config: VimdConfig): ValidationResult {
@@ -48,6 +53,13 @@ export class ConfigValidator {
     if (config.watch.debounce < 0) {
       errors.push(
         `Invalid debounce: ${config.watch.debounce} (must be >= 0)`
+      );
+    }
+
+    // Math engine validation
+    if (config.math && !this.validateMathEngine(config.math.engine)) {
+      errors.push(
+        `Invalid math engine: ${config.math.engine} (must be 'mathjax' or 'katex')`
       );
     }
 
