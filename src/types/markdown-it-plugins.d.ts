@@ -18,3 +18,15 @@ declare module 'markdown-it-task-lists' {
   const taskLists: PluginWithOptions<TaskListsOptions>;
   export default taskLists;
 }
+
+declare module 'markdown-it-texmath' {
+  import { PluginWithOptions } from 'markdown-it';
+
+  interface TexmathOptions {
+    engine?: { name: string };
+    delimiters?: 'dollars' | 'brackets' | 'gitlab' | 'julia' | 'kramdown';
+  }
+
+  const texmath: PluginWithOptions<TexmathOptions>;
+  export default texmath;
+}

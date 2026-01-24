@@ -4,7 +4,9 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import strikethrough from 'markdown-it-strikethrough-alt';
 import taskLists from 'markdown-it-task-lists';
+import texmath from 'markdown-it-texmath';
 import { Parser } from './types.js';
+import { MathConfig } from '../../config/types.js';
 
 /**
  * Markdown parser using markdown-it library.
@@ -14,7 +16,7 @@ export class MarkdownItParser implements Parser {
   readonly name = 'markdown-it';
   private md: MarkdownIt;
 
-  constructor() {
+  constructor(mathConfig?: MathConfig) {
     this.md = new MarkdownIt({
       html: true,
       linkify: true,
@@ -34,6 +36,14 @@ export class MarkdownItParser implements Parser {
     // Enable GFM plugins
     this.md.use(strikethrough); // ~~strikethrough~~
     this.md.use(taskLists); // - [ ] task list
+
+    // Enable math support
+    if (mathConfig?.enabled) {
+      this.md.use(texmath, {
+        engine: { name: mathConfig.engine },
+        delimiters: 'dollars',
+      });
+    }
   }
 
   /**
