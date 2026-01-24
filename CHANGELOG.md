@@ -7,6 +7,14 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.14] - 2026-01-25
+
+### 修正
+
+- **MathJax レンダリングが動作しない問題を修正**
+  - `markdown-it-texmath` プラグインを削除（MathJax と競合するため）
+  - MathJax はブラウザ側で `$...$` と `$$...$$` を検出してレンダリング
+
 ## [0.3.13] - 2026-01-25
 
 ### 修正
