@@ -16,6 +16,7 @@ export interface VimdConfig {
   pandoc: PandocConfig;
   watch: WatchConfig;
   build?: BuildConfig;
+  math: MathConfig;
   devParser: ConfigParserType;
   buildParser: ConfigParserType;
 }
@@ -37,6 +38,11 @@ export interface BuildConfig {
   output?: string;
   inlineCSS: boolean;
   standalone: boolean;
+}
+
+export interface MathConfig {
+  enabled: boolean;
+  engine: 'mathjax' | 'katex';
 }
 
 export interface ThemeInfo {
