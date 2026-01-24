@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import { Parser } from './types.js';
-import { PandocConfig } from '../../config/types.js';
+import { MathConfig, PandocConfig } from '../../config/types.js';
 
 /**
  * Default pandoc configuration for high-quality HTML output.
@@ -21,9 +21,11 @@ const DEFAULT_PANDOC_CONFIG: PandocConfig = {
 export class PandocParser implements Parser {
   readonly name = 'pandoc';
   private config: PandocConfig;
+  private mathConfig?: MathConfig;
 
-  constructor(config: Partial<PandocConfig> = {}) {
+  constructor(config: Partial<PandocConfig> = {}, mathConfig?: MathConfig) {
     this.config = { ...DEFAULT_PANDOC_CONFIG, ...config };
+    this.mathConfig = mathConfig;
   }
 
   /**
@@ -92,6 +94,15 @@ export class PandocParser implements Parser {
       Object.entries(this.config.metadata).forEach(([key, value]) => {
         args.push(`--metadata=${key}:"${value}"`);
       });
+    }
+
+    // Math support
+    if (this.mathConfig?.enabled) {
+      if (this.mathConfig.engine === 'mathjax') {
+        args.push('--mathjax');
+      } else if (this.mathConfig.engine === 'katex') {
+        args.push('--katex');
+      }
     }
 
     return args;
