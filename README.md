@@ -181,6 +181,43 @@ export default {
 
 詳細な設定オプションは [docs/ja/api.md](docs/ja/api.md) を参照してください。
 
+### 数式サポート
+
+vimd は MathJax を使用した TeX 数式表示に対応しています（v0.3.12以降）。
+
+```markdown
+インライン数式: $E = mc^2$
+
+ブロック数式:
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$
+```
+
+bussproofs（証明図）にも対応しています:
+
+```markdown
+$$
+\begin{prooftree}
+\AxiomC{$A$}
+\AxiomC{$B$}
+\BinaryInfC{$A \land B$}
+\end{prooftree}
+$$
+```
+
+数式サポートの設定:
+
+```javascript
+// ~/.vimd/config.js
+export default {
+  math: {
+    enabled: true,      // デフォルト: true
+    engine: 'mathjax',  // 'mathjax' または 'katex'
+  },
+};
+```
+
 ---
 
 ## Why vimd?
