@@ -19,6 +19,10 @@ export const DEFAULT_CONFIG: VimdConfig = {
     inlineCSS: false,
     standalone: true,
   },
+  math: {
+    enabled: true,
+    engine: 'mathjax',
+  },
   devParser: 'markdown-it',
   buildParser: 'pandoc',
 };
