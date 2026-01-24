@@ -155,6 +155,43 @@ describe('MarkdownItParser', () => {
 
     expect(html).toContain('<a href="https://example.com"');
   });
+
+  describe('Math Support', () => {
+    it('should support inline math when math is enabled', async () => {
+      const parser = new MarkdownItParser({ enabled: true, engine: 'mathjax' });
+      const markdown = 'The equation $E = mc^2$ is famous.';
+      const html = await parser.parse(markdown);
+
+      // texmath wraps math in specific elements
+      expect(html).toContain('E = mc^2');
+    });
+
+    it('should support block math when math is enabled', async () => {
+      const parser = new MarkdownItParser({ enabled: true, engine: 'mathjax' });
+      const markdown = '$$\n\\int_0^\\infty e^{-x^2} dx\n$$';
+      const html = await parser.parse(markdown);
+
+      expect(html).toContain('\\int_0^\\infty');
+    });
+
+    it('should not process math when disabled', async () => {
+      const parser = new MarkdownItParser({ enabled: false, engine: 'mathjax' });
+      const markdown = 'The equation $E = mc^2$ is famous.';
+      const html = await parser.parse(markdown);
+
+      // When disabled, $ should remain as-is or be treated as text
+      expect(html).toContain('$');
+    });
+
+    it('should work without math config (default behavior)', async () => {
+      const parser = new MarkdownItParser();
+      const markdown = '# Normal markdown';
+      const html = await parser.parse(markdown);
+
+      expect(html).toContain('<h1>');
+      expect(html).toContain('Normal markdown');
+    });
+  });
 });
 
 describe('PandocParser', () => {
@@ -256,6 +293,42 @@ describe('PandocParser', () => {
     // because we only use known options
     const html = await parser.parse('# Test');
     expect(html).toContain('Test');
+  });
+
+  describe('Math Support', () => {
+    it('should support inline math when math is enabled', async () => {
+      const parser = new PandocParser({}, { enabled: true, engine: 'mathjax' });
+      const markdown = 'The equation $E = mc^2$ is famous.';
+      const html = await parser.parse(markdown);
+
+      // pandoc with --mathjax outputs math in span with class "math inline"
+      expect(html).toContain('E = mc^2');
+    });
+
+    it('should support block math when math is enabled', async () => {
+      const parser = new PandocParser({}, { enabled: true, engine: 'mathjax' });
+      const markdown = '$$\\int_0^\\infty e^{-x^2} dx$$';
+      const html = await parser.parse(markdown);
+
+      expect(html).toContain('\\int_0^\\infty');
+    });
+
+    it('should support katex engine', async () => {
+      const parser = new PandocParser({}, { enabled: true, engine: 'katex' });
+      const markdown = 'The equation $E = mc^2$ is famous.';
+      const html = await parser.parse(markdown);
+
+      expect(html).toContain('E = mc^2');
+    });
+
+    it('should not add math options when disabled', async () => {
+      const parser = new PandocParser({}, { enabled: false, engine: 'mathjax' });
+      const markdown = 'The equation $E = mc^2$ is famous.';
+      const html = await parser.parse(markdown);
+
+      // Basic conversion should still work
+      expect(html).toContain('equation');
+    });
   });
 });
 
