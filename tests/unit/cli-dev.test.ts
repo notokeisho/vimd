@@ -128,7 +128,7 @@ describe('devCommand', () => {
     // Note: PandocDetector.ensureInstalled is NOT called by default
     // because devParser defaults to 'markdown-it'
     expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {});
+    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {}, undefined);
     expect(mockConverter.setParser).toHaveBeenCalled();
     expect(mockConverter.convertWithTemplate).toHaveBeenCalled();
     expect(mockServer.start).toHaveBeenCalled();
@@ -246,7 +246,7 @@ describe('devCommand', () => {
     await devCommand('test.md', { pandoc: true });
 
     expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('pandoc', {});
+    expect(ParserFactory.create).toHaveBeenCalledWith('pandoc', {}, undefined);
     expect(mockConverter.setParser).toHaveBeenCalled();
   });
 
@@ -254,6 +254,6 @@ describe('devCommand', () => {
     await devCommand('test.md', {});
 
     expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {});
+    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {}, undefined);
   });
 });
