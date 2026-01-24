@@ -7,6 +7,18 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.12] - 2026-01-25
+
+### 追加
+
+- **TeX数式サポート (MathJax)**
+  - インライン数式 (`$E = mc^2$`) とブロック数式 (`$$...$$`) に対応
+  - bussproofs（証明図）、ams、physics 拡張を有効化
+  - markdown-it パーサー: `markdown-it-texmath` プラグインを使用
+  - pandoc パーサー: `--mathjax` オプションを使用
+  - 設定で有効/無効の切り替えが可能 (`math.enabled`)
+  - エンジン選択が可能 (`math.engine`: 'mathjax' または 'katex')
+
 ## [0.3.2] - 2025-12-14
 
 ### 修正
