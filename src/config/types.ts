@@ -64,6 +64,7 @@ export interface ConverterConfig {
   pandocOptions: PandocConfig;
   customCSS?: string;
   template?: string;
+  mathEnabled?: boolean;
 }
 
 export function defineConfig(config: Partial<VimdConfig>): VimdConfig {

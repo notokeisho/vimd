@@ -91,6 +91,16 @@ export class MarkdownConverter {
       html = html.replace(/\{\{#if custom_css\}\}[\s\S]*?\{\{\/if\}\}/g, '');
     }
 
+    // Math support
+    if (this.config.mathEnabled) {
+      // Keep the math_enabled block as-is (MathJax will be loaded)
+      html = html.replace(/\{\{#if math_enabled\}\}/g, '');
+      html = html.replace(/\{\{\/if\}\}/g, '');
+    } else {
+      // Remove the math_enabled block entirely
+      html = html.replace(/\{\{#if math_enabled\}\}[\s\S]*?\{\{\/if\}\}/g, '');
+    }
+
     return html;
   }
 
