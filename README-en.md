@@ -179,6 +179,43 @@ export default {
 
 See [docs/en/api-en.md](docs/en/api-en.md) for detailed configuration options.
 
+### Math Support
+
+vimd supports TeX math rendering using MathJax (v0.3.12+).
+
+```markdown
+Inline math: $E = mc^2$
+
+Block math:
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$
+```
+
+bussproofs (proof trees) are also supported:
+
+```markdown
+$$
+\begin{prooftree}
+\AxiomC{$A$}
+\AxiomC{$B$}
+\BinaryInfC{$A \land B$}
+\end{prooftree}
+$$
+```
+
+Math support configuration:
+
+```javascript
+// ~/.vimd/config.js
+export default {
+  math: {
+    enabled: true,      // default: true
+    engine: 'mathjax',  // 'mathjax' or 'katex'
+  },
+};
+```
+
 ---
 
 ## Why vimd?
