@@ -7,6 +7,14 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.13] - 2026-01-25
+
+### 修正
+
+- **数式設定がパーサーとテンプレートに渡されない問題を修正**
+  - `ParserFactory.create()` に `MathConfig` を渡すように修正
+  - `dev` / `build` コマンドで `mathEnabled` をコンバーターに渡すように修正
+
 ## [0.3.12] - 2026-01-25
 
 ### 追加
