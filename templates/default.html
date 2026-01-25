@@ -14,6 +14,19 @@
   </style>
 {{/if}}
 {{#if math_enabled}}
+  <style>
+  /* Block math centering */
+  .math-block {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+  }
+  mjx-container[display="true"] {
+    display: block !important;
+    text-align: center !important;
+    margin: 1em 0 !important;
+  }
+  </style>
   <script>
   MathJax = {
     loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics']},
