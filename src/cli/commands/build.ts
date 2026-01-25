@@ -73,14 +73,10 @@ export async function buildCommand(
     Logger.info(`Output: ${outputPath}`);
 
     // 7. Prepare converter with selected parser
-    const pandocOptions = {
-      ...config.pandoc,
-      standalone: true, // build always uses standalone
-    };
-    const parser = ParserFactory.create(parserType, pandocOptions, config.math, fromFormat);
+    const parser = ParserFactory.create(parserType, config.pandoc, config.math, fromFormat);
     const converter = new MarkdownConverter({
       theme: config.theme,
-      pandocOptions: pandocOptions,
+      pandocOptions: config.pandoc,
       customCSS: config.css,
       template: config.template || undefined,
       mathEnabled: config.math?.enabled ?? true,

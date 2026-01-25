@@ -117,7 +117,7 @@ describe('buildCommand', () => {
     expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
     expect(ParserFactory.create).toHaveBeenCalledWith(
       'pandoc',
-      expect.objectContaining({ standalone: true }),
+      mockConfig.pandoc,
       undefined,
       'markdown'
     );
@@ -130,7 +130,7 @@ describe('buildCommand', () => {
     expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
     expect(ParserFactory.create).toHaveBeenCalledWith(
       'markdown-it',
-      expect.objectContaining({ standalone: true }),
+      mockConfig.pandoc,
       undefined,
       'markdown'
     );

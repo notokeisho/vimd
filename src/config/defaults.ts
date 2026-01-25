@@ -7,7 +7,7 @@ export const DEFAULT_CONFIG: VimdConfig = {
   host: 'localhost',
   open: true,
   pandoc: {
-    standalone: true,
+    standalone: false, // Template is always used, so standalone is not needed
     toc: false,
     tocDepth: 3,
   },

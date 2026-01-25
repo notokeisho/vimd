@@ -21,7 +21,7 @@ describe('DEFAULT_CONFIG', () => {
 
   it('should have pandoc configuration', () => {
     expect(DEFAULT_CONFIG.pandoc).toBeDefined();
-    expect(DEFAULT_CONFIG.pandoc.standalone).toBe(true);
+    expect(DEFAULT_CONFIG.pandoc.standalone).toBe(false); // Template is always used
     expect(DEFAULT_CONFIG.pandoc.toc).toBe(false);
     // highlightStyle is optional and removed from defaults
     expect(DEFAULT_CONFIG.pandoc.highlightStyle).toBeUndefined();
