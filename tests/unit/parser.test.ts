@@ -332,6 +332,51 @@ describe('PandocParser', () => {
   });
 });
 
+describe('PandocParser LaTeX Support', () => {
+  it('should convert basic LaTeX to HTML', async () => {
+    const parser = new PandocParser({}, undefined, 'latex');
+    const latex = '\\section{Hello}\n\nWorld';
+    const html = await parser.parse(latex);
+
+    expect(html).toContain('Hello');
+    expect(html).toContain('World');
+  });
+
+  it('should support LaTeX math environments', async () => {
+    const parser = new PandocParser({}, { enabled: true, engine: 'mathjax' }, 'latex');
+    const latex = '\\begin{equation}\nE = mc^2\n\\end{equation}';
+    const html = await parser.parse(latex);
+
+    expect(html).toContain('E = mc^2');
+  });
+
+  it('should support LaTeX lists', async () => {
+    const parser = new PandocParser({}, undefined, 'latex');
+    const latex = '\\begin{itemize}\n\\item First\n\\item Second\n\\end{itemize}';
+    const html = await parser.parse(latex);
+
+    expect(html).toContain('<li>');
+    expect(html).toContain('First');
+    expect(html).toContain('Second');
+  });
+
+  it('should support LaTeX tables', async () => {
+    const parser = new PandocParser({}, undefined, 'latex');
+    const latex = '\\begin{tabular}{|c|c|}\n\\hline\nA & B \\\\\n\\hline\n\\end{tabular}';
+    const html = await parser.parse(latex);
+
+    expect(html).toContain('<table');
+  });
+
+  it('should default to markdown format', async () => {
+    const parser = new PandocParser();
+    const markdown = '# Heading';
+    const html = await parser.parse(markdown);
+
+    expect(html).toContain('Heading');
+  });
+});
+
 describe('Parser Comparison', () => {
   it('should produce similar output for basic markdown', async () => {
     const mdIt = new MarkdownItParser();
