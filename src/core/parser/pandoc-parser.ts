@@ -5,6 +5,11 @@ import { Parser } from './types.js';
 import { MathConfig, PandocConfig } from '../../config/types.js';
 
 /**
+ * Source format for pandoc conversion.
+ */
+export type SourceFormat = 'markdown' | 'latex';
+
+/**
  * Default pandoc configuration for high-quality HTML output.
  */
 const DEFAULT_PANDOC_CONFIG: PandocConfig = {
@@ -15,39 +20,52 @@ const DEFAULT_PANDOC_CONFIG: PandocConfig = {
 };
 
 /**
- * Markdown parser using pandoc.
- * Provides high-quality markdown to HTML conversion with extensive features.
+ * Document parser using pandoc.
+ * Provides high-quality document to HTML conversion with extensive features.
+ * Supports both Markdown and LaTeX source formats.
  */
 export class PandocParser implements Parser {
   readonly name = 'pandoc';
   private config: PandocConfig;
   private mathConfig?: MathConfig;
+  private fromFormat: SourceFormat;
 
-  constructor(config: Partial<PandocConfig> = {}, mathConfig?: MathConfig) {
+  /**
+   * Create a new PandocParser instance.
+   * @param config - Pandoc configuration options
+   * @param mathConfig - Math rendering configuration
+   * @param fromFormat - Source format ('markdown' or 'latex')
+   */
+  constructor(
+    config: Partial<PandocConfig> = {},
+    mathConfig?: MathConfig,
+    fromFormat: SourceFormat = 'markdown'
+  ) {
     this.config = { ...DEFAULT_PANDOC_CONFIG, ...config };
     this.mathConfig = mathConfig;
+    this.fromFormat = fromFormat;
   }
 
   /**
-   * Convert markdown to HTML using pandoc.
-   * @param markdown - The markdown content to convert
+   * Convert document to HTML using pandoc.
+   * @param content - The document content to convert
    * @returns The converted HTML string
    */
-  async parse(markdown: string): Promise<string> {
+  async parse(content: string): Promise<string> {
     const pandocArgs = this.buildPandocArgs();
     const command = `pandoc ${pandocArgs.join(' ')}`;
 
     try {
       const html = execSync(command, {
         encoding: 'utf-8',
-        input: markdown,
+        input: content,
         maxBuffer: 10 * 1024 * 1024, // 10MB
       });
 
       return html;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to convert markdown with pandoc: ${errorMessage}`);
+      throw new Error(`Failed to convert document with pandoc: ${errorMessage}`);
     }
   }
 
@@ -71,7 +89,7 @@ export class PandocParser implements Parser {
     const args: string[] = [];
 
     // Basic options
-    args.push('--from=markdown');
+    args.push(`--from=${this.fromFormat}`);
     args.push('--to=html');
 
     if (this.config.standalone) {
