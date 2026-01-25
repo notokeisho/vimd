@@ -34,7 +34,7 @@ body {
   line-height: 1.6;
   color: var(--tech-text-color);
   background-color: var(--tech-bg-color);
-  max-width: 1000px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 2rem;
 }

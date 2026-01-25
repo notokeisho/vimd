@@ -7,6 +7,16 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.3.16] - 2026-01-25
+
+### 変更
+
+- **全テーマのコンテンツ幅を 720px に統一**
+  - 可読性の向上（1行あたり45-50文字程度）
+  - pandoc 出力との見た目の一貫性を確保
+  - 変更前: github/dark 980px、minimal 800px、technical 1000px、academic 720px
+  - 変更後: 全テーマ 720px
+
 ## [0.3.15] - 2026-01-25
 
 ### 修正
