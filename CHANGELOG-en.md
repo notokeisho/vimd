@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.15] - 2026-01-25
+
+### Fixed
+
+- **Fix backslashes disappearing in math blocks with markdown-it**
+  - Protect math blocks (`$$...$$`) and inline math (`$...$`) from markdown-it processing
+  - LaTeX syntax using `\\` (like matrices) now renders correctly
+
+### Improved
+
+- **Center block math equations**
+  - Consistent layout with pandoc output
+
 ## [0.3.14] - 2026-01-25
 
 ### Fixed
