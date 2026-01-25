@@ -118,6 +118,7 @@ npm install -g vimd
 | Command | Description |
 |---------|-------------|
 | `vimd dev <file>` | Start live preview server |
+| `vimd dev <folder>` | Start folder mode |
 | `vimd build <file>` | Generate static HTML |
 | `vimd theme` | Change theme interactively |
 | `vimd config` | Edit configuration interactively |
@@ -228,6 +229,30 @@ LaTeX files are automatically detected and converted using pandoc.
 - `.latex`
 
 **Note**: LaTeX preview requires pandoc. If pandoc is not installed, an installation guide will be displayed.
+
+### Folder Mode
+
+vimd can preview multiple files in a folder on the same port (v0.5.0+).
+
+```bash
+# Preview current directory
+vimd dev .
+
+# Preview a specific folder
+vimd dev ./docs
+```
+
+Select files from a VSCode-style sidebar and preview them in real-time.
+
+**Supported extensions**:
+- `.md` (Markdown)
+- `.tex`, `.latex` (LaTeX)
+
+**Features**:
+- Tree-style file display (expandable/collapsible folders)
+- Resizable sidebar (drag to resize)
+- Keyboard shortcut (Ctrl+B to toggle sidebar)
+- Auto-reload on file changes
 
 ---
 
