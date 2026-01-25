@@ -7,6 +7,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-01-25
+
+### Added
+
+- **LaTeX Document Support**
+  - Preview support for `.tex` / `.latex` files
+  - `vimd dev thesis.tex` for live preview
+  - `vimd build thesis.tex` for HTML generation
+  - Automatic parser mode switching based on file extension
+  - Converts LaTeX to HTML using pandoc
+  - pandoc is required for LaTeX files (no markdown-it fallback)
+
+### Changed
+
+- **Add fromFormat parameter to PandocParser**
+  - Changed from fixed `--from=markdown` to `--from=${fromFormat}`
+  - Export `SourceFormat` type (`'markdown' | 'latex'`)
+
+### Fixed
+
+- **Fix title extraction in converter.ts**
+  - Changed from fixed `.md` to dynamic extension extraction using `path.extname()`
+
 ## [0.3.16] - 2026-01-25
 
 ### Changed

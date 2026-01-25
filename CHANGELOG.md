@@ -7,6 +7,29 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.4.0] - 2026-01-25
+
+### 追加
+
+- **LaTeX ドキュメントサポート**
+  - `.tex` / `.latex` ファイルのプレビューに対応
+  - `vimd dev thesis.tex` でライブプレビュー
+  - `vimd build thesis.tex` で HTML 生成
+  - ファイル拡張子で自動的にパーサーモードを切り替え
+  - pandoc を使用して LaTeX から HTML に変換
+  - LaTeX ファイルでは pandoc が必須（markdown-it フォールバックなし）
+
+### 変更
+
+- **PandocParser の fromFormat パラメータ追加**
+  - `--from=markdown` 固定から `--from=${fromFormat}` に変更
+  - `SourceFormat` 型をエクスポート（`'markdown' | 'latex'`）
+
+### 修正
+
+- **converter.ts のタイトル処理修正**
+  - `.md` 固定から `path.extname()` で動的に拡張子を取得するように変更
+
 ## [0.3.16] - 2026-01-25
 
 ### 変更
