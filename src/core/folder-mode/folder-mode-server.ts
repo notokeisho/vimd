@@ -9,6 +9,7 @@ import { SessionManager } from '../../utils/session-manager.js';
 import { ThemeManager } from '../../themes/index.js';
 import { ParserFactory } from '../parser/index.js';
 import { PandocDetector } from '../pandoc-detector.js';
+import { FileWatcher } from '../watcher.js';
 import { FolderScanner } from './folder-scanner.js';
 import type {
   FolderModeOptions,
@@ -34,6 +35,7 @@ export interface ServerStartResult {
  */
 interface ClientState {
   currentFile: string | null;
+  watcher: FileWatcher | null;
 }
 
 /**
@@ -182,7 +184,7 @@ export class FolderModeServer {
    */
   private handleConnection(ws: WebSocket): void {
     // Initialize client state
-    this.clients.set(ws, { currentFile: null });
+    this.clients.set(ws, { currentFile: null, watcher: null });
     Logger.info(`WebSocket client connected (${this.clients.size} total)`);
 
     // Send file tree on connection
@@ -198,13 +200,23 @@ export class FolderModeServer {
       }
     });
 
-    ws.on('close', () => {
+    ws.on('close', async () => {
+      // Stop watcher for this client
+      const state = this.clients.get(ws);
+      if (state?.watcher) {
+        await state.watcher.stop();
+      }
       this.clients.delete(ws);
       Logger.info(`WebSocket client disconnected (${this.clients.size} remaining)`);
     });
 
-    ws.on('error', (error) => {
+    ws.on('error', async (error) => {
       Logger.warn(`WebSocket error: ${error.message}`);
+      // Stop watcher for this client
+      const state = this.clients.get(ws);
+      if (state?.watcher) {
+        await state.watcher.stop();
+      }
       this.clients.delete(ws);
     });
   }
@@ -264,6 +276,12 @@ export class FolderModeServer {
       return;
     }
 
+    // Stop previous watcher if exists
+    if (state.watcher) {
+      await state.watcher.stop();
+      state.watcher = null;
+    }
+
     // Convert file
     try {
       const html = await this.convertFile(absolutePath, isLatex);
@@ -277,7 +295,25 @@ export class FolderModeServer {
         data: { path: relativePath, html },
       });
 
-      Logger.info(`File converted: ${relativePath}`);
+      // Start watching the file
+      state.watcher = new FileWatcher(absolutePath, { debounce: 300, ignored: [] });
+      state.watcher.onChange(async () => {
+        // Re-convert and send on file change
+        try {
+          const newHtml = await this.convertFile(absolutePath, isLatex);
+          this.sendMessage(ws, {
+            type: 'content',
+            data: { path: relativePath, html: newHtml },
+          });
+          Logger.info(`File updated: ${relativePath}`);
+        } catch (err) {
+          const errMsg = err instanceof Error ? err.message : 'Unknown error';
+          Logger.error(`Failed to reconvert ${relativePath}: ${errMsg}`);
+        }
+      });
+      state.watcher.start();
+
+      Logger.info(`File converted and watching: ${relativePath}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       Logger.error(`Failed to convert ${relativePath}: ${message}`);
