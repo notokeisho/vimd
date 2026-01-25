@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="vimd">
+  <title>vimd - {{folder_name}}</title>
+  <style>
+{{folder_mode_css}}
+  </style>
+  <style id="theme-styles">
+{{theme_css}}
+  </style>
+{{#if math_enabled}}
+  <style>
+  /* Block math centering */
+  .math-block {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+  }
+  mjx-container[display="true"] {
+    display: block !important;
+    text-align: center !important;
+    margin: 1em 0 !important;
+  }
+  </style>
+  <script>
+  MathJax = {
+    loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics']},
+    tex: {
+      packages: {'[+]': ['bussproofs', 'ams', 'physics']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    }
+  };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{{/if}}
+</head>
+<body>
+  <div class="vimd-container">
+    <!-- Sidebar toggle bar (visible when sidebar is collapsed) -->
+    <div class="vimd-sidebar-toggle-bar" id="toggle-bar">
+      <button class="vimd-toggle-btn" id="toggle-btn-collapsed" title="Open Sidebar (Ctrl+B)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M6 2L10 8L6 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="vimd-sidebar" id="sidebar">
+      <div class="vimd-sidebar-header">
+        <span class="vimd-folder-name">{{folder_name}}</span>
+        <button class="vimd-toggle-btn" id="toggle-btn" title="Close Sidebar (Ctrl+B)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M10 2L6 8L10 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        </button>
+      </div>
+      <div class="vimd-tree" id="file-tree">
+        <!-- File tree will be rendered by JavaScript -->
+      </div>
+      <div class="vimd-resizer" id="resizer"></div>
+    </aside>
+
+    <!-- Preview -->
+    <main class="vimd-preview" id="preview">
+      <div class="vimd-welcome" id="welcome">
+        <div class="vimd-welcome-content">
+          <h1>vimd</h1>
+          <p id="welcome-message">Select a file from the sidebar</p>
+        </div>
+      </div>
+      <article class="vimd-content markdown-body" id="content">
+        <!-- File content will be rendered here -->
+      </article>
+    </main>
+  </div>
+
+  <script>
+{{folder_mode_js}}
+  </script>
+</body>
+</html>
