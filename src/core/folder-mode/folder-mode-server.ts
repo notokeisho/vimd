@@ -1,9 +1,12 @@
 import http from 'http';
 import path from 'path';
+import fs from 'fs-extra';
+import { fileURLToPath } from 'url';
 import polka from 'polka';
 import { WebSocketServer as WSServer, WebSocket } from 'ws';
 import { Logger } from '../../utils/logger.js';
 import { SessionManager } from '../../utils/session-manager.js';
+import { ThemeManager } from '../../themes/index.js';
 import { FolderScanner } from './folder-scanner.js';
 import type {
   FolderModeOptions,
@@ -11,6 +14,9 @@ import type {
   ServerMessage,
   ClientMessage,
 } from './types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Result of server start operation
@@ -39,6 +45,7 @@ export class FolderModeServer {
   private options: FolderModeOptions;
   private _port: number;
   private fileTree: TreeNode[] = [];
+  private renderedHtml: string | null = null;
 
   constructor(options: FolderModeOptions) {
     this.options = options;
@@ -78,6 +85,9 @@ export class FolderModeServer {
     // Initial scan
     this.fileTree = await this.scanner.scan();
     Logger.info(`Found ${this.countFiles(this.fileTree)} files in folder`);
+
+    // Render template
+    this.renderedHtml = await this.renderTemplate();
 
     // Create polka app
     const app = polka();
@@ -285,25 +295,60 @@ export class FolderModeServer {
     _req: http.IncomingMessage,
     res: http.ServerResponse
   ): void {
-    // TODO: Render actual template (will be implemented in Phase 2)
-    const html = `<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vimd - Folder Mode</title>
-</head>
-<body>
-  <h1>vimd Folder Mode</h1>
-  <p>Template will be implemented in Phase 2</p>
-</body>
-</html>`;
-
     res.writeHead(200, {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'no-cache, no-store, must-revalidate',
     });
-    res.end(html);
+    res.end(this.renderedHtml);
+  }
+
+  /**
+   * Render the folder mode template
+   */
+  private async renderTemplate(): Promise<string> {
+    // Load template
+    const templatePath = path.join(__dirname, '../../../templates/folder-mode.html');
+    let template = await fs.readFile(templatePath, 'utf-8');
+
+    // Load CSS
+    const cssPath = path.join(__dirname, 'assets/folder-mode.css');
+    const folderModeCss = await fs.readFile(cssPath, 'utf-8');
+
+    // Load JS
+    const jsPath = path.join(__dirname, 'assets/folder-mode.js');
+    const folderModeJs = await fs.readFile(jsPath, 'utf-8');
+
+    // Load theme CSS
+    const themeCss = await ThemeManager.getCSS(this.options.theme);
+
+    // Get folder name for display
+    const folderName = path.basename(this.options.rootPath);
+
+    // Replace placeholders
+    template = template
+      .replace('{{folder_name}}', this.escapeHtml(folderName))
+      .replace('{{folder_mode_css}}', folderModeCss)
+      .replace('{{theme_css}}', themeCss)
+      .replace('{{folder_mode_js}}', folderModeJs);
+
+    // Handle math support (enabled by default)
+    template = template
+      .replace(/\{\{#if math_enabled\}\}/g, '')
+      .replace(/\{\{\/if\}\}/g, '');
+
+    return template;
+  }
+
+  /**
+   * Escape HTML special characters
+   */
+  private escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   /**
