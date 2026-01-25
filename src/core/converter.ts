@@ -81,7 +81,7 @@ export class MarkdownConverter {
 
     // Simple template replacement
     let html = template
-      .replace('{{title}}', path.basename(markdownPath, '.md'))
+      .replace('{{title}}', path.basename(markdownPath, path.extname(markdownPath)))
       .replace('{{theme_css}}', themeCSS)
       .replace('{{content}}', contentHtml);
 
