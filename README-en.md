@@ -68,7 +68,7 @@
 npm install -g vimd
 ```
 
-**Current stable version: v0.3.16** / **Latest: v0.4.1**
+**Current version: v0.4.1**
 
 From v0.2.0, **vimd works without pandoc**.
 Install pandoc only when you need high-quality output.
@@ -103,19 +103,12 @@ vimd config
 
 ## Version Information
 
-**Stable version: v0.3.16** / **Latest: v0.4.1**
+**Current version: v0.4.1**
 
-v0.4.x is the latest version with LaTeX document support.
-Use v0.3.16 for stable operation.
+v0.4.x includes LaTeX document support.
 
-To install the stable version:
 ```bash
-npm install -g vimd@0.3.16
-```
-
-To install the latest version:
-```bash
-npm install -g vimd@latest
+npm install -g vimd
 ```
 
 ---
