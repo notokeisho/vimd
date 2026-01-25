@@ -85,11 +85,12 @@ html, body {
   min-height: 35px;
 }
 
+/* Header title (VSCode-style) */
 .vimd-folder-name {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.04em;
   color: var(--sidebar-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;

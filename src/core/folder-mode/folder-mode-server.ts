@@ -96,10 +96,10 @@ export class FolderModeServer {
     // Create polka app
     const app = polka();
 
-    // API: Get file tree
+    // API: Get file tree (wrapped with root folder)
     app.get('/api/tree', (_req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(this.fileTree));
+      res.end(JSON.stringify(this.getWrappedTree()));
     });
 
     // Serve folder mode HTML for all routes (SPA style)
@@ -187,8 +187,8 @@ export class FolderModeServer {
     this.clients.set(ws, { currentFile: null, watcher: null });
     Logger.info(`WebSocket client connected (${this.clients.size} total)`);
 
-    // Send file tree on connection
-    this.sendMessage(ws, { type: 'tree', data: this.fileTree });
+    // Send file tree on connection (wrapped with root folder)
+    this.sendMessage(ws, { type: 'tree', data: this.getWrappedTree() });
 
     // Handle messages from client
     ws.on('message', (data) => {
@@ -441,6 +441,21 @@ export class FolderModeServer {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * Wrap file tree with root folder for VSCode-style explorer UI
+   */
+  private getWrappedTree(): TreeNode[] {
+    const folderName = path.basename(this.options.rootPath);
+    return [
+      {
+        type: 'folder',
+        name: folderName,
+        path: '',
+        children: this.fileTree,
+      },
+    ];
   }
 
   /**
