@@ -62,6 +62,10 @@ describe('devCommand', () => {
 
     // Mock file system
     vi.mocked(fs.pathExists).mockResolvedValue(true);
+    vi.mocked(fs.stat).mockResolvedValue({
+      isDirectory: () => false,
+      isFile: () => true,
+    } as any);
     vi.mocked(fs.ensureDir).mockResolvedValue(undefined);
     vi.mocked(fs.remove).mockResolvedValue(undefined);
 
@@ -173,7 +177,7 @@ describe('devCommand', () => {
     await devCommand('nonexistent.md', {});
 
     expect(Logger.error).toHaveBeenCalledWith(
-      expect.stringContaining('File not found')
+      expect.stringContaining('Path not found')
     );
     expect(process.exit).toHaveBeenCalledWith(1);
   });
