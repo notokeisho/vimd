@@ -5,12 +5,21 @@ import { MarkdownConverter } from '../../core/converter.js';
 import { WebSocketServer } from '../../core/websocket-server.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { ParserFactory } from '../../core/parser/index.js';
+import { SourceFormat } from '../../core/parser/pandoc-parser.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
 import { SessionManager } from '../../utils/session-manager.js';
 import * as path from 'path';
 import fs from 'fs-extra';
 import open from 'open';
+
+/**
+ * Check if the file is a LaTeX file based on extension.
+ */
+function isLatexFile(filePath: string): boolean {
+  const ext = path.extname(filePath).toLowerCase();
+  return ext === '.tex' || ext === '.latex';
+}
 
 interface DevOptions {
   port?: string;
@@ -68,30 +77,37 @@ export async function devCommand(
     Logger.info(`Theme: ${config.theme}`);
     Logger.info(`Port: ${port}`);
 
-    // 5. Determine parser type
-    const parserType = options.pandoc ? 'pandoc' : config.devParser;
-    Logger.info(`Parser: ${parserType}`);
-
-    // 6. Check pandoc installation only if pandoc parser is selected
-    if (parserType === 'pandoc') {
-      PandocDetector.ensureInstalled();
-    }
-
-    // 7. Check file exists
+    // 5. Check file exists first (needed for extension detection)
     const absolutePath = path.resolve(filePath);
     if (!(await fs.pathExists(absolutePath))) {
       Logger.error(`File not found: ${filePath}`);
       process.exit(1);
     }
 
-    // 8. Prepare output HTML in source directory
+    // 6. Detect file type and determine parser/format
+    const isLatex = isLatexFile(filePath);
+    const fromFormat: SourceFormat = isLatex ? 'latex' : 'markdown';
+
+    // 7. Determine parser type (LaTeX requires pandoc)
+    const parserType = isLatex ? 'pandoc' : (options.pandoc ? 'pandoc' : config.devParser);
+    Logger.info(`Parser: ${parserType}`);
+    if (isLatex) {
+      Logger.info('Mode: LaTeX');
+    }
+
+    // 8. Check pandoc installation (required for pandoc parser or LaTeX files)
+    if (parserType === 'pandoc') {
+      PandocDetector.ensureInstalled();
+    }
+
+    // 9. Prepare output HTML in source directory
     const sourceDir = path.dirname(absolutePath);
     const basename = path.basename(filePath, path.extname(filePath));
     const htmlFileName = `vimd-preview-${basename}.html`;
     const htmlPath = path.join(sourceDir, htmlFileName);
 
-    // 9. Prepare converter with selected parser
-    const parser = ParserFactory.create(parserType, config.pandoc, config.math);
+    // 10. Prepare converter with selected parser
+    const parser = ParserFactory.create(parserType, config.pandoc, config.math, fromFormat);
     const converter = new MarkdownConverter({
       theme: config.theme,
       pandocOptions: config.pandoc,
@@ -101,8 +117,8 @@ export async function devCommand(
     });
     converter.setParser(parser);
 
-    // 10. Initial conversion
-    Logger.info('Converting markdown...');
+    // 11. Initial conversion
+    Logger.info(`Converting ${isLatex ? 'LaTeX' : 'markdown'}...`);
     const html = await converter.convertWithTemplate(absolutePath);
     await converter.writeHTML(html, htmlPath);
     Logger.success('Conversion complete');

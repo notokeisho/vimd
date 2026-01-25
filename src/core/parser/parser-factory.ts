@@ -2,7 +2,7 @@
 
 import { Parser, ParserType } from './types.js';
 import { MarkdownItParser } from './markdown-it-parser.js';
-import { PandocParser } from './pandoc-parser.js';
+import { PandocParser, SourceFormat } from './pandoc-parser.js';
 import { PandocConfig, MathConfig } from '../../config/types.js';
 
 /**
@@ -15,19 +15,21 @@ export class ParserFactory {
    * @param type - The type of parser to create
    * @param pandocConfig - Optional configuration for pandoc parser
    * @param mathConfig - Optional configuration for math support
+   * @param fromFormat - Source format for pandoc parser ('markdown' or 'latex')
    * @returns A parser instance
    * @throws Error if the parser type is unknown
    */
   static create(
     type: ParserType,
     pandocConfig?: Partial<PandocConfig>,
-    mathConfig?: MathConfig
+    mathConfig?: MathConfig,
+    fromFormat: SourceFormat = 'markdown'
   ): Parser {
     switch (type) {
       case 'markdown-it':
         return new MarkdownItParser(mathConfig);
       case 'pandoc':
-        return new PandocParser(pandocConfig, mathConfig);
+        return new PandocParser(pandocConfig, mathConfig, fromFormat);
       default:
         // TypeScript exhaustive check
         const _exhaustive: never = type;
