@@ -216,6 +216,26 @@ export default {
 };
 ```
 
+### LaTeX Document Support
+
+vimd supports `.tex` file preview (v0.4.0+).
+
+```bash
+# Live preview for LaTeX files
+vimd dev thesis.tex
+
+# Convert LaTeX file to HTML
+vimd build thesis.tex
+```
+
+LaTeX files are automatically detected and converted using pandoc.
+
+**Supported extensions**:
+- `.tex`
+- `.latex`
+
+**Note**: LaTeX preview requires pandoc. If pandoc is not installed, an installation guide will be displayed.
+
 ---
 
 ## Why vimd?

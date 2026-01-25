@@ -218,6 +218,26 @@ export default {
 };
 ```
 
+### LaTeX ドキュメントサポート
+
+vimd は `.tex` ファイルのプレビューに対応しています（v0.4.0以降）。
+
+```bash
+# LaTeX ファイルのライブプレビュー
+vimd dev thesis.tex
+
+# LaTeX ファイルを HTML に変換
+vimd build thesis.tex
+```
+
+LaTeX ファイルは自動的に検出され、pandoc を使用して変換されます。
+
+**対応する拡張子**:
+- `.tex`
+- `.latex`
+
+**注意**: LaTeX プレビューには pandoc が必須です。pandoc がインストールされていない場合、インストールガイドが表示されます。
+
 ---
 
 ## Why vimd?
