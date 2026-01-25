@@ -68,7 +68,7 @@
 npm install -g vimd
 ```
 
-**Current version: v0.4.1**
+**Current version: v0.5.0**
 
 From v0.2.0, **vimd works without pandoc**.
 Install pandoc only when you need high-quality output.
@@ -103,9 +103,9 @@ vimd config
 
 ## Version Information
 
-**Current version: v0.4.1**
+**Current version: v0.5.0**
 
-v0.4.x includes LaTeX document support.
+v0.5.x includes folder mode (multi-file preview).
 
 ```bash
 npm install -g vimd
@@ -118,6 +118,7 @@ npm install -g vimd
 | Command | Description |
 |---------|-------------|
 | `vimd dev <file>` | Start live preview server |
+| `vimd dev <folder>` | Start folder mode |
 | `vimd build <file>` | Generate static HTML |
 | `vimd theme` | Change theme interactively |
 | `vimd config` | Edit configuration interactively |
@@ -229,6 +230,30 @@ LaTeX files are automatically detected and converted using pandoc.
 
 **Note**: LaTeX preview requires pandoc. If pandoc is not installed, an installation guide will be displayed.
 
+### Folder Mode
+
+vimd can preview multiple files in a folder on the same port (v0.5.0+).
+
+```bash
+# Preview current directory
+vimd dev .
+
+# Preview a specific folder
+vimd dev ./docs
+```
+
+Select files from a VSCode-style sidebar and preview them in real-time.
+
+**Supported extensions**:
+- `.md` (Markdown)
+- `.tex`, `.latex` (LaTeX)
+
+**Features**:
+- Tree-style file display (expandable/collapsible folders)
+- Resizable sidebar (drag to resize)
+- Keyboard shortcut (Ctrl+B to toggle sidebar)
+- Auto-reload on file changes
+
 ---
 
 ## Why vimd?
@@ -268,3 +293,7 @@ LaTeX files are automatically detected and converted using pandoc.
 ## License
 
 MIT © notokeishou
+
+### Third-Party Licenses
+
+Folder mode icons are from [vscode-icons](https://github.com/vscode-icons/vscode-icons) (CC BY-SA 4.0).

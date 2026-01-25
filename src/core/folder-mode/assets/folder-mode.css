@@ -1,0 +1,308 @@
+/**
+ * Folder mode styles - VSCode-style dark sidebar
+ */
+
+:root {
+  --sidebar-bg: #252526;
+  --sidebar-text: #cccccc;
+  --sidebar-text-muted: #858585;
+  --sidebar-hover: #2a2d2e;
+  --sidebar-selected: #094771;
+  --sidebar-border: #3c3c3c;
+  --sidebar-header-bg: #3c3c3c;
+  --sidebar-width: 250px;
+  --sidebar-min-width: 150px;
+  --sidebar-max-width: 500px;
+  --toggle-bar-width: 20px;
+  --resizer-width: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Container */
+.vimd-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+/* Toggle bar (visible when sidebar is collapsed) */
+.vimd-sidebar-toggle-bar {
+  width: var(--toggle-bar-width);
+  min-width: var(--toggle-bar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.vimd-sidebar-toggle-bar.visible {
+  display: flex;
+}
+
+/* Sidebar */
+.vimd-sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-min-width);
+  max-width: var(--sidebar-max-width);
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-right: 1px solid var(--sidebar-border);
+  transition: width 0.15s ease, min-width 0.15s ease, opacity 0.15s ease;
+}
+
+.vimd-sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border-right: none;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* Sidebar header */
+.vimd-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--sidebar-header-bg);
+  border-bottom: 1px solid var(--sidebar-border);
+  min-height: 35px;
+}
+
+.vimd-folder-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sidebar-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* Toggle button */
+.vimd-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  opacity: 0.7;
+  transition: opacity 0.1s, background 0.1s;
+}
+
+.vimd-toggle-btn:hover {
+  opacity: 1;
+  background: var(--sidebar-hover);
+}
+
+/* File tree */
+.vimd-tree {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 0;
+}
+
+.vimd-tree::-webkit-scrollbar {
+  width: 10px;
+}
+
+.vimd-tree::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.vimd-tree::-webkit-scrollbar-thumb {
+  background: rgba(121, 121, 121, 0.4);
+  border-radius: 5px;
+}
+
+.vimd-tree::-webkit-scrollbar-thumb:hover {
+  background: rgba(121, 121, 121, 0.7);
+}
+
+/* Tree item (file or folder) */
+.vimd-tree-item {
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  line-height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vimd-tree-item:hover {
+  background: var(--sidebar-hover);
+}
+
+.vimd-tree-item.selected {
+  background: var(--sidebar-selected);
+}
+
+.vimd-tree-item.selected:hover {
+  background: var(--sidebar-selected);
+}
+
+/* Tree item icon */
+.vimd-tree-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vimd-tree-icon img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Folder chevron */
+.vimd-tree-chevron {
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sidebar-text-muted);
+  transition: transform 0.1s;
+}
+
+.vimd-tree-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Tree children (nested items) */
+.vimd-tree-children {
+  display: block;
+}
+
+.vimd-tree-children.collapsed {
+  display: none;
+}
+
+/* Indentation */
+.vimd-tree-item[data-depth="0"] { padding-left: 8px; }
+.vimd-tree-item[data-depth="1"] { padding-left: 24px; }
+.vimd-tree-item[data-depth="2"] { padding-left: 40px; }
+.vimd-tree-item[data-depth="3"] { padding-left: 56px; }
+.vimd-tree-item[data-depth="4"] { padding-left: 72px; }
+.vimd-tree-item[data-depth="5"] { padding-left: 88px; }
+
+/* Resizer */
+.vimd-resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--resizer-width);
+  cursor: ew-resize;
+  background: transparent;
+  z-index: 10;
+}
+
+.vimd-resizer:hover,
+.vimd-resizer.active {
+  background: #007acc;
+}
+
+/* Preview area */
+.vimd-preview {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #ffffff;
+}
+
+/* Welcome screen */
+.vimd-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.vimd-welcome.hidden {
+  display: none;
+}
+
+.vimd-welcome-content h1 {
+  font-size: 48px;
+  font-weight: 300;
+  color: #999;
+  margin: 0 0 16px 0;
+}
+
+.vimd-welcome-content p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* Content area */
+.vimd-content {
+  display: none;
+  padding: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.vimd-content.visible {
+  display: block;
+}
+
+/* Loading state */
+.vimd-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Error state */
+.vimd-error {
+  padding: 32px;
+  color: #d32f2f;
+}
+
+.vimd-error h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.vimd-error p {
+  margin: 0;
+  font-size: 14px;
+}
