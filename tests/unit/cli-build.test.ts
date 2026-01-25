@@ -118,7 +118,8 @@ describe('buildCommand', () => {
     expect(ParserFactory.create).toHaveBeenCalledWith(
       'pandoc',
       expect.objectContaining({ standalone: true }),
-      undefined
+      undefined,
+      'markdown'
     );
   });
 
@@ -130,7 +131,8 @@ describe('buildCommand', () => {
     expect(ParserFactory.create).toHaveBeenCalledWith(
       'markdown-it',
       expect.objectContaining({ standalone: true }),
-      undefined
+      undefined,
+      'markdown'
     );
   });
 });
