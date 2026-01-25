@@ -44,11 +44,46 @@ export class MarkdownItParser implements Parser {
 
   /**
    * Convert markdown to HTML.
+   * Math blocks ($$...$$) are protected from markdown-it processing
+   * to preserve LaTeX syntax (especially backslashes).
    * @param markdown - The markdown content to convert
    * @returns The converted HTML string
    */
   async parse(markdown: string): Promise<string> {
-    return this.md.render(markdown);
+    // Protect math blocks from markdown-it processing
+    const mathBlocks: string[] = [];
+
+    // Replace block math ($$...$$) with placeholders
+    let processed = markdown.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
+      mathBlocks.push(match);
+      return `\n\n%%MATH_BLOCK_${mathBlocks.length - 1}%%\n\n`;
+    });
+
+    // Replace inline math ($...$) with placeholders
+    // Be careful not to match $$ or currency amounts like $100
+    const inlineMathBlocks: string[] = [];
+    processed = processed.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (match) => {
+      inlineMathBlocks.push(match);
+      return `%%INLINE_MATH_${inlineMathBlocks.length - 1}%%`;
+    });
+
+    // Process with markdown-it
+    let html = this.md.render(processed);
+
+    // Restore block math (wrap in div for centering)
+    mathBlocks.forEach((block, i) => {
+      html = html.replace(
+        `%%MATH_BLOCK_${i}%%`,
+        `<div class="math-block">${block}</div>`
+      );
+    });
+
+    // Restore inline math
+    inlineMathBlocks.forEach((block, i) => {
+      html = html.replace(`%%INLINE_MATH_${i}%%`, block);
+    });
+
+    return html;
   }
 
   /**
