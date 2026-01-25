@@ -97,7 +97,7 @@ export async function devCommand(
 
     // 8. Check pandoc installation (required for pandoc parser or LaTeX files)
     if (parserType === 'pandoc') {
-      PandocDetector.ensureInstalled();
+      PandocDetector.ensureInstalled(isLatex);
     }
 
     // 9. Prepare output HTML in source directory

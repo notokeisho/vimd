@@ -26,17 +26,27 @@ export class PandocDetector {
     }
   }
 
-  static showInstallGuide(os: OSType): void {
+  static showInstallGuide(os: OSType, forLatex: boolean = false): void {
     console.error('⚠️  pandoc not found');
     console.error('');
-    console.error('pandoc is required for the selected parser mode.');
-    console.error('');
-    console.error('Option 1: Use markdown-it mode (no pandoc needed)');
-    console.error('  vimd dev document.md       (default, fast preview)');
-    console.error('  vimd build document.md --fast');
-    console.error('');
-    console.error('Option 2: Install pandoc for high-quality output');
-    console.error('');
+
+    if (forLatex) {
+      // LaTeX files require pandoc - no fallback option
+      console.error('pandoc is required for LaTeX (.tex) file preview.');
+      console.error('');
+      console.error('Install pandoc:');
+      console.error('');
+    } else {
+      // Markdown files have a fallback option
+      console.error('pandoc is required for the selected parser mode.');
+      console.error('');
+      console.error('Option 1: Use markdown-it mode (no pandoc needed)');
+      console.error('  vimd dev document.md       (default, fast preview)');
+      console.error('  vimd build document.md --fast');
+      console.error('');
+      console.error('Option 2: Install pandoc for high-quality output');
+      console.error('');
+    }
 
     switch (os) {
       case 'macos':
@@ -75,12 +85,16 @@ export class PandocDetector {
     process.exit(1);
   }
 
-  static ensureInstalled(): void {
+  /**
+   * Ensure pandoc is installed. If not, show installation guide and exit.
+   * @param forLatex - If true, indicates this is for LaTeX file processing (no markdown-it fallback)
+   */
+  static ensureInstalled(forLatex: boolean = false): void {
     if (this.check()) {
       return;
     }
 
     const os = this.detectOS();
-    this.showInstallGuide(os);
+    this.showInstallGuide(os, forLatex);
   }
 }

@@ -59,7 +59,7 @@ export async function buildCommand(
 
     // 5. Check pandoc installation (required for pandoc parser or LaTeX files)
     if (parserType === 'pandoc') {
-      PandocDetector.ensureInstalled();
+      PandocDetector.ensureInstalled(isLatex);
     }
 
     // 6. Determine output path
