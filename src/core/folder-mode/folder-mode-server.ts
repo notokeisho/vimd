@@ -7,6 +7,8 @@ import { WebSocketServer as WSServer, WebSocket } from 'ws';
 import { Logger } from '../../utils/logger.js';
 import { SessionManager } from '../../utils/session-manager.js';
 import { ThemeManager } from '../../themes/index.js';
+import { ParserFactory } from '../parser/index.js';
+import { PandocDetector } from '../pandoc-detector.js';
 import { FolderScanner } from './folder-scanner.js';
 import type {
   FolderModeOptions,
@@ -223,7 +225,7 @@ export class FolderModeServer {
   /**
    * Handle file selection
    */
-  private handleSelectFile(ws: WebSocket, relativePath: string): void {
+  private async handleSelectFile(ws: WebSocket, relativePath: string): Promise<void> {
     const state = this.clients.get(ws);
     if (!state) return;
 
@@ -237,11 +239,65 @@ export class FolderModeServer {
       return;
     }
 
-    // Update client state
-    state.currentFile = relativePath;
+    // Check file exists
+    if (!(await fs.pathExists(absolutePath))) {
+      this.sendMessage(ws, {
+        type: 'error',
+        data: { type: 'file-not-found', message: 'File not found' },
+      });
+      return;
+    }
 
-    // TODO: Convert file and send content (will be implemented in next task)
-    Logger.info(`File selected: ${relativePath}`);
+    // Determine file type
+    const ext = path.extname(relativePath).toLowerCase();
+    const isLatex = ext === '.tex' || ext === '.latex';
+
+    // Check pandoc for LaTeX files
+    if (isLatex && !PandocDetector.check()) {
+      this.sendMessage(ws, {
+        type: 'error',
+        data: {
+          type: 'pandoc-not-found',
+          message: 'LaTeX files require pandoc. Please install pandoc.',
+        },
+      });
+      return;
+    }
+
+    // Convert file
+    try {
+      const html = await this.convertFile(absolutePath, isLatex);
+
+      // Update client state
+      state.currentFile = relativePath;
+
+      // Send content
+      this.sendMessage(ws, {
+        type: 'content',
+        data: { path: relativePath, html },
+      });
+
+      Logger.info(`File converted: ${relativePath}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      Logger.error(`Failed to convert ${relativePath}: ${message}`);
+      this.sendMessage(ws, {
+        type: 'error',
+        data: { type: 'conversion-error', message: `Failed to convert file: ${message}` },
+      });
+    }
+  }
+
+  /**
+   * Convert a file to HTML
+   */
+  private async convertFile(absolutePath: string, isLatex: boolean): Promise<string> {
+    const content = await fs.readFile(absolutePath, 'utf-8');
+    const fromFormat = isLatex ? 'latex' : 'markdown';
+    const parserType = isLatex ? 'pandoc' : 'markdown-it';
+
+    const parser = ParserFactory.create(parserType, {}, undefined, fromFormat);
+    return parser.parse(content);
   }
 
   /**
