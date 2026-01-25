@@ -3,6 +3,7 @@ import { ConfigLoader } from '../../config/loader.js';
 import { FileWatcher } from '../../core/watcher.js';
 import { MarkdownConverter } from '../../core/converter.js';
 import { WebSocketServer } from '../../core/websocket-server.js';
+import { FolderModeServer } from '../../core/folder-mode/index.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
 import { ParserFactory } from '../../core/parser/index.js';
 import { SourceFormat } from '../../core/parser/pandoc-parser.js';
@@ -29,7 +30,7 @@ interface DevOptions {
 }
 
 export async function devCommand(
-  filePath: string,
+  targetPath: string,
   options: DevOptions
 ): Promise<void> {
   try {
@@ -77,14 +78,25 @@ export async function devCommand(
     Logger.info(`Theme: ${config.theme}`);
     Logger.info(`Port: ${port}`);
 
-    // 5. Check file exists first (needed for extension detection)
-    const absolutePath = path.resolve(filePath);
+    // 5. Check target exists and determine mode
+    const absolutePath = path.resolve(targetPath);
     if (!(await fs.pathExists(absolutePath))) {
-      Logger.error(`File not found: ${filePath}`);
+      Logger.error(`Path not found: ${targetPath}`);
       process.exit(1);
     }
 
-    // 6. Detect file type and determine parser/format
+    const stat = await fs.stat(absolutePath);
+
+    // 6. Branch: Folder mode or Single file mode
+    if (stat.isDirectory()) {
+      await startFolderMode(absolutePath, port, config, options);
+      return;
+    }
+
+    // Continue with single file mode
+    const filePath = targetPath;
+
+    // 7. Detect file type and determine parser/format
     const isLatex = isLatexFile(filePath);
     const fromFormat: SourceFormat = isLatex ? 'latex' : 'markdown';
 
@@ -207,4 +219,58 @@ export async function devCommand(
     }
     process.exit(1);
   }
+}
+
+/**
+ * Start folder mode server
+ */
+async function startFolderMode(
+  folderPath: string,
+  port: number,
+  config: Awaited<ReturnType<typeof ConfigLoader.loadGlobal>>,
+  _options: DevOptions
+): Promise<void> {
+  Logger.info('Mode: Folder');
+  Logger.info(`Folder: ${folderPath}`);
+
+  // Create folder mode server
+  const server = new FolderModeServer({
+    rootPath: folderPath,
+    port: port,
+    theme: config.theme,
+    open: config.open,
+  });
+
+  const startResult = await server.start();
+  const actualPort = startResult.actualPort;
+
+  // Open browser if configured
+  if (config.open) {
+    const url = `http://localhost:${actualPort}/`;
+    try {
+      await open(url);
+      Logger.info('Browser opened');
+    } catch {
+      Logger.warn('Failed to open browser automatically');
+    }
+  }
+
+  // Save session
+  await SessionManager.saveSession({
+    pid: process.pid,
+    port: actualPort,
+    htmlPath: '', // No HTML file in folder mode
+    sourcePath: folderPath,
+    startedAt: new Date().toISOString(),
+  });
+
+  Logger.info('Press Ctrl+C to stop');
+
+  // Register cleanup
+  ProcessManager.onExit(async () => {
+    Logger.info('Shutting down...');
+    await server.stop();
+    await SessionManager.removeSession(actualPort);
+    Logger.info('Cleanup complete');
+  });
 }
