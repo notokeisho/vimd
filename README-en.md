@@ -68,7 +68,7 @@
 npm install -g vimd
 ```
 
-**Current version: v0.4.1**
+**Current version: v0.5.0**
 
 From v0.2.0, **vimd works without pandoc**.
 Install pandoc only when you need high-quality output.
@@ -103,9 +103,9 @@ vimd config
 
 ## Version Information
 
-**Current version: v0.4.1**
+**Current version: v0.5.0**
 
-v0.4.x includes LaTeX document support.
+v0.5.x includes folder mode (multi-file preview).
 
 ```bash
 npm install -g vimd
@@ -293,3 +293,7 @@ Select files from a VSCode-style sidebar and preview them in real-time.
 ## License
 
 MIT © notokeishou
+
+### Third-Party Licenses
+
+Folder mode icons are from [vscode-icons](https://github.com/vscode-icons/vscode-icons) (CC BY-SA 4.0).
