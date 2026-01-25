@@ -18,6 +18,12 @@ async function copyAssets() {
     const templatesDest = path.join(projectRoot, 'dist', 'templates');
     await fs.copy(templatesSource, templatesDest);
     console.log('✓ Copied templates to dist/templates/');
+
+    // Copy folder-mode assets
+    const folderModeAssetsSource = path.join(projectRoot, 'src', 'core', 'folder-mode', 'assets');
+    const folderModeAssetsDest = path.join(projectRoot, 'dist', 'core', 'folder-mode', 'assets');
+    await fs.copy(folderModeAssetsSource, folderModeAssetsDest);
+    console.log('✓ Copied folder-mode assets to dist/core/folder-mode/assets/');
   } catch (error) {
     console.error('✗ Failed to copy assets:', error.message);
     process.exit(1);
