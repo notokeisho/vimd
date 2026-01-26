@@ -45,6 +45,7 @@ html, body {
 /* Container */
 .vimd-container {
   display: flex;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: #1e1e1e;
