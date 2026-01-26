@@ -223,6 +223,12 @@ html, body {
   min-width: 100px;
 }
 
+/* Split view: Panel 1 (initial 720px, resizable) */
+.vimd-panel.split-panel1 {
+  flex: none;
+  /* width is set by JS */
+}
+
 .vimd-panel-body {
   flex: 1;
   overflow-y: auto;
