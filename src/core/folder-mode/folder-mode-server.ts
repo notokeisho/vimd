@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'url';
 import polka from 'polka';
+import sirv from 'sirv';
 import { WebSocketServer as WSServer, WebSocket } from 'ws';
 import { Logger } from '../../utils/logger.js';
 import { SessionManager } from '../../utils/session-manager.js';
@@ -102,7 +103,33 @@ export class FolderModeServer {
       res.end(JSON.stringify(this.getWrappedTree()));
     });
 
-    // Serve folder mode HTML for all routes (SPA style)
+    // Static file server for images, CSS, JS, etc.
+    const serve = sirv(this.options.rootPath, {
+      dev: true, // Disable caching for development
+    });
+
+    // Middleware: serve static files except for markdown/latex/root
+    app.use((req, res, next) => {
+      const url = req.url || '/';
+
+      // Skip API routes
+      if (url.startsWith('/api/')) {
+        return next();
+      }
+
+      // Skip root and markdown/latex files (handled by folder mode)
+      if (url === '/' || url.endsWith('.md') || url.endsWith('.tex') || url.endsWith('.latex')) {
+        return next();
+      }
+
+      // Try to serve as static file
+      serve(req, res, () => {
+        // If file not found, fall back to folder mode HTML
+        next();
+      });
+    });
+
+    // Serve folder mode HTML for markdown/root routes
     app.get('*', (req, res) => {
       this.serveFolderModeHtml(req, res);
     });
