@@ -614,6 +614,49 @@ body i {
 }
 
 /* ============================================
+   LaTeX Metadata
+   ============================================ */
+.vimd-authors {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+  color: #d4d4d4;
+}
+
+.vimd-authors sup {
+  color: #4ec9b0;
+  font-weight: bold;
+}
+
+.vimd-affiliations {
+  font-size: 0.9em;
+  color: #9cdcfe;
+  margin-bottom: 0.5em;
+}
+
+.vimd-affiliation {
+  margin-bottom: 0.25em;
+}
+
+.vimd-affiliation sup {
+  color: #4ec9b0;
+  font-weight: bold;
+  margin-right: 0.25em;
+}
+
+.vimd-corresponding {
+  font-size: 0.9em;
+  color: #9cdcfe;
+  font-style: italic;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.vimd-corresponding a {
+  color: #569cd6;
+}
+
+/* ============================================
    Responsive
    ============================================ */
 @media (max-width: 768px) {

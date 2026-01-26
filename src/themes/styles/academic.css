@@ -644,6 +644,52 @@ body mark {
 }
 
 /* ============================================
+   LaTeX Metadata
+   ============================================ */
+.vimd-authors {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.vimd-authors sup {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.vimd-affiliations {
+  font-size: 0.9em;
+  color: #7f8c8d;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.vimd-affiliation {
+  margin-bottom: 0.25em;
+}
+
+.vimd-affiliation sup {
+  color: #c0392b;
+  font-weight: bold;
+  margin-right: 0.25em;
+}
+
+.vimd-corresponding {
+  font-size: 0.9em;
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #ecf0f1;
+  text-align: center;
+}
+
+.vimd-corresponding a {
+  color: #2980b9;
+}
+
+/* ============================================
    Responsive
    ============================================ */
 @media (max-width: 768px) {

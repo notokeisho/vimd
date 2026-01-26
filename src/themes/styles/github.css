@@ -516,6 +516,47 @@ body a:focus {
   outline-offset: -2px;
 }
 
+/* LaTeX metadata styles */
+.vimd-authors {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+  color: #1f2328;
+}
+
+.vimd-authors sup {
+  color: #0969da;
+  font-weight: bold;
+}
+
+.vimd-affiliations {
+  font-size: 0.9em;
+  color: #656d76;
+  margin-bottom: 0.5em;
+}
+
+.vimd-affiliation {
+  margin-bottom: 0.25em;
+}
+
+.vimd-affiliation sup {
+  color: #0969da;
+  font-weight: bold;
+  margin-right: 0.25em;
+}
+
+.vimd-corresponding {
+  font-size: 0.9em;
+  color: #656d76;
+  font-style: italic;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.vimd-corresponding a {
+  color: #0969da;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   body {
