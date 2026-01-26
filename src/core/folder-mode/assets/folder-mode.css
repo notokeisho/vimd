@@ -3,6 +3,7 @@
  */
 
 :root {
+  /* Sidebar */
   --sidebar-bg: #252526;
   --sidebar-text: #cccccc;
   --sidebar-text-muted: #858585;
@@ -10,11 +11,24 @@
   --sidebar-selected: #094771;
   --sidebar-border: #3c3c3c;
   --sidebar-header-bg: #3c3c3c;
-  --sidebar-width: 250px;
+  --sidebar-width: 280px;
   --sidebar-min-width: 150px;
   --sidebar-max-width: 500px;
-  --toggle-bar-width: 20px;
   --resizer-width: 4px;
+
+  /* Panel header (light theme) */
+  --panel-header-border: #e0e0e0;
+  --panel-filename-color: #666;
+  --panel-close-color: #999;
+  --panel-close-hover: #333;
+  --panel-active-color: #007acc;
+
+  /* Context menu */
+  --context-menu-bg: #ffffff;
+  --context-menu-border: #e0e0e0;
+  --context-menu-hover: #f5f5f5;
+  --context-menu-text: #333;
+  --context-menu-shadow: rgba(0, 0, 0, 0.15);
 }
 
 * {
@@ -24,6 +38,8 @@
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  max-width: none;
   height: 100%;
   overflow: hidden;
 }
@@ -31,25 +47,10 @@ html, body {
 /* Container */
 .vimd-container {
   display: flex;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: #1e1e1e;
-}
-
-/* Toggle bar (visible when sidebar is collapsed) */
-.vimd-sidebar-toggle-bar {
-  width: var(--toggle-bar-width);
-  min-width: var(--toggle-bar-width);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 8px;
-}
-
-.vimd-sidebar-toggle-bar.visible {
-  display: flex;
 }
 
 /* Sidebar */
@@ -63,15 +64,6 @@ html, body {
   flex-direction: column;
   position: relative;
   border-right: 1px solid var(--sidebar-border);
-  transition: width 0.15s ease, min-width 0.15s ease, opacity 0.15s ease;
-}
-
-.vimd-sidebar.collapsed {
-  width: 0;
-  min-width: 0;
-  border-right: none;
-  overflow: hidden;
-  opacity: 0;
 }
 
 /* Sidebar header */
@@ -96,26 +88,6 @@ html, body {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-}
-
-/* Toggle button */
-.vimd-toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--sidebar-text);
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 3px;
-  opacity: 0.7;
-  transition: opacity 0.1s, background 0.1s;
-}
-
-.vimd-toggle-btn:hover {
-  opacity: 1;
-  background: var(--sidebar-hover);
 }
 
 /* File tree */
@@ -239,9 +211,116 @@ html, body {
 /* Preview area */
 .vimd-preview {
   flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* Panel */
+.vimd-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+/* Split view: Panel 1 (initial 720px, resizable) */
+.vimd-panel.split-panel1 {
+  flex: none;
+  /* width is set by JS */
+}
+
+/* Split view: Panel 2 (takes remaining space) */
+.vimd-panel.split-panel2 {
+  flex: 1;
+}
+
+.vimd-panel-body {
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #ffffff;
+}
+
+/* Panel header */
+.vimd-panel-header {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 28px;
+  padding: 4px 16px;
+  background: transparent;
+  border-bottom: 1px solid var(--panel-header-border);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.vimd-panel-header.visible {
+  display: flex;
+}
+
+.vimd-panel-header.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--panel-active-color);
+}
+
+.vimd-panel-filename {
+  font-size: 12px;
+  color: var(--panel-filename-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 30px);
+}
+
+.vimd-panel-filename:hover {
+  overflow: visible;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.vimd-panel-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--panel-close-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.vimd-panel-close:hover {
+  color: var(--panel-close-hover);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Panel resizer (between panels) */
+.vimd-panel-resizer {
+  width: 4px;
+  background: transparent;
+  cursor: ew-resize;
+  flex-shrink: 0;
+  display: none;
+}
+
+.vimd-panel-resizer.visible {
+  display: block;
+}
+
+.vimd-panel-resizer:hover,
+.vimd-panel-resizer.active {
+  background: var(--panel-active-color);
 }
 
 /* Welcome screen */
@@ -274,8 +353,13 @@ html, body {
 .vimd-content {
   display: none;
   padding: 32px;
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
+}
+
+.vimd-content pre,
+.vimd-content table {
+  overflow-x: auto;
 }
 
 .vimd-content.visible {
@@ -306,4 +390,36 @@ html, body {
 .vimd-error p {
   margin: 0;
   font-size: 14px;
+}
+
+/* Context menu */
+.vimd-context-menu {
+  display: none;
+  position: fixed;
+  background: var(--context-menu-bg);
+  border: 1px solid var(--context-menu-border);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px var(--context-menu-shadow);
+  min-width: 150px;
+  z-index: 1000;
+  padding: 4px 0;
+}
+
+.vimd-context-menu.visible {
+  display: block;
+}
+
+.vimd-context-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--context-menu-text);
+}
+
+.vimd-context-item:hover {
+  background: var(--context-menu-hover);
+}
+
+.vimd-context-item.hidden {
+  display: none;
 }

@@ -7,6 +7,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2026-01-26
+
+### Added
+
+- **Preview Panel Header**
+  - Display filename in header when a file is selected
+  - [×] button to close file and return to welcome screen
+  - Long filenames truncated with ellipsis, full name on hover
+
+- **Split View**
+  - Right-click on file → "分割画面で開く" (Open in split view) for 2-panel display
+  - Active panel indicated by blue underline (#007acc)
+  - Resizable panel divider (minimum width 100px)
+  - Same file can be opened in both panels
+
+- **Context Menu**
+  - 1 panel mode: "開く" (Open), "分割画面で開く" (Open in split view)
+  - 2 panel mode: "パネル1で開く" (Open in Panel 1), "パネル2で開く" (Open in Panel 2)
+
+- **State Persistence (localStorage)**
+  - Save split view state, open files, panel widths, active panel
+  - Restore state on page reload
+
+### Changed
+
+- **Removed Sidebar Toggle**
+  - Toggle button and Ctrl+B shortcut removed
+  - Sidebar is always visible
+
+- **Preview Content Width**
+  - Removed max-width restriction, content expands naturally with panel width
+  - Added overflow-x: auto for code blocks and tables
+
+### Improved
+
+- **CSS Variables for Theme Support**
+  - Panel header and context menu colors defined as CSS variables
+  - Easier dark theme customization
+
 ## [0.5.1] - 2026-01-25
 
 ### Changed
