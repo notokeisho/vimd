@@ -229,6 +229,11 @@ html, body {
   /* width is set by JS */
 }
 
+/* Split view: Panel 2 (takes remaining space) */
+.vimd-panel.split-panel2 {
+  flex: 1;
+}
+
 .vimd-panel-body {
   flex: 1;
   overflow-y: auto;
