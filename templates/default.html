@@ -29,11 +29,14 @@
   </style>
   <script>
   MathJax = {
-    loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics']},
+    loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics', '[tex]/boldsymbol']},
     tex: {
-      packages: {'[+]': ['bussproofs', 'ams', 'physics']},
+      packages: {'[+]': ['bussproofs', 'ams', 'physics', 'boldsymbol']},
       inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      macros: {
+        bm: ['\\boldsymbol{#1}', 1]
+      }
     }
   };
   </script>

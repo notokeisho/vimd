@@ -90,9 +90,17 @@ export class PandocParser implements Parser {
 
   /**
    * Get the path to the LaTeX metadata Lua filter.
+   * Supports both development mode (src/) and production mode (dist/).
    */
   private getLuaFilterPath(): string {
-    return path.join(__dirname, '../../filters/latex-metadata.lua');
+    // Try production path first (dist/filters/)
+    const prodPath = path.join(__dirname, '../../filters/latex-metadata.lua');
+    if (fs.existsSync(prodPath)) {
+      return prodPath;
+    }
+    // Fallback to development path (filters/ from project root)
+    const devPath = path.join(__dirname, '../../../filters/latex-metadata.lua');
+    return devPath;
   }
 
   /**
