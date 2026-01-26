@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.5] - 2026-01-26
+
+### Added
+
+- **Realtime file tree updates in folder mode**
+  - Sidebar automatically updates when files are added or deleted while server is running
+  - Implemented folder watching using `chokidar`
+  - Supported events: file add, file delete, folder add, folder delete
+  - Debounce processing (300ms) prevents excessive rescanning
+
 ## [0.5.4] - 2026-01-26
 
 ### Fixed

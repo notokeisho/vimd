@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import { fileURLToPath } from 'url';
 import polka from 'polka';
 import sirv from 'sirv';
+import chokidar, { FSWatcher } from 'chokidar';
 import { WebSocketServer as WSServer, WebSocket } from 'ws';
 import { Logger } from '../../utils/logger.js';
 import { SessionManager } from '../../utils/session-manager.js';
@@ -40,6 +41,11 @@ interface ClientState {
 }
 
 /**
+ * Supported extensions for tree updates
+ */
+const TREE_EXTENSIONS = ['.md', '.tex', '.latex'];
+
+/**
  * Folder mode server for multi-file preview
  */
 export class FolderModeServer {
@@ -51,6 +57,8 @@ export class FolderModeServer {
   private _port: number;
   private fileTree: TreeNode[] = [];
   private renderedHtml: string | null = null;
+  private folderWatcher: FSWatcher | null = null;
+  private treeUpdateTimer: NodeJS.Timeout | null = null;
 
   constructor(options: FolderModeOptions) {
     this.options = options;
@@ -90,6 +98,9 @@ export class FolderModeServer {
     // Initial scan
     this.fileTree = await this.scanner.scan();
     Logger.info(`Found ${this.countFiles(this.fileTree)} files in folder`);
+
+    // Start watching for file changes
+    this.startFolderWatcher();
 
     // Render template
     this.renderedHtml = await this.renderTemplate();
@@ -176,6 +187,18 @@ export class FolderModeServer {
    * Stop the server
    */
   async stop(): Promise<void> {
+    // Stop folder watcher
+    if (this.folderWatcher) {
+      await this.folderWatcher.close();
+      this.folderWatcher = null;
+    }
+
+    // Clear tree update timer
+    if (this.treeUpdateTimer) {
+      clearTimeout(this.treeUpdateTimer);
+      this.treeUpdateTimer = null;
+    }
+
     // Terminate all WebSocket clients
     for (const [client] of this.clients) {
       try {
@@ -498,5 +521,92 @@ export class FolderModeServer {
       }
     }
     return count;
+  }
+
+  /**
+   * Start watching the folder for file changes
+   */
+  private startFolderWatcher(): void {
+    const watchOptions = {
+      ignored: [
+        '**/node_modules/**',
+        '**/.git/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/vimd-preview-*.html',
+      ],
+      persistent: true,
+      ignoreInitial: true,
+      depth: 99,
+    };
+
+    this.folderWatcher = chokidar.watch(this.options.rootPath, watchOptions);
+
+    // File added
+    this.folderWatcher.on('add', (filePath) => {
+      this.handleFileSystemChange(filePath, 'add');
+    });
+
+    // File removed
+    this.folderWatcher.on('unlink', (filePath) => {
+      this.handleFileSystemChange(filePath, 'unlink');
+    });
+
+    // Directory added
+    this.folderWatcher.on('addDir', (dirPath) => {
+      this.handleFileSystemChange(dirPath, 'addDir');
+    });
+
+    // Directory removed
+    this.folderWatcher.on('unlinkDir', (dirPath) => {
+      this.handleFileSystemChange(dirPath, 'unlinkDir');
+    });
+
+    Logger.info('Folder watcher started');
+  }
+
+  /**
+   * Handle file system changes (add, unlink, etc.)
+   */
+  private handleFileSystemChange(filePath: string, eventType: string): void {
+    const ext = path.extname(filePath).toLowerCase();
+
+    // Only react to supported extensions or directory changes
+    const isDirectory = eventType.includes('Dir');
+    const isSupportedFile = TREE_EXTENSIONS.includes(ext);
+
+    if (!isDirectory && !isSupportedFile) {
+      return;
+    }
+
+    // Debounce tree updates (300ms)
+    if (this.treeUpdateTimer) {
+      clearTimeout(this.treeUpdateTimer);
+    }
+
+    this.treeUpdateTimer = setTimeout(async () => {
+      await this.updateFileTree();
+      this.treeUpdateTimer = null;
+    }, 300);
+  }
+
+  /**
+   * Update file tree and broadcast to all clients
+   */
+  private async updateFileTree(): Promise<void> {
+    try {
+      const newTree = await this.scanner.scan();
+      const fileCount = this.countFiles(newTree);
+
+      // Only update if tree actually changed
+      if (JSON.stringify(newTree) !== JSON.stringify(this.fileTree)) {
+        this.fileTree = newTree;
+        this.broadcast({ type: 'tree', data: this.getWrappedTree() });
+        Logger.info(`File tree updated: ${fileCount} files`);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      Logger.error(`Failed to update file tree: ${message}`);
+    }
   }
 }
