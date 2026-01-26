@@ -246,7 +246,8 @@ html, body {
 .vimd-panel-header {
   display: none;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   height: 28px;
   padding: 4px 16px;
   background: transparent;
