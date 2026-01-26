@@ -7,6 +7,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.3] - 2026-01-26
+
+### Changed
+
+- **Sidebar width changed to 300px**
+  - Increased initial width from 280px to 300px
+  - Filenames are now more visible
+
+### Fixed
+
+- **Sidebar selection state when closing panel**
+  - Fixed issue where sidebar kept showing file as selected after closing tab with [×] button
+  - Blue highlight now correctly clears for closed files
+
 ## [0.5.2] - 2026-01-26
 
 ### Added

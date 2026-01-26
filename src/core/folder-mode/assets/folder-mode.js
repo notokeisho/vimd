@@ -756,9 +756,12 @@
       // Single panel - show welcome
       state.panels[0].file = null;
       showWelcome(0);
-      savePanelState();
-      updateURL();
     }
+
+    // Update sidebar selection and save state
+    updateSelection();
+    savePanelState();
+    updateURL();
   }
 
   /**
