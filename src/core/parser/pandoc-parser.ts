@@ -1,8 +1,14 @@
 // src/core/parser/pandoc-parser.ts
 
 import { execSync } from 'child_process';
+import fs from 'fs-extra';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { Parser } from './types.js';
 import { MathConfig, PandocConfig } from '../../config/types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Source format for pandoc conversion.
@@ -83,14 +89,32 @@ export class PandocParser implements Parser {
   }
 
   /**
+   * Get the path to the LaTeX metadata Lua filter.
+   */
+  private getLuaFilterPath(): string {
+    return path.join(__dirname, '../../filters/latex-metadata.lua');
+  }
+
+  /**
    * Build pandoc command arguments from config.
    */
   private buildPandocArgs(): string[] {
     const args: string[] = [];
 
-    // Basic options
-    args.push(`--from=${this.fromFormat}`);
+    // Basic options - add +raw_tex for latex to preserve unknown commands
+    const fromFormatWithExt = this.fromFormat === 'latex'
+      ? 'latex+raw_tex'
+      : this.fromFormat;
+    args.push(`--from=${fromFormatWithExt}`);
     args.push('--to=html');
+
+    // Apply Lua filter for LaTeX metadata extraction
+    if (this.fromFormat === 'latex') {
+      const filterPath = this.getLuaFilterPath();
+      if (fs.existsSync(filterPath)) {
+        args.push(`--lua-filter=${filterPath}`);
+      }
+    }
 
     if (this.config.standalone) {
       args.push('--standalone');
