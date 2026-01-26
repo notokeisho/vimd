@@ -9,6 +9,9 @@
   var STORAGE_KEY_SIDEBAR_WIDTH = 'vimd-sidebar-width';
   var STORAGE_KEY_STATE = 'vimd-folder-mode-state';
 
+  // Supported file extensions for link navigation
+  var SUPPORTED_EXTENSIONS = ['.md', '.tex', '.latex'];
+
   // State
   var fileTree = [];
   var ws = null;
@@ -272,6 +275,95 @@
       return false;
     }
     return search(fileTree);
+  }
+
+  /**
+   * Get file extension from path
+   */
+  function getExtension(path) {
+    // Remove query string and hash
+    var cleanPath = path.split('?')[0].split('#')[0];
+    var lastDot = cleanPath.lastIndexOf('.');
+    if (lastDot === -1) {
+      return '';
+    }
+    return cleanPath.substring(lastDot).toLowerCase();
+  }
+
+  /**
+   * Check if href is an internal link to a supported file
+   */
+  function isInternalLink(href) {
+    // Ignore external links (http://, https://, //, mailto:, etc.)
+    if (/^(https?:)?\/\/|^mailto:|^tel:|^javascript:/i.test(href)) {
+      return false;
+    }
+
+    // Ignore anchor links
+    if (href.startsWith('#')) {
+      return false;
+    }
+
+    // Check if it's a supported file extension
+    var ext = getExtension(href);
+    return SUPPORTED_EXTENSIONS.indexOf(ext) !== -1;
+  }
+
+  /**
+   * Resolve relative path
+   */
+  function resolvePath(basePath, relativePath) {
+    // Handle absolute paths (starting with /)
+    if (relativePath.startsWith('/')) {
+      return relativePath.substring(1);
+    }
+
+    // Combine base and relative
+    var combined = basePath + relativePath;
+
+    // Normalize path (handle ../ and ./)
+    var parts = combined.split('/');
+    var result = [];
+
+    for (var i = 0; i < parts.length; i++) {
+      var part = parts[i];
+      if (part === '..') {
+        result.pop();
+      } else if (part !== '.' && part !== '') {
+        result.push(part);
+      }
+    }
+
+    return result.join('/');
+  }
+
+  /**
+   * Handle internal link click
+   */
+  function handleInternalLink(href) {
+    // Get current file's directory
+    var currentFile = state.panels[state.activePanel].file;
+    var currentDir = '';
+
+    if (currentFile) {
+      var lastSlash = currentFile.lastIndexOf('/');
+      if (lastSlash !== -1) {
+        currentDir = currentFile.substring(0, lastSlash + 1);
+      }
+    }
+
+    // Resolve relative path
+    var targetPath = resolvePath(currentDir, href);
+
+    // Remove query string and hash for file selection
+    targetPath = targetPath.split('?')[0].split('#')[0];
+
+    // Check if file exists in tree
+    if (fileExists(targetPath)) {
+      selectFile(targetPath);
+    } else {
+      console.warn('[vimd] File not found:', targetPath);
+    }
   }
 
   /**
@@ -712,6 +804,24 @@
             selectFile(path);
           }
         }
+      }
+    });
+
+    // Preview content link handler (event delegation)
+    preview.addEventListener('click', function(e) {
+      var target = e.target;
+
+      // Find closest anchor element
+      while (target && target !== preview) {
+        if (target.tagName === 'A') {
+          var href = target.getAttribute('href');
+          if (href && isInternalLink(href)) {
+            e.preventDefault();
+            handleInternalLink(href);
+          }
+          return;
+        }
+        target = target.parentElement;
       }
     });
   }

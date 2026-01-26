@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.6] - 2026-01-27
+
+### Added
+
+- **Preview link navigation**
+  - In folder mode, clicking a link to another Markdown file in the preview now opens that file in the preview panel
+  - Supports relative paths (`../README.md`, `./docs/api.md`, etc.)
+  - Supported extensions: `.md`, `.tex`, `.latex`
+  - External links (http://, https://) and anchor links (#section) work as before
+
 ## [0.5.5] - 2026-01-26
 
 ### Added

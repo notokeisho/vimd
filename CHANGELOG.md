@@ -7,6 +7,16 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.5.6] - 2026-01-27
+
+### 追加
+
+- **プレビュー内リンクナビゲーション**
+  - フォルダモードでMarkdownをプレビュー中に、ドキュメント内の他のMarkdownファイルへのリンクをクリックすると、そのファイルがプレビューに表示されるように
+  - 相対パス（`../README.md`、`./docs/api.md`など）に対応
+  - 対応する拡張子: `.md`、`.tex`、`.latex`
+  - 外部リンク（http://、https://など）やアンカーリンク（#section）は従来通りの動作
+
 ## [0.5.5] - 2026-01-26
 
 ### 追加
