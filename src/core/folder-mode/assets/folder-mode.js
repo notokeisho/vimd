@@ -785,9 +785,9 @@
       panelResizer = null;
     }
 
-    // Reset panel 1 width
+    // Reset panel 1 to single panel mode
+    panel1.classList.remove('split-panel1');
     panel1.style.width = '';
-    panel1.style.flex = '';
 
     updatePanelUI();
     savePanelState();
