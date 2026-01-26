@@ -339,6 +339,7 @@ html, body {
 .vimd-content {
   display: none;
   padding: 32px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
