@@ -24,6 +24,14 @@ async function copyAssets() {
     const folderModeAssetsDest = path.join(projectRoot, 'dist', 'core', 'folder-mode', 'assets');
     await fs.copy(folderModeAssetsSource, folderModeAssetsDest);
     console.log('✓ Copied folder-mode assets to dist/core/folder-mode/assets/');
+
+    // Copy Lua filters for pandoc
+    const filtersSource = path.join(projectRoot, 'filters');
+    const filtersDest = path.join(projectRoot, 'dist', 'filters');
+    if (await fs.pathExists(filtersSource)) {
+      await fs.copy(filtersSource, filtersDest);
+      console.log('✓ Copied filters to dist/filters/');
+    }
   } catch (error) {
     console.error('✗ Failed to copy assets:', error.message);
     process.exit(1);
