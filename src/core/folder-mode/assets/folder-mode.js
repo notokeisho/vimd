@@ -659,7 +659,6 @@
 
         if (panelWidth >= minPanelWidth && panelWidth <= maxPanelWidth) {
           panel1.style.width = panelWidth + 'px';
-          panel1.style.flex = 'none';
           state.panelWidth = panelWidth;
         }
       }
@@ -813,7 +812,7 @@
 
     // Create panel 2
     panel2 = document.createElement('div');
-    panel2.className = 'vimd-panel';
+    panel2.className = 'vimd-panel split-panel2';
     panel2.id = 'panel2';
 
     panel2Header = document.createElement('div');
@@ -857,9 +856,9 @@
     preview.appendChild(panelResizer);
     preview.appendChild(panel2);
 
-    // Set initial width for panel 1
+    // Set panel 1 to split mode
+    panel1.classList.add('split-panel1');
     panel1.style.width = state.panelWidth + 'px';
-    panel1.style.flex = 'none';
   }
 
   /**
