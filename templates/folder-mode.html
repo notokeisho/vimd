@@ -40,24 +40,10 @@
 </head>
 <body>
   <div class="vimd-container">
-    <!-- Sidebar toggle bar (visible when sidebar is collapsed) -->
-    <div class="vimd-sidebar-toggle-bar" id="toggle-bar">
-      <button class="vimd-toggle-btn" id="toggle-btn-collapsed" title="Open Sidebar (Ctrl+B)">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M6 2L10 8L6 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </button>
-    </div>
-
     <!-- Sidebar -->
     <aside class="vimd-sidebar" id="sidebar">
       <div class="vimd-sidebar-header">
         <span class="vimd-folder-name">エクスプローラー</span>
-        <button class="vimd-toggle-btn" id="toggle-btn" title="Close Sidebar (Ctrl+B)">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M10 2L6 8L10 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          </svg>
-        </button>
       </div>
       <div class="vimd-tree" id="file-tree">
         <!-- File tree will be rendered by JavaScript -->
@@ -67,16 +53,33 @@
 
     <!-- Preview -->
     <main class="vimd-preview" id="preview">
-      <div class="vimd-welcome" id="welcome">
-        <div class="vimd-welcome-content">
-          <h1>vimd</h1>
-          <p id="welcome-message">Select a file from the sidebar</p>
+      <!-- Panel 1 -->
+      <div class="vimd-panel" id="panel1">
+        <div class="vimd-panel-header" id="panel1-header">
+          <span class="vimd-panel-filename" id="panel1-filename"></span>
+          <button class="vimd-panel-close" id="panel1-close" title="閉じる">&times;</button>
+        </div>
+        <div class="vimd-panel-body">
+          <div class="vimd-welcome" id="welcome">
+            <div class="vimd-welcome-content">
+              <h1>vimd</h1>
+              <p id="welcome-message">Select a file from the sidebar</p>
+            </div>
+          </div>
+          <article class="vimd-content markdown-body" id="content">
+            <!-- File content will be rendered here -->
+          </article>
         </div>
       </div>
-      <article class="vimd-content markdown-body" id="content">
-        <!-- File content will be rendered here -->
-      </article>
     </main>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="vimd-context-menu" id="context-menu">
+    <div class="vimd-context-item" data-action="open">開く</div>
+    <div class="vimd-context-item" data-action="open-split">分割画面で開く</div>
+    <div class="vimd-context-item" data-action="open-panel1">パネル1で開く</div>
+    <div class="vimd-context-item" data-action="open-panel2">パネル2で開く</div>
   </div>
 
   <script>
