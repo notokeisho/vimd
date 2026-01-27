@@ -556,6 +556,59 @@ body i {
   color: #333;
 }
 
+/* LaTeX document title */
+.vimd-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+/* Key Points box */
+.vimd-keypoints {
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.vimd-keypoints h2 {
+  font-size: 1.1em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+.vimd-keypoints ul {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+.vimd-keypoints li {
+  margin-bottom: 0.3em;
+}
+
+/* Abstract section */
+.vimd-abstract {
+  border-left: 3px solid #333;
+  padding-left: 1em;
+  margin: 1em 0;
+}
+
+.vimd-abstract h2 {
+  font-size: 1.1em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+.vimd-abstract p {
+  margin: 0;
+  text-align: justify;
+}
+
 /* ============================================
    Responsive
    ============================================ */
