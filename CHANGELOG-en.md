@@ -7,6 +7,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.8] - 2026-01-28
+
+### Changed
+
+- **Single file mode architecture improvement** (Issue #11)
+  - Content now served from memory instead of writing HTML files to disk
+  - Content delivered dynamically via WebSocket
+  - Adopted shell HTML pattern similar to folder mode
+  - No need for HTML file cleanup on server shutdown
+
+- **Scroll position preservation**
+  - Maintains scroll position during live reload on file changes
+  - Correctly restores position after MathJax re-rendering
+  - Works in both single file mode and folder mode
+
+### Removed
+
+- **WebSocketServer removed from public API** (breaking change)
+  - Removed `WebSocketServer` class export
+  - Now uses `SingleFileServer` internally
+  - Note: Code that directly used this class needs to be updated
+
+- **Removed unused files**
+  - `src/core/websocket-server.ts` - integrated into SingleFileServer
+  - `templates/standalone.html` - unused
+  - `scripts/benchmark-server.ts` - unused
+
 ## [0.5.7] - 2026-01-28
 
 ### Added

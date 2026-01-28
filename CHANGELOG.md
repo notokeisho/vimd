@@ -7,6 +7,33 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.5.8] - 2026-01-28
+
+### 変更
+
+- **シングルファイルモードのアーキテクチャ改善** (Issue #11)
+  - HTMLファイルをディスクに書き出さずにメモリ上で提供するように変更
+  - WebSocket経由でコンテンツを動的に配信
+  - フォルダモードと同様のシェルHTMLパターンを採用
+  - サーバー停止時のHTMLファイル削除処理が不要に
+
+- **スクロール位置の保持機能**
+  - ファイル変更時のライブリロードでスクロール位置を維持
+  - MathJax再レンダリング後も位置を正しく復元
+  - シングルファイルモードとフォルダモードの両方で対応
+
+### 削除
+
+- **WebSocketServer のパブリックAPIからの削除**（破壊的変更）
+  - `WebSocketServer` クラスのエクスポートを削除
+  - 代わりに内部で `SingleFileServer` を使用
+  - 注：このクラスを直接使用していたコードは修正が必要
+
+- **不要なファイルの削除**
+  - `src/core/websocket-server.ts` - SingleFileServerに統合
+  - `templates/standalone.html` - 未使用
+  - `scripts/benchmark-server.ts` - 未使用
+
 ## [0.5.7] - 2026-01-28
 
 ### 追加
