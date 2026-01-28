@@ -8,7 +8,6 @@ export { defineConfig } from './config/types.js';
 // ==================== コア機能エクスポート ====================
 export { MarkdownConverter } from './core/converter.js';
 export { FileWatcher } from './core/watcher.js';
-export { WebSocketServer } from './core/websocket-server.js';
 export { PandocDetector } from './core/pandoc-detector.js';
 
 // ==================== テーマ管理エクスポート ====================
