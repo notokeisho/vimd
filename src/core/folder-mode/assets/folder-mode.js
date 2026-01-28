@@ -613,13 +613,21 @@
       state.panels[panelIndex].file = path;
     }
 
+    // Get scroll container (panel-body) and save scroll position
+    var scrollContainer = null;
+    var scrollTop = 0;
+
     if (panelIndex === 0) {
+      scrollContainer = content.parentElement;
+      scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
       welcome.classList.add('hidden');
       content.classList.add('visible');
       content.innerHTML = html;
       panel1Filename.textContent = getFileName(path);
       panel1Header.classList.add('visible');
     } else if (panelIndex === 1 && panel2Content) {
+      scrollContainer = panel2Content.parentElement;
+      scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
       panel2Content.innerHTML = html;
       panel2Content.classList.add('visible');
       panel2Filename.textContent = getFileName(path);
@@ -628,12 +636,34 @@
 
     updatePanelUI();
 
-    // Re-render MathJax if available
+    // Re-render MathJax if available, then restore scroll position
     if (window.MathJax && window.MathJax.typeset) {
-      if (panelIndex === 0) {
-        window.MathJax.typeset([content]);
-      } else if (panel2Content) {
-        window.MathJax.typeset([panel2Content]);
+      var targetElement = panelIndex === 0 ? content : panel2Content;
+      if (targetElement) {
+        var promise = window.MathJax.typeset([targetElement]);
+        // MathJax v3 returns a promise
+        if (promise && promise.then) {
+          promise.then(function() {
+            if (scrollContainer) {
+              scrollContainer.scrollTop = scrollTop;
+            }
+          }).catch(function() {
+            // Restore scroll even if MathJax fails
+            if (scrollContainer) {
+              scrollContainer.scrollTop = scrollTop;
+            }
+          });
+        } else {
+          // Fallback for older MathJax or if promise not returned
+          if (scrollContainer) {
+            scrollContainer.scrollTop = scrollTop;
+          }
+        }
+      }
+    } else {
+      // No MathJax: restore scroll immediately
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollTop;
       }
     }
   }
