@@ -119,8 +119,9 @@ export class SessionManager {
     for (const [port, session] of Object.entries(sessions)) {
       if (!this.isProcessAlive(session.pid)) {
         // Process is dead, clean up HTML if exists
+        // Skip if htmlPath is empty (single file / folder mode)
         try {
-          if (await fs.pathExists(session.htmlPath)) {
+          if (session.htmlPath && await fs.pathExists(session.htmlPath)) {
             await fs.remove(session.htmlPath);
           }
         } catch {
@@ -160,9 +161,9 @@ export class SessionManager {
       result.killed = await this.killProcess(session.pid);
     }
 
-    // Remove HTML file
+    // Remove HTML file (skip if htmlPath is empty - single file / folder mode)
     try {
-      if (await fs.pathExists(session.htmlPath)) {
+      if (session.htmlPath && await fs.pathExists(session.htmlPath)) {
         await fs.remove(session.htmlPath);
         result.htmlRemoved = true;
       }
