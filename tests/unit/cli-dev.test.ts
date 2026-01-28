@@ -2,11 +2,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { devCommand } from '../../src/cli/commands/dev.js';
 import { ConfigLoader } from '../../src/config/loader.js';
-import { FileWatcher } from '../../src/core/watcher.js';
-import { MarkdownConverter } from '../../src/core/converter.js';
-import { WebSocketServer } from '../../src/core/websocket-server.js';
+import { SingleFileServer } from '../../src/core/single-file-server.js';
 import { PandocDetector } from '../../src/core/pandoc-detector.js';
-import { ParserFactory } from '../../src/core/parser/index.js';
 import { Logger } from '../../src/utils/logger.js';
 import { ProcessManager } from '../../src/utils/process-manager.js';
 import { SessionManager } from '../../src/utils/session-manager.js';
@@ -14,11 +11,8 @@ import fs from 'fs-extra';
 import open from 'open';
 
 vi.mock('../../src/config/loader.js');
-vi.mock('../../src/core/watcher.js');
-vi.mock('../../src/core/converter.js');
-vi.mock('../../src/core/websocket-server.js');
+vi.mock('../../src/core/single-file-server.js');
 vi.mock('../../src/core/pandoc-detector.js');
-vi.mock('../../src/core/parser/index.js');
 vi.mock('../../src/utils/logger.js');
 vi.mock('../../src/utils/process-manager.js');
 vi.mock('../../src/utils/session-manager.js');
@@ -26,9 +20,7 @@ vi.mock('fs-extra');
 vi.mock('open');
 
 describe('devCommand', () => {
-  let mockWatcher: any;
   let mockServer: any;
-  let mockConverter: any;
 
   const getDefaultConfig = () => ({
     theme: 'github',
@@ -39,6 +31,7 @@ describe('devCommand', () => {
     css: undefined,
     template: undefined,
     watch: { ignored: [] },
+    math: { enabled: true },
     devParser: 'markdown-it',
     buildParser: 'pandoc',
   });
@@ -51,14 +44,6 @@ describe('devCommand', () => {
 
     // Mock pandoc
     vi.mocked(PandocDetector.ensureInstalled).mockReturnValue(undefined);
-
-    // Mock ParserFactory
-    const mockParser = {
-      name: 'markdown-it',
-      parse: vi.fn().mockResolvedValue('<html>test</html>'),
-      isAvailable: vi.fn().mockResolvedValue(true),
-    };
-    vi.mocked(ParserFactory.create).mockReturnValue(mockParser as any);
 
     // Mock file system
     vi.mocked(fs.pathExists).mockResolvedValue(true);
@@ -79,16 +64,7 @@ describe('devCommand', () => {
     vi.mocked(SessionManager.saveSession).mockResolvedValue(undefined);
     vi.mocked(SessionManager.removeSession).mockResolvedValue(undefined);
 
-    // Mock converter
-    mockConverter = {
-      convertWithTemplate: vi.fn().mockResolvedValue('<html>test</html>'),
-      writeHTML: vi.fn().mockResolvedValue(undefined),
-      setParser: vi.fn(),
-      getParser: vi.fn(),
-    };
-    vi.mocked(MarkdownConverter).mockImplementation(() => mockConverter);
-
-    // Mock server
+    // Mock SingleFileServer
     mockServer = {
       start: vi.fn().mockResolvedValue({
         actualPort: 8080,
@@ -96,17 +72,8 @@ describe('devCommand', () => {
         portChanged: false,
       }),
       stop: vi.fn().mockResolvedValue(undefined),
-      broadcast: vi.fn(),
     };
-    vi.mocked(WebSocketServer).mockImplementation(() => mockServer);
-
-    // Mock watcher
-    mockWatcher = {
-      onChange: vi.fn(),
-      start: vi.fn(),
-      stop: vi.fn().mockResolvedValue(undefined),
-    };
-    vi.mocked(FileWatcher).mockImplementation(() => mockWatcher);
+    vi.mocked(SingleFileServer).mockImplementation(() => mockServer);
 
     // Mock ProcessManager
     vi.mocked(ProcessManager.onExit).mockImplementation(() => {});
@@ -129,15 +96,23 @@ describe('devCommand', () => {
     expect(SessionManager.cleanDeadSessions).toHaveBeenCalled();
     expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(8080);
     expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(8080);
-    // Note: PandocDetector.ensureInstalled is NOT called by default
-    // because devParser defaults to 'markdown-it'
+    // PandocDetector.ensureInstalled is NOT called for markdown files
     expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {}, undefined, 'markdown');
-    expect(mockConverter.setParser).toHaveBeenCalled();
-    expect(mockConverter.convertWithTemplate).toHaveBeenCalled();
+    expect(SingleFileServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 8080,
+        host: 'localhost',
+        theme: 'github',
+        mathEnabled: true,
+      })
+    );
     expect(mockServer.start).toHaveBeenCalled();
-    expect(SessionManager.saveSession).toHaveBeenCalled();
-    expect(mockWatcher.start).toHaveBeenCalled();
+    expect(SessionManager.saveSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 8080,
+        htmlPath: '', // No HTML file in single file mode
+      })
+    );
   });
 
   it('should override port from options', async () => {
@@ -145,7 +120,7 @@ describe('devCommand', () => {
 
     expect(SessionManager.cleanupSessionOnPort).toHaveBeenCalledWith(3000);
     expect(SessionManager.isPortAvailable).toHaveBeenCalledWith(3000);
-    expect(WebSocketServer).toHaveBeenCalledWith(
+    expect(SingleFileServer).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 3000,
       })
@@ -155,20 +130,24 @@ describe('devCommand', () => {
   it('should override theme from options', async () => {
     await devCommand('test.md', { theme: 'custom-theme' });
 
-    expect(MarkdownConverter).toHaveBeenCalledWith(
+    expect(SingleFileServer).toHaveBeenCalledWith(
       expect.objectContaining({
         theme: 'custom-theme',
       })
     );
   });
 
-  it('should override open browser option', async () => {
-    // Note: open option is now handled separately in dev.ts using the 'open' package
-    // WebSocketServer doesn't receive the open option directly
+  it('should open browser when open option is true', async () => {
+    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue({
+      ...getDefaultConfig(),
+      open: true,
+    } as any);
+
     await devCommand('test.md', { open: true });
 
-    // Verify server is started (open is handled after server start)
     expect(mockServer.start).toHaveBeenCalled();
+    expect(open).toHaveBeenCalledWith('http://localhost:8080/');
+    expect(Logger.info).toHaveBeenCalledWith('Browser opened');
   });
 
   it('should exit with error when file does not exist', async () => {
@@ -188,21 +167,13 @@ describe('devCommand', () => {
     expect(ProcessManager.onExit).toHaveBeenCalled();
   });
 
-  it('should handle conversion errors gracefully', async () => {
-    mockConverter.convertWithTemplate.mockRejectedValue(
-      new Error('Conversion failed')
-    );
+  it('should handle server start errors gracefully', async () => {
+    mockServer.start.mockRejectedValue(new Error('Server start failed'));
 
     await devCommand('test.md', {});
 
     expect(Logger.error).toHaveBeenCalledWith('Failed to start dev server');
     expect(process.exit).toHaveBeenCalledWith(1);
-  });
-
-  it('should register file change handler', async () => {
-    await devCommand('test.md', {});
-
-    expect(mockWatcher.onChange).toHaveBeenCalled();
   });
 
   it('should find alternative port if port is unavailable', async () => {
@@ -215,7 +186,7 @@ describe('devCommand', () => {
     expect(Logger.warn).toHaveBeenCalledWith(
       'Port 8080 is in use by another application'
     );
-    expect(WebSocketServer).toHaveBeenCalledWith(
+    expect(SingleFileServer).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 8081,
       })
@@ -246,18 +217,80 @@ describe('devCommand', () => {
     expect(Logger.info).toHaveBeenCalledWith('Removed previous preview file');
   });
 
-  it('should use pandoc parser when --pandoc option is provided', async () => {
-    await devCommand('test.md', { pandoc: true });
+  it('should check pandoc for LaTeX files', async () => {
+    await devCommand('document.tex', {});
 
-    expect(PandocDetector.ensureInstalled).toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('pandoc', {}, undefined, 'markdown');
-    expect(mockConverter.setParser).toHaveBeenCalled();
+    expect(PandocDetector.ensureInstalled).toHaveBeenCalledWith(true);
+    expect(Logger.info).toHaveBeenCalledWith('Mode: LaTeX');
   });
 
-  it('should use markdown-it parser by default (devParser config)', async () => {
-    await devCommand('test.md', {});
+  it('should check pandoc for .latex files', async () => {
+    await devCommand('document.latex', {});
+
+    expect(PandocDetector.ensureInstalled).toHaveBeenCalledWith(true);
+  });
+
+  it('should not check pandoc for markdown files', async () => {
+    await devCommand('readme.md', {});
 
     expect(PandocDetector.ensureInstalled).not.toHaveBeenCalled();
-    expect(ParserFactory.create).toHaveBeenCalledWith('markdown-it', {}, undefined, 'markdown');
+  });
+
+  it('should pass pandoc options to SingleFileServer', async () => {
+    const customConfig = {
+      ...getDefaultConfig(),
+      pandoc: { standalone: true },
+    };
+    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue(customConfig as any);
+
+    await devCommand('test.md', {});
+
+    expect(SingleFileServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pandocOptions: { standalone: true },
+      })
+    );
+  });
+
+  it('should pass watch options to SingleFileServer', async () => {
+    const customConfig = {
+      ...getDefaultConfig(),
+      watch: { debounce: 300, ignored: ['*.log'] },
+    };
+    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue(customConfig as any);
+
+    await devCommand('test.md', {});
+
+    expect(SingleFileServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        watchOptions: { debounce: 300, ignored: ['*.log'] },
+      })
+    );
+  });
+
+  it('should pass custom CSS to SingleFileServer', async () => {
+    const customConfig = {
+      ...getDefaultConfig(),
+      css: 'body { background: red; }',
+    };
+    vi.mocked(ConfigLoader.loadGlobal).mockResolvedValue(customConfig as any);
+
+    await devCommand('test.md', {});
+
+    expect(SingleFileServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        customCSS: 'body { background: red; }',
+      })
+    );
+  });
+
+  it('should save session with empty htmlPath', async () => {
+    await devCommand('test.md', {});
+
+    expect(SessionManager.saveSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        htmlPath: '',
+      })
+    );
   });
 });
