@@ -7,6 +7,23 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.5.7] - 2026-01-28
+
+### 追加
+
+- **LaTeX プレビューの機能強化**
+  - `\bm`（太字数式）マクロのサポートを追加
+  - MathJax 式番号付け機能を追加（`tags: 'ams'`）
+  - `\label{}`/`\ref{}` による相互参照が正しく動作するように
+  - LaTeX ファイルからタイトル、Abstract、Key Points を自動抽出して表示
+  - 各テーマに LaTeX メタデータ用の CSS スタイルを追加
+
+### 修正
+
+- **LaTeX コマンドの表示問題** (Issue #10)
+  - `\bm` などの特殊コマンドが表示されない問題を修正
+  - 式番号が `(???)` と表示される問題を修正
+
 ## [0.5.6] - 2026-01-27
 
 ### 追加
