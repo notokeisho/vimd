@@ -66,4 +66,15 @@ program
   .option('-y, --yes', 'Skip confirmation prompt')
   .action(resetCommand);
 
+// Allow omitting 'dev' subcommand: vimd README.md -> vimd dev README.md
+const subcommands = ['dev', 'build', 'theme', 'config', 'kill', 'reset', 'help'];
+const globalFlags = ['--help', '-h', '--version', '-V'];
+const args = process.argv.slice(2);
+const firstArg = args[0];
+
+// Insert 'dev' if first argument is not a subcommand or global flag
+if (firstArg && !subcommands.includes(firstArg) && !globalFlags.includes(firstArg)) {
+  process.argv.splice(2, 0, 'dev');
+}
+
 program.parse(process.argv);

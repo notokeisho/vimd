@@ -84,7 +84,8 @@ choco install pandoc       # Windows
 
 ```bash
 # Start live preview (no pandoc required, fast)
-vimd dev draft.md
+vimd draft.md         # Shorthand (v0.5.10+)
+vimd dev draft.md     # Traditional form also works
 
 # Build static HTML (uses pandoc, high quality)
 vimd build draft.md
@@ -117,6 +118,8 @@ npm install -g vimd
 
 | Command | Description |
 |---------|-------------|
+| `vimd <file>` | Start live preview server (`dev` shorthand) |
+| `vimd <folder>` | Start folder mode (`dev` shorthand) |
 | `vimd dev <file>` | Start live preview server |
 | `vimd dev <folder>` | Start folder mode |
 | `vimd build <file>` | Generate static HTML |
@@ -236,13 +239,15 @@ vimd can preview multiple files in a folder on the same port (v0.5.0+).
 
 ```bash
 # Preview current directory
-vimd dev .
+vimd .            # Shorthand (v0.5.10+)
+vimd dev .        # Traditional form also works
 
 # Preview a specific folder
-vimd dev ./docs
+vimd ./docs       # Shorthand
+vimd dev ./docs   # Traditional form
 ```
 
-Select files from a VSCode-style sidebar and preview them in real-time.
+Select files from the sidebar and preview them in real-time.
 
 **Supported extensions**:
 - `.md` (Markdown)

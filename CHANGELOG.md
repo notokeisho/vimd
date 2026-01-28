@@ -7,6 +7,16 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/ja/1.0.0/) に基づいており、
 このプロジェクトは [Semantic Versioning](https://semver.org/lang/ja/) に準拠しています。
 
+## [0.5.10] - 2026-01-28
+
+### 追加
+
+- **CLI: `dev` サブコマンドの省略機能** (Issue #12)
+  - `vimd README.md` で直接プレビューを起動可能に
+  - `vimd .` でフォルダモードを起動可能に
+  - 従来の `vimd dev <file>` 形式も引き続き使用可能
+  - より直感的で簡潔なコマンドラインインターフェース
+
 ## [0.5.9] - 2026-01-28
 
 ### 修正

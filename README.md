@@ -84,7 +84,8 @@ choco install pandoc       # Windows
 
 ```bash
 # ライブプレビューを開始（pandoc不要、高速）
-vimd dev draft.md
+vimd draft.md         # 省略形式（v0.5.10以降）
+vimd dev draft.md     # 従来の形式も使用可能
 
 # 静的HTMLを生成（pandoc使用、高品質）
 vimd build draft.md
@@ -117,6 +118,8 @@ npm install -g vimd
 
 | コマンド            | 説明                           |
 | ------------------- | ------------------------------ |
+| `vimd <file>`       | ライブプレビューサーバーを起動（`dev`省略形） |
+| `vimd <folder>`     | フォルダモードを起動（`dev`省略形） |
 | `vimd dev <file>`   | ライブプレビューサーバーを起動 |
 | `vimd dev <folder>` | フォルダモードを起動           |
 | `vimd build <file>` | 静的HTMLを生成                 |
@@ -236,13 +239,15 @@ vimd はフォルダ内の複数ファイルを同一ポートで切り替えな
 
 ```bash
 # カレントディレクトリをプレビュー
-vimd dev .
+vimd .            # 省略形式（v0.5.10以降）
+vimd dev .        # 従来の形式も使用可能
 
 # 指定フォルダをプレビュー
-vimd dev ./docs
+vimd ./docs       # 省略形式
+vimd dev ./docs   # 従来の形式
 ```
 
-VSCode風のサイドバーでファイルを選択し、リアルタイムでプレビューを確認できます。
+サイドバーでファイルを選択し、リアルタイムでプレビューを確認できます。
 
 **対応する拡張子**:
 - `.md` (Markdown)
