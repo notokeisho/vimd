@@ -1,12 +1,8 @@
 // src/cli/commands/dev.ts
 import { ConfigLoader } from '../../config/loader.js';
-import { FileWatcher } from '../../core/watcher.js';
-import { MarkdownConverter } from '../../core/converter.js';
-import { WebSocketServer } from '../../core/websocket-server.js';
+import { SingleFileServer } from '../../core/single-file-server.js';
 import { FolderModeServer } from '../../core/folder-mode/index.js';
 import { PandocDetector } from '../../core/pandoc-detector.js';
-import { ParserFactory } from '../../core/parser/index.js';
-import { SourceFormat } from '../../core/parser/pandoc-parser.js';
 import { Logger } from '../../utils/logger.js';
 import { ProcessManager } from '../../utils/process-manager.js';
 import { SessionManager } from '../../utils/session-manager.js';
@@ -94,65 +90,32 @@ export async function devCommand(
     }
 
     // Continue with single file mode
-    const filePath = targetPath;
-
-    // 7. Detect file type and determine parser/format
-    const isLatex = isLatexFile(filePath);
-    const fromFormat: SourceFormat = isLatex ? 'latex' : 'markdown';
-
-    // 7. Determine parser type (LaTeX requires pandoc)
-    const parserType = isLatex ? 'pandoc' : (options.pandoc ? 'pandoc' : config.devParser);
-    Logger.info(`Parser: ${parserType}`);
+    const isLatex = isLatexFile(targetPath);
     if (isLatex) {
       Logger.info('Mode: LaTeX');
+      // Check pandoc installation for LaTeX files
+      PandocDetector.ensureInstalled(true);
     }
 
-    // 8. Check pandoc installation (required for pandoc parser or LaTeX files)
-    if (parserType === 'pandoc') {
-      PandocDetector.ensureInstalled(isLatex);
-    }
-
-    // 9. Prepare output HTML in source directory
-    const sourceDir = path.dirname(absolutePath);
-    const basename = path.basename(filePath, path.extname(filePath));
-    const htmlFileName = `vimd-preview-${basename}.html`;
-    const htmlPath = path.join(sourceDir, htmlFileName);
-
-    // 10. Prepare converter with selected parser
-    const parser = ParserFactory.create(parserType, config.pandoc, config.math, fromFormat);
-    const converter = new MarkdownConverter({
-      theme: config.theme,
-      pandocOptions: config.pandoc,
-      customCSS: config.css,
-      template: config.template,
-      mathEnabled: config.math?.enabled ?? true,
-    });
-    converter.setParser(parser);
-
-    // 11. Initial conversion
-    Logger.info(`Converting ${isLatex ? 'LaTeX' : 'markdown'}...`);
-    const html = await converter.convertWithTemplate(absolutePath);
-    await converter.writeHTML(html, htmlPath);
-    Logger.success('Conversion complete');
-
-    // 11. Start WebSocket server from source directory
-    const server = new WebSocketServer({
+    // 7. Create and start SingleFileServer
+    // Server handles conversion, watching, and WebSocket internally
+    const server = new SingleFileServer({
       port: port,
       host: config.host,
-      root: sourceDir,
+      filePath: absolutePath,
+      theme: config.theme,
+      mathEnabled: config.math?.enabled ?? true,
+      pandocOptions: config.pandoc,
+      customCSS: config.css,
+      watchOptions: config.watch,
     });
 
     const startResult = await server.start();
-
-    // Update port if server used a different one
     const actualPort = startResult.actualPort;
-    if (startResult.portChanged) {
-      port = actualPort;
-    }
 
-    // 11.5. Open browser if configured
+    // 8. Open browser if configured
     if (config.open) {
-      const url = `http://${config.host}:${actualPort}/${htmlFileName}`;
+      const url = `http://${config.host}:${actualPort}/`;
       try {
         await open(url);
         Logger.info('Browser opened');
@@ -161,55 +124,22 @@ export async function devCommand(
       }
     }
 
-    // 12. Save session with actual port
+    // 9. Save session (no HTML file in single file mode)
     await SessionManager.saveSession({
       pid: process.pid,
       port: actualPort,
-      htmlPath: htmlPath,
+      htmlPath: '', // No HTML file generated
       sourcePath: absolutePath,
       startedAt: new Date().toISOString(),
     });
 
-    Logger.info(`Watching: ${filePath}`);
     Logger.info('Press Ctrl+C to stop');
 
-    // 13. Start file watching
-    const watcher = new FileWatcher(absolutePath, config.watch);
-
-    watcher.onChange(async (changedPath) => {
-      Logger.info('File changed, reconverting...');
-      try {
-        const newHtml = await converter.convertWithTemplate(changedPath);
-        await converter.writeHTML(newHtml, htmlPath);
-        server.broadcast('reload');
-        Logger.success('Reconversion complete');
-      } catch (error) {
-        Logger.error('Reconversion failed');
-        if (error instanceof Error) {
-          Logger.error(error.message);
-        }
-      }
-    });
-
-    watcher.start();
-
-    // 14. Register cleanup - remove generated HTML file and session
+    // 10. Register cleanup
     ProcessManager.onExit(async () => {
       Logger.info('Shutting down...');
-      await watcher.stop();
       await server.stop();
-
-      // Remove the generated preview HTML file
-      try {
-        await fs.remove(htmlPath);
-        Logger.info(`Removed: ${htmlFileName}`);
-      } catch {
-        // Ignore errors when removing file
-      }
-
-      // Remove session from registry (use actual port)
       await SessionManager.removeSession(actualPort);
-
       Logger.info('Cleanup complete');
     });
   } catch (error) {
