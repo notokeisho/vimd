@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="vimd">
+  <title>{{title}} - vimd</title>
+  <style>
+{{theme_css}}
+  </style>
+  <style>
+  /* Single file mode styles */
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .vimd-single-container {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .vimd-single-content {
+    padding: 32px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .vimd-single-content pre,
+  .vimd-single-content table {
+    overflow-x: auto;
+  }
+
+  /* Connection status indicator */
+  .vimd-connection-status {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .vimd-connection-status.visible {
+    opacity: 1;
+  }
+
+  .vimd-connection-status.error {
+    background: rgba(211, 47, 47, 0.9);
+  }
+  </style>
+{{#if math_enabled}}
+  <style>
+  /* Block math centering */
+  .math-block {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+  }
+  mjx-container[display="true"] {
+    display: block !important;
+    text-align: center !important;
+    margin: 1em 0 !important;
+  }
+  </style>
+  <script>
+  MathJax = {
+    loader: {load: ['[tex]/bussproofs', '[tex]/ams', '[tex]/physics', '[tex]/boldsymbol']},
+    tex: {
+      packages: {'[+]': ['bussproofs', 'ams', 'physics', 'boldsymbol']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams',
+      macros: {
+        bm: ['\\boldsymbol{#1}', 1]
+      }
+    }
+  };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{{/if}}
+</head>
+<body>
+  <div class="vimd-single-container" id="container">
+    <article class="vimd-single-content markdown-body" id="content">
+      <!-- Content will be loaded via WebSocket -->
+    </article>
+  </div>
+
+  <div class="vimd-connection-status" id="status"></div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    var container = document.getElementById('container');
+    var content = document.getElementById('content');
+    var status = document.getElementById('status');
+    var ws = null;
+    var reconnectAttempts = 0;
+    var maxReconnectAttempts = 10;
+    var reconnectDelay = 1000;
+
+    /**
+     * Show connection status message
+     */
+    function showStatus(message, isError) {
+      status.textContent = message;
+      status.classList.toggle('error', isError);
+      status.classList.add('visible');
+
+      // Hide after 3 seconds for non-error messages
+      if (!isError) {
+        setTimeout(function() {
+          status.classList.remove('visible');
+        }, 3000);
+      }
+    }
+
+    /**
+     * Hide connection status
+     */
+    function hideStatus() {
+      status.classList.remove('visible');
+    }
+
+    /**
+     * Connect to WebSocket server
+     */
+    function connect() {
+      var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(protocol + '//' + location.host);
+
+      ws.onopen = function() {
+        console.log('[vimd] WebSocket connected');
+        reconnectAttempts = 0;
+        hideStatus();
+      };
+
+      ws.onmessage = function(event) {
+        try {
+          var msg = JSON.parse(event.data);
+          handleMessage(msg);
+        } catch (e) {
+          console.error('[vimd] Failed to parse message:', e);
+        }
+      };
+
+      ws.onclose = function() {
+        console.log('[vimd] WebSocket disconnected');
+
+        if (reconnectAttempts < maxReconnectAttempts) {
+          reconnectAttempts++;
+          showStatus('Reconnecting... (' + reconnectAttempts + '/' + maxReconnectAttempts + ')', false);
+          setTimeout(connect, reconnectDelay);
+        } else {
+          showStatus('Connection lost. Please refresh the page.', true);
+        }
+      };
+
+      ws.onerror = function(error) {
+        console.error('[vimd] WebSocket error:', error);
+      };
+    }
+
+    /**
+     * Handle incoming WebSocket message
+     */
+    function handleMessage(msg) {
+      switch (msg.type) {
+        case 'content':
+          updateContent(msg.data.html);
+          if (msg.data.title) {
+            document.title = msg.data.title + ' - vimd';
+          }
+          break;
+
+        case 'error':
+          showError(msg.data.message);
+          break;
+
+        default:
+          console.warn('[vimd] Unknown message type:', msg.type);
+      }
+    }
+
+    /**
+     * Update content with scroll position preservation
+     */
+    function updateContent(html) {
+      // Save scroll position
+      var scrollTop = container.scrollTop;
+
+      // Update content
+      content.innerHTML = html;
+
+      // Re-render MathJax if available
+      if (window.MathJax && window.MathJax.typeset) {
+        // MathJax.typeset returns a promise in v3
+        var promise = window.MathJax.typeset([content]);
+
+        // Restore scroll position after MathJax completes
+        if (promise && promise.then) {
+          promise.then(function() {
+            container.scrollTop = scrollTop;
+          }).catch(function() {
+            // Restore scroll even if MathJax fails
+            container.scrollTop = scrollTop;
+          });
+        } else {
+          // Fallback: restore scroll immediately
+          container.scrollTop = scrollTop;
+        }
+      } else {
+        // No MathJax: restore scroll immediately
+        container.scrollTop = scrollTop;
+      }
+    }
+
+    /**
+     * Show error message
+     */
+    function showError(message) {
+      content.innerHTML = '<div class="vimd-error"><h2>Error</h2><p>' + escapeHtml(message) + '</p></div>';
+    }
+
+    /**
+     * Escape HTML special characters
+     */
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Initialize connection
+    connect();
+  })();
+  </script>
+</body>
+</html>
