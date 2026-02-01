@@ -167,11 +167,12 @@ html, body {
   align-items: center;
   justify-content: center;
   color: var(--sidebar-text-muted);
+  transform: rotate(90deg);  /* expanded state: down arrow */
   transition: transform 0.1s;
 }
 
 .vimd-tree-chevron.collapsed {
-  transform: rotate(-90deg);
+  transform: rotate(0deg);  /* collapsed state: right arrow */
 }
 
 /* Tree children (nested items) */
